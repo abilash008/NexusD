@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, .dark, .dark *));
+
+@layer base {
+  :root {
+    --background: #F8FAFC;
+    --foreground: #0F172A;
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --popover: #FFFFFF;
+    --popover-foreground: #0F172A;
+    --primary: #0B192C;
+    --primary-foreground: #F8FAFC;
+    --secondary: #1E3E62;
+    --secondary-foreground: #F8FAFC;
+    --muted: #F1F5F9;
+    --muted-foreground: #64748B;
+    --accent: #0066FF;
+    --accent-foreground: #FFFFFF;
+    --accent-hover: #0052CC;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: #E2E8F0;
+    --input: #E2E8F0;
+    --ring: #0066FF;
+    --radius: 0.5rem;
+    --success: #10B981;
+    --warning: #F59E0B;
+  }
+
+  .dark {
+    --background: #0B1120;
+    --foreground: #F8FAFC;
+    --card: #131D31;
+    --card-foreground: #F8FAFC;
+    --popover: #131D31;
+    --popover-foreground: #F8FAFC;
+    --primary: #38BDF8;
+    --primary-foreground: #0B1120;
+    --secondary: #1E293B;
+    --secondary-foreground: #F8FAFC;
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+    --accent: #0066FF;
+    --accent-foreground: #FFFFFF;
+    --accent-hover: #2563EB;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: #1E293B;
+    --input: #1E293B;
+    --ring: #38BDF8;
+    --radius: 0.5rem;
+    --success: #10B981;
+    --warning: #F59E0B;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom scrollbars for question drawer */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0B1120;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1E293B;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
