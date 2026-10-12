@@ -342,17 +342,6 @@ export function SubscriptionModal({
                   </>
                 )}
               </Button>
-
-              {/* Developer Sandbox Instant Preview Button */}
-              <button
-                type="button"
-                onClick={() => handleInitiatePayment("sandbox")}
-                disabled={isProcessing}
-                className="w-full text-[11px] text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 py-1 flex items-center justify-center gap-1.5 cursor-pointer underline decoration-dotted"
-              >
-                <Zap className="h-3 w-3 text-amber-500" />
-                Instant Test Activation (Sandbox Preview Mode)
-              </button>
             </div>
           )}
 
