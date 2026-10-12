@@ -53,11 +53,13 @@ export async function GET(req: NextRequest) {
       certificationId,
       attempts: attempts.map((a) => ({
         id: a.id,
-        date: a.completedAt ? new Date(a.completedAt).toLocaleDateString("en-IN", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }) : "Recent",
+        date: a.completedAt
+          ? new Date(a.completedAt).toLocaleDateString("en-IN", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })
+          : "Recent",
         scorePercentage: a.scorePercentage,
         passed: a.passed,
         timeSpentSeconds: a.timeSpentSeconds,
@@ -71,6 +73,53 @@ export async function GET(req: NextRequest) {
     console.error("[GET /api/exams/attempts error]:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch exam attempts", attempts: [] },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await auth();
+    const { searchParams } = new URL(req.url);
+    const certificationId = searchParams.get("certificationId");
+
+    if (!session?.user) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    let userId = session.user.id;
+    if (!userId && session.user.email) {
+      const [u] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, session.user.email.toLowerCase()))
+        .limit(1);
+      if (u) userId = u.id;
+    }
+
+    if (userId) {
+      if (certificationId) {
+        await db
+          .delete(userExamAttempts)
+          .where(
+            and(
+              eq(userExamAttempts.userId, userId),
+              eq(userExamAttempts.certificationId, certificationId)
+            )
+          );
+      } else {
+        await db
+          .delete(userExamAttempts)
+          .where(eq(userExamAttempts.userId, userId));
+      }
+    }
+
+    return NextResponse.json({ success: true, message: "Attempts successfully cleared" });
+  } catch (error: any) {
+    console.error("[DELETE /api/exams/attempts error]:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete exam attempts" },
       { status: 500 }
     );
   }

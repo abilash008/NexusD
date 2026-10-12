@@ -40,27 +40,38 @@ export default function DashboardPage() {
         setProfile(JSON.parse(stored));
       }
 
-      const mocks = JSON.parse(localStorage.getItem("nexusd_csa_mock_history") || "[]");
-      const practices = JSON.parse(localStorage.getItem("nexusd_csa_practice_history") || "[]");
-      const total = mocks.length + practices.length;
-      setAttemptsCount(total);
-
-      if (mocks.length > 0) {
-        setLatestScore(mocks[0].scorePercentage ?? null);
-      } else if (practices.length > 0) {
-        setLatestScore(practices[0].scorePercentage ?? null);
-      }
-
       if (session?.user) {
+        try {
+          localStorage.removeItem("nexusd_csa_mock_history");
+          localStorage.removeItem("nexusd_csa_practice_history");
+        } catch (e) {}
+
         fetch("/api/exams/attempts?certificationId=csa")
           .then((res) => res.json())
           .then((data) => {
-            if (data?.success && Array.isArray(data.attempts) && data.attempts.length > 0) {
-              setAttemptsCount((prev) => Math.max(prev, data.attempts.length));
-              setLatestScore(data.attempts[0].scorePercentage ?? null);
+            if (data?.success && Array.isArray(data.attempts)) {
+              setAttemptsCount(data.attempts.length);
+              setLatestScore(data.attempts.length > 0 ? (data.attempts[0].scorePercentage ?? null) : null);
+            } else {
+              setAttemptsCount(0);
+              setLatestScore(null);
             }
           })
-          .catch(() => {});
+          .catch(() => {
+            setAttemptsCount(0);
+            setLatestScore(null);
+          });
+      } else {
+        const mocks = JSON.parse(localStorage.getItem("nexusd_csa_mock_history") || "[]");
+        const practices = JSON.parse(localStorage.getItem("nexusd_csa_practice_history") || "[]");
+        const total = mocks.length + practices.length;
+        setAttemptsCount(total);
+
+        if (mocks.length > 0) {
+          setLatestScore(mocks[0].scorePercentage ?? null);
+        } else if (practices.length > 0) {
+          setLatestScore(practices[0].scorePercentage ?? null);
+        }
       }
     } catch (e) {
       // Ignore

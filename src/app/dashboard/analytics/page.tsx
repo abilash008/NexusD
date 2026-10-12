@@ -23,6 +23,7 @@ import {
   ChevronRight,
   Gauge,
   Lock,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -167,7 +168,7 @@ export default function AnalyticsDashboardPage() {
     const loadData = async () => {
       let loadedAttempts: ExamAttempt[] = [];
 
-      // 1. If signed in, query server API for persistent Neon DB records
+      // 1. If signed in, query server API for persistent Neon DB records ONLY
       if (session?.user) {
         try {
           const res = await fetch(`/api/exams/attempts?certificationId=${selectedCertId}`);
@@ -176,40 +177,29 @@ export default function AnalyticsDashboardPage() {
             loadedAttempts = data.attempts;
           }
         } catch (err) {
-          // Fallback to local storage
+          loadedAttempts = [];
         }
-      }
 
-      // 2. Also check local storage for browser attempts
-      try {
-        const storageKey =
-          selectedCertId === "csa" ? "nexusd_csa_mock_history" : `nexusd_${selectedCertId}_mock_history`;
-        const localMocks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        // Clean out stale unauthenticated test artifacts
+        try {
+          localStorage.removeItem("nexusd_csa_mock_history");
+          localStorage.removeItem("nexusd_csa_practice_history");
+        } catch (e) {}
+      } else {
+        // 2. Only if unauthenticated, read local storage for offline drills
+        try {
+          const storageKey =
+            selectedCertId === "csa" ? "nexusd_csa_mock_history" : `nexusd_${selectedCertId}_mock_history`;
+          const localMocks = JSON.parse(localStorage.getItem(storageKey) || "[]");
 
-        const practiceKey =
-          selectedCertId === "csa" ? "nexusd_csa_practice_history" : `nexusd_${selectedCertId}_practice_history`;
-        const localPractices = JSON.parse(localStorage.getItem(practiceKey) || "[]");
+          const practiceKey =
+            selectedCertId === "csa" ? "nexusd_csa_practice_history" : `nexusd_${selectedCertId}_practice_history`;
+          const localPractices = JSON.parse(localStorage.getItem(practiceKey) || "[]");
 
-        // Merge without duplicates
-        const combined = [...loadedAttempts];
-        for (const item of [...localMocks, ...localPractices]) {
-          if (!combined.some((a) => a.id === item.id)) {
-            combined.push({
-              id: item.id || `local-${Math.random()}`,
-              date: item.date || "Recent",
-              scorePercentage: item.scorePercentage ?? 0,
-              passed: Boolean(item.passed),
-              timeSpentSeconds: item.timeSpentSeconds ?? 0,
-              correctAnswersCount: item.correctAnswersCount ?? item.correctCount ?? 0,
-              totalQuestions: item.totalQuestions ?? 60,
-              mode: item.mode || "practice",
-              domainScores: item.domainScores,
-            });
-          }
+          loadedAttempts = [...localMocks, ...localPractices];
+        } catch (e) {
+          loadedAttempts = [];
         }
-        loadedAttempts = combined;
-      } catch (e) {
-        // Ignore
       }
 
       setAttempts(loadedAttempts);
@@ -218,6 +208,19 @@ export default function AnalyticsDashboardPage() {
 
     loadData();
   }, [selectedCertId, session]);
+
+  const handleClearHistory = async () => {
+    if (session?.user) {
+      await fetch(`/api/exams/attempts?certificationId=${selectedCertId}`, { method: "DELETE" }).catch(() => {});
+    }
+    try {
+      localStorage.removeItem("nexusd_csa_mock_history");
+      localStorage.removeItem("nexusd_csa_practice_history");
+      localStorage.removeItem(`nexusd_${selectedCertId}_mock_history`);
+      localStorage.removeItem(`nexusd_${selectedCertId}_practice_history`);
+    } catch (e) {}
+    setAttempts([]);
+  };
 
   // Aggregate real telemetry metrics (No fake numbers!)
   const totalAttempts = attempts.length;
@@ -311,6 +314,16 @@ export default function AnalyticsDashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          {attempts.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClearHistory}
+              className="gap-1.5 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Clear Records
+            </Button>
+          )}
           <Link href={selectedTrack.practiceUrl}>
             <Button variant="outline" size="sm" className="gap-2 dark:border-slate-700 dark:hover:bg-slate-800 cursor-pointer">
               <Zap className="h-4 w-4" /> Practice Drills
@@ -636,9 +649,19 @@ export default function AnalyticsDashboardPage() {
                 Exam History & Score Log ({selectedTrack.code})
               </h2>
             </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-              {attempts.length} Record{attempts.length > 1 ? "s" : ""}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                {attempts.length} Record{attempts.length > 1 ? "s" : ""}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClearHistory}
+                className="h-7 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/30 gap-1.5 cursor-pointer"
+              >
+                <Trash2 className="h-3 w-3" /> Clear Records
+              </Button>
+            </div>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31]">
