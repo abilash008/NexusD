@@ -50,10 +50,22 @@ export default function DashboardPage() {
       } else if (practices.length > 0) {
         setLatestScore(practices[0].scorePercentage ?? null);
       }
+
+      if (session?.user) {
+        fetch("/api/exams/attempts?certificationId=csa")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.success && Array.isArray(data.attempts) && data.attempts.length > 0) {
+              setAttemptsCount((prev) => Math.max(prev, data.attempts.length));
+              setLatestScore(data.attempts[0].scorePercentage ?? null);
+            }
+          })
+          .catch(() => {});
+      }
     } catch (e) {
       // Ignore
     }
-  }, []);
+  }, [session]);
 
   const getSegmentLabel = (seg?: string) => {
     switch (seg) {
@@ -72,6 +84,8 @@ export default function DashboardPage() {
     ? session.user.name.split(" ")[0]
     : null;
 
+  const isAuthenticated = Boolean(session?.user);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
       {/* Top Welcome Banner */}
@@ -83,7 +97,7 @@ export default function DashboardPage() {
                 {getSegmentLabel(profile.backgroundSegment)}
               </Badge>
 
-              {isPro ? (
+              {isAuthenticated && isPro ? (
                 <Badge variant="success" className="gap-1 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   {entitlement?.planId === "all_access" ? "All-Access Pass" : "CSA Pro Pass"} ({daysRemaining}d left)
@@ -117,10 +131,15 @@ export default function DashboardPage() {
                 <Zap className="h-4 w-4" /> Start Practice Test
               </Button>
             </Link>
+            <Link href="/profile">
+              <Button variant="outline" size="lg" className="whitespace-nowrap border-slate-300 dark:border-slate-700 dark:text-slate-200 cursor-pointer">
+                Candidate Profile
+              </Button>
+            </Link>
             {!isPro && (
               <Link href="/pricing">
-                <Button variant="outline" size="lg" className="whitespace-nowrap border-slate-300 dark:border-slate-700 dark:text-slate-200 cursor-pointer">
-                  Upgrade to Pro
+                <Button variant="ghost" size="lg" className="whitespace-nowrap text-slate-600 dark:text-slate-300 cursor-pointer">
+                  Upgrade
                 </Button>
               </Link>
             )}

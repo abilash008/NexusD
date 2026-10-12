@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   getStoredEntitlement,
   saveStoredEntitlement,
@@ -13,30 +14,49 @@ import {
 } from "@/lib/entitlements";
 
 export function useEntitlements() {
+  const { data: session, status: authStatus } = useSession();
   const [entitlement, setEntitlement] = useState<StoredEntitlement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Initial read from local storage
-    setEntitlement(getStoredEntitlement());
-    setIsLoaded(true);
+    // If explicitly unauthenticated, purge any local/stale entitlement immediately
+    if (authStatus === "unauthenticated") {
+      clearStoredEntitlement();
+      setEntitlement(null);
+      setIsLoaded(true);
+      return;
+    }
 
-    // Sync from server if logged in
-    fetch("/api/user/entitlements")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.success && data?.entitlement) {
-          saveStoredEntitlement(data.entitlement);
-          setEntitlement(data.entitlement);
-        }
-      })
-      .catch(() => {
-        // Fallback gracefully to offline/local entitlement
-      });
+    if (authStatus === "authenticated") {
+      // Sync strictly from server
+      fetch("/api/user/entitlements")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.success && data?.entitlement) {
+            saveStoredEntitlement(data.entitlement);
+            setEntitlement(data.entitlement);
+          } else {
+            // User is signed in but has no active paid entitlements in database
+            clearStoredEntitlement();
+            setEntitlement(null);
+          }
+        })
+        .catch(() => {
+          // If offline, read cached entitlement only if session is present
+          setEntitlement(getStoredEntitlement());
+        })
+        .finally(() => {
+          setIsLoaded(true);
+        });
+    }
 
     // Event listener for updates across tabs / components
     const handleUpdate = () => {
-      setEntitlement(getStoredEntitlement());
+      if (authStatus === "authenticated") {
+        setEntitlement(getStoredEntitlement());
+      } else {
+        setEntitlement(null);
+      }
     };
 
     window.addEventListener("nexusd_entitlement_updated", handleUpdate);
@@ -46,7 +66,7 @@ export function useEntitlements() {
       window.removeEventListener("nexusd_entitlement_updated", handleUpdate);
       window.removeEventListener("storage", handleUpdate);
     };
-  }, []);
+  }, [authStatus]);
 
   const grantPlan = (
     planId: "csa_pass" | "all_access",
@@ -75,16 +95,17 @@ export function useEntitlements() {
     setEntitlement(null);
   };
 
-  const active = isEntitlementActive(entitlement);
+  const isAuthenticated = authStatus === "authenticated" && Boolean(session?.user);
+  const active = isAuthenticated && isEntitlementActive(entitlement);
 
   return {
-    entitlement,
+    entitlement: isAuthenticated ? entitlement : null,
     isLoaded,
-    isPro: Boolean(entitlement && active),
+    isPro: Boolean(active),
     isCertificationActive: active,
-    daysRemaining: getRemainingDays(entitlement),
-    isUnlocked: (certCode: string = "csa") => isCertificationUnlocked(certCode, entitlement),
-    isFeatureUnlocked: (certCode: string = "csa") => isProFeatureUnlocked(entitlement, certCode),
+    daysRemaining: active ? getRemainingDays(entitlement) : 0,
+    isUnlocked: (certCode: string = "csa") => active && isCertificationUnlocked(certCode, entitlement),
+    isFeatureUnlocked: (certCode: string = "csa") => active && isProFeatureUnlocked(entitlement, certCode),
     grantPlan,
     revokePlan,
   };

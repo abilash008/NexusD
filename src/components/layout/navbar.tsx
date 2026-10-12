@@ -71,14 +71,19 @@ export function Navbar({ user }: NavbarProps) {
         {/* Desktop CTA / User Profile */}
         <div className="hidden md:flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="text-xs dark:border-slate-700">
                   Dashboard
                 </Button>
               </Link>
+              <Link href="/profile">
+                <Button variant="outline" size="sm" className="text-xs dark:border-slate-700">
+                  Profile
+                </Button>
+              </Link>
               <Link href="/api/auth/signout">
-                <Button variant="ghost" size="sm" className="text-slate-600">
+                <Button variant="ghost" size="sm" className="text-xs text-slate-600 dark:text-slate-400">
                   Sign Out
                 </Button>
               </Link>

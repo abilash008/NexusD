@@ -41,9 +41,12 @@ export default function PricingPage() {
 
   const { isPro, entitlement, daysRemaining, isCertificationActive } = useEntitlements();
 
-  const isAllAccessActive = Boolean(isCertificationActive && entitlement?.planId === "all_access");
+  const isAuthenticated = Boolean(session?.user);
+
+  const isAllAccessActive = Boolean(isAuthenticated && isCertificationActive && entitlement?.planId === "all_access");
   const isCsaActive = Boolean(
-    isCertificationActive &&
+    isAuthenticated &&
+      isCertificationActive &&
       (entitlement?.planId === "all_access" || entitlement?.certifications?.includes("csa"))
   );
 
@@ -71,10 +74,10 @@ export default function PricingPage() {
           Start free with <strong>60 blueprint-aligned practice questions</strong> and real-time mock simulations. Upgrade anytime for full question vaults, 3-mode printable PDF packs, and multi-track certification passes.
         </p>
 
-        {isPro && (
+        {isAuthenticated && isPro && entitlement && (
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-700 dark:text-emerald-300">
             <CheckCircle2 className="h-4 w-4" />
-            Your Account is Active: {entitlement?.planId === "all_access" ? "All-Access Pro Pass" : "CSA Pro Pass"}
+            Your Account is Active: {entitlement.planId === "all_access" ? "All-Access Pro Pass" : "CSA Pro Pass"} ({daysRemaining} days left)
           </div>
         )}
       </div>

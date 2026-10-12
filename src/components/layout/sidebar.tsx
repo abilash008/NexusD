@@ -5,10 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
+  LayoutDashboard,
   Zap,
   BookOpen,
   BarChart3,
   CreditCard,
+  User,
   Users,
   Menu,
   X,
@@ -36,6 +38,12 @@ export function Sidebar({ user }: SidebarProps) {
 
   const navItems = [
     {
+      title: "Dashboard",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      match: (path: string) => path === "/dashboard",
+    },
+    {
       title: "Practice Engine",
       href: "/certifications",
       icon: Zap,
@@ -52,13 +60,19 @@ export function Sidebar({ user }: SidebarProps) {
       title: "Readiness Analytics",
       href: "/dashboard/analytics",
       icon: BarChart3,
-      match: (path: string) => path.startsWith("/dashboard"),
+      match: (path: string) => path.startsWith("/dashboard/analytics"),
     },
     {
       title: "Pricing & Plans",
       href: "/pricing",
       icon: CreditCard,
       match: (path: string) => path.startsWith("/pricing"),
+    },
+    {
+      title: "Candidate Profile",
+      href: "/profile",
+      icon: User,
+      match: (path: string) => path.startsWith("/profile"),
     },
     {
       title: "Community",
@@ -278,13 +292,15 @@ export function Sidebar({ user }: SidebarProps) {
           {/* Sign In or Active Candidate Details */}
           {user ? (
             <div className="space-y-2 pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
-              <div
-                className={`flex items-center gap-3 ${
+              <Link
+                href="/profile"
+                className={`flex items-center gap-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 p-1 transition-colors group cursor-pointer ${
                   isExpanded ? "px-1" : "justify-center"
                 }`}
+                title="View ServiceNow Candidate Profile"
               >
                 <div
-                  className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#0066FF] to-blue-400 flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0"
+                  className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#0066FF] to-blue-400 flex items-center justify-center text-white font-bold text-xs shadow-xs shrink-0 group-hover:scale-105 transition-transform"
                   title={user.name || "Candidate"}
                 >
                   {user.name ? user.name.charAt(0).toUpperCase() : "U"}
@@ -292,7 +308,7 @@ export function Sidebar({ user }: SidebarProps) {
 
                 {isExpanded && (
                   <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-[#0066FF] dark:group-hover:text-[#38BDF8] transition-colors">
                       {user.name || "ServiceNow Trainee"}
                     </span>
                     <span className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
@@ -300,7 +316,7 @@ export function Sidebar({ user }: SidebarProps) {
                     </span>
                   </div>
                 )}
-              </div>
+              </Link>
 
               {isExpanded ? (
                 <div className="flex items-center justify-between pt-1 px-1 border-t border-slate-200/60 dark:border-slate-800/60">
