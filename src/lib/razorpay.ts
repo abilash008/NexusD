@@ -1,4 +1,18 @@
+import Razorpay from "razorpay";
 import crypto from "crypto";
+
+/**
+ * Returns an authenticated Razorpay instance on the server
+ */
+export function getRazorpayServerInstance(): Razorpay | null {
+  const key_id = process.env.RAZORPAY_KEY_ID;
+  const key_secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!key_id || !key_secret) return null;
+  return new Razorpay({
+    key_id,
+    key_secret,
+  });
+}
 
 /**
  * Dynamically loads the Razorpay Standard Checkout script on the client

@@ -10,23 +10,21 @@ export async function POST(req: NextRequest) {
     const session = await auth();
     const body = await req.json().catch(() => ({}));
 
-    const {
-      orderId,
-      paymentId,
-      signature,
-      planId,
-      userEmail: providedEmail,
-      userName: providedName,
-    } = body;
+    const orderId = body.orderId || body.order_id || body.razorpay_order_id;
+    const paymentId = body.paymentId || body.payment_id || body.razorpay_payment_id;
+    const signature = body.signature || body.razorpay_signature;
+    const planId = body.planId || "all_access";
+    const providedEmail = body.userEmail;
+    const providedName = body.userName;
 
-    if (!orderId || !paymentId) {
+    if (!orderId || !paymentId || !signature) {
       return NextResponse.json(
-        { success: false, error: "Missing required order or payment identifiers." },
+        { success: false, error: "Missing required orderId, paymentId, or signature identifiers." },
         { status: 400 }
       );
     }
 
-    if (!planId || !(planId in PRICING_PLANS)) {
+    if (!(planId in PRICING_PLANS)) {
       return NextResponse.json(
         { success: false, error: "Invalid pricing plan specified." },
         { status: 400 }
@@ -34,13 +32,20 @@ export async function POST(req: NextRequest) {
     }
 
     const plan = PRICING_PLANS[planId as keyof typeof PRICING_PLANS];
-    const secret = process.env.RAZORPAY_KEY_SECRET || "dev_secret";
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!secret) {
+      return NextResponse.json(
+        { success: false, error: "Razorpay secret key not configured." },
+        { status: 500 }
+      );
+    }
 
     // Validate cryptographic HMAC-SHA256 signature
     const isValid = verifyPaymentSignature({
       orderId,
       paymentId,
-      signature: signature || "sig_sandbox_valid",
+      signature,
       secret,
     });
 
