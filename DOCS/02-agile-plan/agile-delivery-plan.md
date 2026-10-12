@@ -14,8 +14,8 @@ This delivery plan executes the **confirmed Phase 1 MVP Scope** approved at the 
 ### Sprint Cadence & Velocity
 * **Sprint Length:** 2 Weeks per sprint.
 * **Target Velocity:** 10–14 Story Points per sprint.
-* **Total Phase 1 Duration:** 5 Sprints (10 Weeks).
-* **Guiding Principle:** Every sprint ends with a demonstrable, vertically integrated slice. Sprint 2 delivers a functional practice test; Sprint 4 adds complete monetization; Sprint 5 delivers a production-ready system with CMS and SEO.
+* **Total Phase 1 Duration:** 6 Sprints (12 Weeks).
+* **Guiding Principle:** Every sprint ends with a demonstrable, vertically integrated slice. Sprint 2 delivers a functional practice test; Sprint 4 adds complete monetization; Sprint 5 delivers a production-ready system with CMS; Sprint 6 executes production deployment on `nexusd.in`, live payment gateway integration, hardened auth, and multi-track telemetry.
 
 ---
 
@@ -241,10 +241,10 @@ This delivery plan executes the **confirmed Phase 1 MVP Scope** approved at the 
 ## 4. Sprint Roadmap & Sequence
 
 ```
-Sprint 1 (Weeks 1-2)  ──>  Sprint 2 (Weeks 3-4)  ──>  Sprint 3 (Weeks 5-6)  ──>  Sprint 4 (Weeks 7-8)  ──>  Sprint 5 (Weeks 9-10)
-Foundations & Auth         Practice Engine Slice      Study Guides & Analytics    Razorpay Monetization      Admin CMS & Launch
-[US-1.1, 1.2, 1.3, 1.4]    [US-2.1, 2.2, 2.3, 2.4]    [US-3.1, 3.2, 8.1, 8.2]     [US-6.1, 6.2, 6.3]         [US-7.1, 7.2, 7.3]
-(16 Points)                (19 Points)                (14 Points)                 (12 Points)                (10 Points)
+Sprint 1 (Weeks 1-2)  ──>  Sprint 2 (Weeks 3-4)  ──>  Sprint 3 (Weeks 5-6)  ──>  Sprint 4 (Weeks 7-8)  ──>  Sprint 5 (Weeks 9-10) ──> Sprint 6 (Weeks 11-12)
+Foundations & Auth         Practice Engine Slice      Study Guides & Analytics    Razorpay Monetization      Admin CMS & Polish         Production Launch & Telemetry
+[US-1.1, 1.2, 1.3, 1.4]    [US-2.1, 2.2, 2.3, 2.4]    [US-3.1, 3.2, 8.1, 8.2]     [US-6.1, 6.2, 6.3]         [US-7.1, 7.2, 7.3]         [US-6.1, 6.2, 6.3, 6.4, 6.5]
+(16 Points)                (19 Points)                (14 Points)                 (12 Points)                (10 Points)                (14 Points)
 ```
 
 | Sprint | Goal & Demonstrable Deliverable | Stories Committed | Total Points |
@@ -254,7 +254,8 @@ Foundations & Auth         Practice Engine Slice      Study Guides & Analytics  
 | **Sprint 3** | **Study Blueprints & Student Analytics:**<br>Publicly indexable domain study guides (SSR/SEO) + student performance dashboard with domain weakness breakdown and pass readiness gauge. | US-3.1, US-3.2, US-8.1, US-8.2 | **14** |
 | **Sprint 4** | **Razorpay Monetization & Paywall Gates:**<br>Native UPI/Card payment modal for full CSA mock pass, secure webhook verification, email invoice receipt, and access gating. | US-6.1, US-6.2, US-6.3 | **12** |
 | **Sprint 5** | **Admin CMS, Errata Triage & Pre-Launch Polish:**<br>Protected CMS to author/edit questions and manage reports without code deploys; SEO/Lighthouse audit, sitemap, final launch readiness. | US-7.1, US-7.2, US-7.3 | **10** |
-| **Total** | **Phase 1 MVP Scope Complete** | **17 Stories** | **71 Points** |
+| **Sprint 6** | **Production Launch, Live Razorpay, Auth Security & Multi-Track Telemetry:**<br>Deploy `nexusd.in` on Vercel, integrate live Razorpay Standard Web Checkout (`checkout.js` + HMAC verification), harden NextAuth/Neon DB with password policy on `/signup`, deliver zero-mock multi-track analytics (`/dashboard/analytics`), and enforce Neon DB single source of truth with Clear Records action. | US-6.1, US-6.2, US-6.3, US-6.4, US-6.5 | **14** |
+| **Total** | **Phase 1 MVP Scope & Launch Complete** | **22 Stories** | **85 Points** |
 
 ---
 
