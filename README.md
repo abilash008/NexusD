@@ -60,31 +60,47 @@ Examinations are released in a strict sequence with official ServiceNow examinat
   - **Mode 3: Master Guide:** Complete study manual with verified answers and detailed architecture rationales.
   - Generates crisp vector PDFs via clean CSS `@media print` rules without third-party watermarks.
 
-### 4. Subscription & Access Control (Free vs. Pro)
-- **Free Tier Policy:** 
-  - CSA includes **60 free blueprint questions** covering all 5 domain quotas.
-  - Free allocation scales with total bank size: 60 questions for large banks (hundreds of questions), 40 or 20 for specialized tracks.
-- **Pro Blueprint Vault:**
-  - Questions beyond 60 (e.g. 61–85+) are protected behind a cosmic glassy locked card displaying the Domain Tag in the top left and an upgrade CTA.
-  - PDF & Print exports require an active subscription.
-  - Pricing tiers: **CSA Pro Pass (₹499)** or **All-Access Pass (₹999)**.
-  - Features sandbox checkout simulation with persistent `localStorage` unlock for testing.
+### 4. Live Razorpay Standard Web Checkout (`/pricing`, `/payment/*`)
+- **Live Standard Web Checkout:** Powered by Razorpay Standard Checkout modal (`https://checkout.razorpay.com/v1/checkout.js`).
+- **Server-Side Order Creation:** Authenticated endpoint `POST /api/create-order` creates orders with paise conversion and server validation.
+- **Cryptographic Signature Verification:** `POST /api/verify-payment` performs HMAC-SHA256 verification (`order_id + "|" + payment_id` against `RAZORPAY_KEY_SECRET`) before granting entitlements.
+- **Entitlement Gating:** Active 365-day access provisioning in Neon PostgreSQL (`userEntitlements`), preventing duplicate purchases and granting instant Pro access.
+- **Free vs. Pro:**
+  - Free Tier: CSA includes **60 free blueprint questions** covering all 5 domain quotas.
+  - Pro Tier: Unlocks full question bank vault (85+), multi-track examinations, and 3-mode vector PDF exports.
 
-### 5. UI/UX Design System (2026 Standards)
-- **Fluid Sidebar:** Collapsible and pinnable with screen-fitting layout adjustments (`mr-[240px]` on desktop when pinned).
-- **Dual-Theme Logos:** Automatically switches between light mode and dark glassy logos (`/nd-logo.png` & `/nexusd-full-logo.png` vs. `/nd-logo-dark.png` & `/nexusd-full-logo-dark.png`).
-- **Domain Tag Primacy:** Question cards prioritize domain identification tags in the top-left corner (`<Badge variant="accent">`) without sequential numbering (`CSA-01`).
+### 5. Hardened Authentication & Password Policy (`/signup`, `/login`)
+- **Dedicated Registration (`/signup`):** Real user signups backed by Neon PostgreSQL.
+- **Strict Password Validation:** Enforces minimum 8 characters, at least 1 uppercase letter, 1 special character, and 1 digit on both client and server.
+- **NextAuth.js v5 Integration:** Credentials and Google OAuth providers with bcrypt password hashing. Real database checks eliminate dummy credential bypasses.
+
+### 6. Multi-Track Telemetry & Performance Analytics (`/dashboard/analytics`)
+- **Zero Mock Data Policy:** Telemetry driven entirely by genuine user examination attempts.
+- **Certification Track Switcher:** Seamlessly switch between CSA, CAD, CIS-DF, and CIS-ITSM to inspect readiness.
+- **Calculated Telemetry:**
+  - **Overall Readiness Gauge:** Benchmarked against official 70% passing threshold with status badges.
+  - **Velocity & Question Pacing:** Average seconds spent per question compared against the 90s exam target.
+  - **Official Domain Breakdown:** Real-time domain accuracy percentages isolating candidate's weakest domain.
+  - **Contextual Study Directives:** Direct links to official blueprint study guides.
+- **Single Source of Truth:** Authenticated candidates load exclusively from Neon DB (`userExamAttempts`). Client `localStorage` is automatically purged on load.
+- **History Wipe Action:** "Clear Records" button invokes `DELETE /api/exams/attempts` and resets browser storage with a single click.
+
+### 7. User Profile Hub & Navigation (`/profile`, `/dashboard`)
+- **Fluid Sidebar:** Dashboard placed as the primary top item in the navigation hierarchy.
+- **Profile Hub:** Displays account credentials, active subscription badges, days remaining countdown, onboarding background segment, and target roles. Groundwork for ServiceNow University credentials, badges, and portfolio.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Framework:** Next.js 15+ (App Router, Turbopack)
+- **Framework:** Next.js 16+ (App Router, Turbopack)
 - **Language:** TypeScript 5+ (Strict typing)
-- **Styling:** Tailwind CSS v4 with custom dark mode variables
+- **Styling:** Tailwind CSS v4 with custom dark mode variables & WCAG AA contrast
 - **Components:** Radix UI primitives & Lucide React icons
-- **State & Storage:** React Context (`SidebarContext`), `localStorage` persistence
-- **Database / Auth:** NextAuth.js / Drizzle ORM (Better-SQLite3)
+- **State & Storage:** React Context (`SidebarContext`), Neon PostgreSQL persistent telemetry
+- **Database & ORM:** Neon Serverless PostgreSQL (`@neondatabase/serverless`) & Drizzle ORM
+- **Authentication:** Auth.js (NextAuth v5) + bcrypt password hashing
+- **Payments:** Razorpay Standard Web Checkout (Live API)
 
 ---
 
@@ -98,8 +114,8 @@ Examinations are released in a strict sequence with official ServiceNow examinat
 
 ```bash
 # Clone the repository
-git clone https://github.com/nexusd/nexusd-platform.git
-cd nexusd-platform
+git clone https://github.com/abilash008/NexusD.git
+cd NexusD
 
 # Install dependencies
 npm install
@@ -117,10 +133,16 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```
 src/
 ├── app/
+│   ├── (auth)/
+│   │   ├── login/page.tsx           # Hardened Sign-In Flow
+│   │   └── signup/page.tsx          # Real Sign-Up with Password Validation
+│   ├── dashboard/
+│   │   ├── page.tsx                 # Learner Dashboard Overview
+│   │   └── analytics/page.tsx       # Multi-Track Telemetry & Readiness Engine
+│   ├── profile/page.tsx             # Candidate Profile Hub & Entitlements
 │   ├── certifications/
 │   │   ├── page.tsx                 # Multi-Exam Catalogue & Roadmap
 │   │   └── csa/
-│   │       ├── page.tsx             # CSA Certification Hub
 │   │       ├── practice/page.tsx    # 60-Question Shuffled Practice Engine
 │   │       └── mock/page.tsx        # 90-Min Timed Countdown Simulation
 │   ├── study/
@@ -129,12 +151,20 @@ src/
 │   │       ├── page.tsx             # 5 Domain Syllabus Guides
 │   │       └── question-bank/       # Master Bank & 3-Mode PDF Exporter
 │   ├── pricing/page.tsx             # Plans, Free Starter & Pro Passes
-│   └── layout.tsx                   # Root Layout with ThemeProvider & Sidebar
+│   ├── admin/                       # Protected Admin CMS & Errata Triage
+│   └── api/
+│       ├── create-order/route.ts    # Razorpay Order Creation API
+│       ├── verify-payment/route.ts  # HMAC-SHA256 Signature Verification API
+│       ├── exams/attempts/route.ts  # GET & DELETE Persistent Attempt Telemetry
+│       └── exams/submit/route.ts    # Exam Attempt Submission API
 ├── components/
 │   ├── layout/                      # Pinned & Collapsible Glassy Sidebar
-│   ├── subscription/                # 2026 Cosmic Glassy Subscription Modal
+│   ├── subscription/                # Razorpay Standard Checkout Button & Modal
 │   ├── theme/                       # Light / Dark / System Toggle
 │   └── ui/                          # Button, Card, Badge, Progress
+├── lib/
+│   ├── db/                          # Drizzle ORM Schema & Neon Postgres Client
+│   └── admin.ts                     # Admin Role Gate & Errata Utilities
 └── data/
     └── csa-questions.ts             # 85+ Blueprint Questions, 60 Free Quotas & Shuffler
 ```

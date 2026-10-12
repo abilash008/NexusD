@@ -14,18 +14,23 @@ All 5 core architectural and scoping decisions have been formally confirmed:
 | :---: | :--- | :---: | :--- |
 | **1** | **Phase 1 MVP Scope** | ✅ **Confirmed** | **Epics 1, 2, 3, 6, 7, and 8:** Practice Engine for Certification Preparations (launching with CSA), Study Blueprints, Razorpay, Admin CMS, and Performance Analytics. Other epics deferred to Phase 2/3. |
 | **2** | **Database ORM** | ✅ **Confirmed** | **Drizzle ORM** with Neon PostgreSQL (`@neondatabase/serverless` connection pooler). Zero cold starts. |
-| **3** | **Authentication** | ✅ **Confirmed** | **Auth.js (NextAuth v5)** with Drizzle adapter. Zero MAU fee, self-hosted in Neon, custom shadcn/ui. |
+| **3** | **Authentication** | ✅ **Confirmed** | **Auth.js (NextAuth v5)** with Drizzle adapter and real Neon DB checks. Zero MAU fee, self-hosted in Neon, custom shadcn/ui. |
 | **4** | **Payment Gateway** | ✅ **Confirmed** | **Razorpay** for native Indian UPI, domestic NetBanking, and INR card support on `nexusd.in`. |
 | **5** | **Community Real-Time** | ✅ **Confirmed** | **Option A (ADR 001):** Next.js Route Handlers + Optimistic UI & SWR Polling. Avoids Render sleeping instances and keeps hosting at $0. |
+| **6** | **Live Razorpay Checkout Architecture** | ✅ **Confirmed & Live** | **Standard Web Checkout Modal (`checkout.js`)** with backend order creation (`/api/create-order`), cryptographic HMAC-SHA256 signature verification (`/api/verify-payment`), and automated 365-day access entitlement activation. |
+| **7** | **Telemetry Source of Truth Policy** | ✅ **Confirmed & Live** | **Strict Neon DB Isolation:** Authenticated candidate telemetry (`/dashboard`, `/dashboard/analytics`) reads exclusively from Neon DB `userExamAttempts`. Dirty client `localStorage` caches are purged on load. Explicit `DELETE /api/exams/attempts` and Clear Records UI provided. |
+| **8** | **Credential Security & Complexity Policy** | ✅ **Confirmed & Live** | **Strict Account Validation:** Dedicated `/signup` flow enforcing mandatory minimum 8 characters, at least 1 uppercase, 1 special character, and 1 digit, backed by bcrypt password hashing. |
 
 ---
 
 ## 2. Active Implementation Queue
 
-With Step 2 approved, the delivery backlog is locked in [`DOCS/02-agile-plan/agile-delivery-plan.md`](file:///c:/NexusD/DOCS/02-agile-plan/agile-delivery-plan.md).
+With Phase 1 MVP delivered and live in production on [`nexusd.in`](https://nexusd.in):
 
-* **Immediate Next Action:** Begin **Sprint 1 (Foundations, Design System & Auth Context)**:
-  - `US-1.1`: Next.js 15+ App Router, Tailwind, shadcn/ui tokens, Navy/Blue theme, component conventions.
-  - `US-1.2`: Drizzle ORM schema, migrations, and Neon Postgres setup.
-  - `US-1.3`: Auth.js (NextAuth v5) configuration with Google OAuth and Magic Link.
-  - `US-1.4`: Contextual onboarding flow (Background segment + ServiceNow target role taxonomy).
+* **Current Status:** Phase 1 MVP Live in Production.
+* **Next Active Sprint / Phase 2 Queue:**
+  - **Epic 4:** Tailored Career Guidance Roadmaps (Fresher / Switcher / Trainee guides).
+  - **Epic 5:** 1:1 Mentorship Marketplace (Practitioner profiles, Cal.com/Google Meet scheduling, reviews).
+  - **Epic 9:** ServiceNow Community (Threaded Q&A, optimistic likes/comments, moderation).
+  - **Epic 10:** ServiceNow-Exclusive Job Board (Employer & peer referral listings, portfolio applications).
+  - **ServiceNow University Expansion:** Badges, exam completion credentials, candidate portfolio, and resume showcase.

@@ -33,7 +33,8 @@
 | **Step 3: Implementation — Sprint 3** | ✅ Complete | [`DOCS/03-sprints/sprint-03/sprint-03-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-03/sprint-03-summary.md) |
 | **Step 3: Implementation — Sprint 4** | ✅ Complete | [`DOCS/03-sprints/sprint-04/sprint-04-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-04/sprint-04-summary.md) |
 | **Step 3: Implementation — Sprint 5** | ✅ Complete | [`DOCS/03-sprints/sprint-05/sprint-05-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-05/sprint-05-summary.md) |
-| **Phase 1 MVP Platform Status** | 🚀 Launch Ready | All Phase 1 Core Epics Delivered (Auth, Mock Engine, SSG Guides, 1-Year Payments, Multi-Certification Admin CMS, Excel Bulk Uploader, Exam Track Creator) |
+| **Step 3: Implementation — Sprint 6** | ✅ Complete | [`DOCS/03-sprints/sprint-06/sprint-06-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-06/sprint-06-summary.md) |
+| **Production Launch Status** | 🚀 **Live in Production** | Live at [`nexusd.in`](https://nexusd.in) (Live Razorpay Standard Checkout, Hardened NextAuth + Neon DB, Multi-Track Telemetry) |
 
 ---
 
@@ -47,6 +48,12 @@
 ├── 02-agile-plan/
 │   └── agile-delivery-plan.md       ← Epics, user stories, Fibonacci estimates, sprint roadmap
 ├── 03-sprints/                      ← Per-sprint execution logs, acceptance criteria, DoD checklists
+│   ├── sprint-01/
+│   ├── sprint-02/
+│   ├── sprint-03/
+│   ├── sprint-04/
+│   ├── sprint-05/
+│   └── sprint-06/                   ← Live deployment, Razorpay Standard Checkout, Auth & Telemetry
 ├── 04-architecture/
 │   ├── cloud-infrastructure-and-migration.md ← Two-phase hosting model & AWS migration blueprint
 │   ├── email-infrastructure.md      ← Zoho Mail routing and domain configuration
