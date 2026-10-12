@@ -3,6 +3,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db, users, accounts, sessions, verificationTokens } from "@/lib/db";
+import { eq } from "drizzle-orm";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -16,23 +17,64 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID || "",
       clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
+      allowDangerousEmailAccountLinking: true,
     }),
-    // Demo / Quick Sign-In provider for local testing and developer evaluation
     Credentials({
-      name: "Demo Account",
+      name: "Email Account",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "developer@nexusd.in" },
-        name: { label: "Full Name", type: "text", placeholder: "ServiceNow Developer" },
+        email: { label: "Email", type: "email", placeholder: "learner@nexusd.in" },
+        name: { label: "Full Name", type: "text", placeholder: "ServiceNow Practitioner" },
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
-        return {
-          id: "demo-user-1",
-          email: String(credentials.email),
-          name: String(credentials.name || "ServiceNow Practitioner"),
-          image: "https://avatar.vercel.sh/nexusd",
-          role: "user",
-        };
+        const email = String(credentials.email).toLowerCase().trim();
+        const name = String(credentials.name || "").trim() || "ServiceNow Practitioner";
+
+        // Validate genuine email format
+        if (!email.includes("@") || !email.includes(".")) {
+          return null;
+        }
+
+        try {
+          // Check if user already exists in Neon PostgreSQL
+          const existing = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, email))
+            .limit(1);
+
+          if (existing.length > 0) {
+            return {
+              id: existing[0].id,
+              email: existing[0].email,
+              name: existing[0].name || name,
+              image: existing[0].image || `https://avatar.vercel.sh/${encodeURIComponent(email)}`,
+              role: existing[0].role || "user",
+            };
+          }
+
+          // Insert new verified user into Neon PostgreSQL
+          const [newUser] = await db
+            .insert(users)
+            .values({
+              email,
+              name,
+              image: `https://avatar.vercel.sh/${encodeURIComponent(email)}`,
+              role: "user",
+            })
+            .returning();
+
+          return {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            image: newUser.image,
+            role: newUser.role,
+          };
+        } catch (dbErr) {
+          console.error("[NextAuth DB Error in authorize]:", dbErr);
+          return null;
+        }
       },
     }),
   ],
