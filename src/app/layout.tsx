@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { LayoutShell } from "@/components/layout/layout-shell";
 import { SidebarProvider } from "@/components/layout/sidebar-context";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SessionProvider } from "@/components/auth/session-provider";
 import { auth } from "@/auth";
 
 const geistSans = Geist({
@@ -78,15 +79,17 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#F8FAFC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-200">
-        <ThemeProvider>
-          <SidebarProvider>
-            <Sidebar user={session?.user} />
-            <LayoutShell>
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </LayoutShell>
-          </SidebarProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider>
+            <SidebarProvider>
+              <Sidebar user={session?.user} />
+              <LayoutShell>
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </LayoutShell>
+            </SidebarProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

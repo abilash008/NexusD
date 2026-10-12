@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   Sparkles,
   CheckCircle2,
@@ -13,10 +15,9 @@ import {
   ShieldCheck,
   X,
   CreditCard,
-  QrCode,
   Shield,
   Loader2,
-  FileText,
+  LogIn,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,10 +44,26 @@ export function SubscriptionModal({
   onSubscribed,
 }: SubscriptionModalProps) {
   const router = useRouter();
-  const { grantPlan } = useEntitlements();
-  const effectiveReason = reason || initialReason || "general";
+  const pathname = usePathname();
+  const { data: session, status: authStatus } = useSession();
+  const { entitlement, daysRemaining, isCertificationActive, grantPlan } = useEntitlements();
 
-  const [selectedPlan, setSelectedPlan] = useState<"csa_pass" | "all_access">("all_access");
+  const effectiveReason = reason || initialReason || "general";
+  const isAuthenticated = Boolean(session?.user);
+
+  // Check which plans are currently active for this user
+  const isAllAccessActive = Boolean(isCertificationActive && entitlement?.planId === "all_access");
+  const isCsaActive = Boolean(
+    isCertificationActive &&
+      (entitlement?.planId === "all_access" || entitlement?.certifications?.includes("csa"))
+  );
+
+  // Default to all_access unless already active and CSA isn't (or vice versa)
+  const [selectedPlan, setSelectedPlan] = useState<"csa_pass" | "all_access">(() => {
+    if (isCsaActive && !isAllAccessActive) return "all_access";
+    return "all_access";
+  });
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -54,9 +71,27 @@ export function SubscriptionModal({
   if (!isOpen) return null;
 
   const currentPlanConfig = PRICING_PLANS[selectedPlan];
+  const isCurrentPlanActive =
+    (selectedPlan === "all_access" && isAllAccessActive) ||
+    (selectedPlan === "csa_pass" && isCsaActive);
 
-  // Primary payment initiator (Razorpay Checkout Modal + Sandbox Fallback)
-  const handleInitiatePayment = async (mode: "razorpay" | "sandbox" = "razorpay") => {
+  // Razorpay standard checkout flow
+  const handleInitiatePayment = async () => {
+    // 1. Must be logged in
+    if (!isAuthenticated) {
+      const returnUrl = encodeURIComponent(pathname || "/pricing");
+      router.push(`/login?callbackUrl=${returnUrl}`);
+      return;
+    }
+
+    // 2. Cannot purchase if already active
+    if (isCurrentPlanActive) {
+      setErrorMessage(
+        `You already hold an active 1-year pass for this certification (${daysRemaining} days remaining).`
+      );
+      return;
+    }
+
     setIsProcessing(true);
     setErrorMessage(null);
 
@@ -74,44 +109,6 @@ export function SubscriptionModal({
       }
 
       const order = orderData.order;
-
-      // If user specifically requested sandbox mode or if order is sandbox-flagged
-      if (mode === "sandbox" || order.isSandbox) {
-        // Instant sandbox verification
-        const verifyRes = await fetch("/api/payments/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderId: order.id,
-            paymentId: `pay_sandbox_${Date.now()}`,
-            signature: "sig_sandbox_valid",
-            planId: selectedPlan,
-          }),
-        });
-
-        const verifyData = await verifyRes.json();
-        const receiptNo = verifyData?.entitlement?.receiptNumber || `INV-${Date.now()}`;
-
-        // Save entitlement locally & trigger callbacks
-        grantPlan(selectedPlan, {
-          orderId: order.id,
-          paymentId: `pay_sandbox_${Date.now()}`,
-          receiptNumber: receiptNo,
-        });
-
-        setIsProcessing(false);
-        setIsSuccess(true);
-
-        setTimeout(() => {
-          if (onSimulateUnlock) onSimulateUnlock();
-          if (onSubscribed) onSubscribed();
-          onClose();
-          router.push(
-            `/payment/success?order_id=${order.id}&payment_id=pay_sandbox&plan_id=${selectedPlan}&receipt_no=${receiptNo}`
-          );
-        }, 1000);
-        return;
-      }
 
       // 2. Load Razorpay Client SDK for live/test checkout
       const isLoaded = await loadRazorpayScript();
@@ -163,8 +160,8 @@ export function SubscriptionModal({
           }
         },
         prefill: {
-          name: orderData.user?.name || "ServiceNow Practitioner",
-          email: orderData.user?.email || "developer@nexusd.in",
+          name: session?.user?.name || "ServiceNow Practitioner",
+          email: session?.user?.email || "developer@nexusd.in",
         },
         theme: {
           color: "#0066FF",
@@ -224,6 +221,38 @@ export function SubscriptionModal({
           </p>
         </div>
 
+        {/* Auth status banner if not signed in */}
+        {!isAuthenticated && (
+          <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 flex items-start gap-3">
+            <Lock className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+            <div className="space-y-1 text-left">
+              <p className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                Sign In Required to Purchase
+              </p>
+              <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed">
+                You must be logged in to your NexusD account to purchase so your 1-year certification pass is securely linked to your account.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Active plan banner if user already holds active pass */}
+        {isAuthenticated && (isAllAccessActive || isCsaActive) && (
+          <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-start gap-3">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
+            <div className="space-y-1 text-left">
+              <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                Active Certification Subscription ({daysRemaining} Days Left)
+              </p>
+              <p className="text-[11px] text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                {isAllAccessActive
+                  ? "You have active 1-year access to all 4 certification tracks (CSA, CAD, CIS-DF, CIS-ITSM). No additional purchase is required."
+                  : "You have active 1-year access to the CSA certification track. You can upgrade to All-Access below if you wish to unlock CAD and CIS tracks."}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Error alert if any */}
         {errorMessage && (
           <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400">
@@ -235,13 +264,22 @@ export function SubscriptionModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
           {/* Plan 1: CSA Specific Pass */}
           <div
-            onClick={() => setSelectedPlan("csa_pass")}
-            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-              selectedPlan === "csa_pass"
-                ? "border-[#0066FF] bg-blue-50/40 dark:bg-blue-950/30 ring-1 ring-[#0066FF]"
-                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40"
+            onClick={() => {
+              if (!isCsaActive) setSelectedPlan("csa_pass");
+            }}
+            className={`p-4 rounded-xl border-2 transition-all relative ${
+              isCsaActive
+                ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
+                : selectedPlan === "csa_pass"
+                ? "border-[#0066FF] bg-blue-50/40 dark:bg-blue-950/30 ring-1 ring-[#0066FF] cursor-pointer"
+                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
             }`}
           >
+            {isCsaActive && (
+              <div className="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" /> ACTIVE ({daysRemaining}d)
+              </div>
+            )}
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 CSA Exam Pass
@@ -254,22 +292,34 @@ export function SubscriptionModal({
               ₹499 <span className="text-xs font-normal text-slate-400">/ 1 year</span>
             </div>
             <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-              Full 85+ CSA question bank, unlimited PDF downloads & 1-year release updates.
+              {isCsaActive
+                ? "Your CSA pass is currently active. All 85+ questions & PDF exports unlocked."
+                : "Full 85+ CSA question bank, unlimited PDF downloads & 1-year release updates."}
             </p>
           </div>
 
-          {/* Plan 2: All Access Pass (Recommended) */}
+          {/* Plan 2: All Access Pass */}
           <div
-            onClick={() => setSelectedPlan("all_access")}
-            className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all ${
-              selectedPlan === "all_access"
-                ? "border-[#0066FF] bg-blue-50/60 dark:bg-blue-950/50 ring-2 ring-[#0066FF]/30"
-                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40"
+            onClick={() => {
+              if (!isAllAccessActive) setSelectedPlan("all_access");
+            }}
+            className={`relative p-4 rounded-xl border-2 transition-all ${
+              isAllAccessActive
+                ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
+                : selectedPlan === "all_access"
+                ? "border-[#0066FF] bg-blue-50/60 dark:bg-blue-950/50 ring-2 ring-[#0066FF]/30 cursor-pointer"
+                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
             }`}
           >
-            <div className="absolute -top-2.5 right-3 bg-[#0066FF] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
-              RECOMMENDED
-            </div>
+            {isAllAccessActive ? (
+              <div className="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" /> ACTIVE ({daysRemaining}d)
+              </div>
+            ) : (
+              <div className="absolute -top-2.5 right-3 bg-[#0066FF] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                RECOMMENDED
+              </div>
+            )}
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-[#0066FF] dark:text-[#38BDF8]">
                 All-Access Pass
@@ -282,7 +332,9 @@ export function SubscriptionModal({
               ₹999 <span className="text-xs font-normal text-slate-400">/ 1 year</span>
             </div>
             <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-300 font-medium">
-              1-Year access to <strong>CSA, CAD, CIS-DF, and CIS-ITSM</strong> question banks & exports.
+              {isAllAccessActive
+                ? "Full active 1-year access to CSA, CAD, CIS-DF, and CIS-ITSM question vaults."
+                : "1-Year access to CSA, CAD, CIS-DF, and CIS-ITSM question banks & exports."}
             </p>
           </div>
         </div>
@@ -322,13 +374,55 @@ export function SubscriptionModal({
             <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-center text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2">
               <CheckCircle2 className="h-4 w-4" /> Pro Access Activated! Redirecting to receipt...
             </div>
+          ) : !isAuthenticated ? (
+            /* 1. Unauthenticated state: Require login before paying */
+            <div className="space-y-2.5">
+              <Button
+                variant="accent"
+                size="lg"
+                onClick={() => {
+                  const returnUrl = encodeURIComponent(pathname || "/pricing");
+                  router.push(`/login?callbackUrl=${returnUrl}`);
+                }}
+                className="w-full gap-2 shadow-sm font-bold text-sm cursor-pointer"
+              >
+                <LogIn className="h-4 w-4" /> Sign In to Proceed to Payment
+              </Button>
+              <div className="text-center text-xs text-slate-500">
+                New to NexusD?{" "}
+                <Link
+                  href="/signup"
+                  onClick={onClose}
+                  className="text-[#0066FF] dark:text-[#38BDF8] font-semibold hover:underline"
+                >
+                  Sign Up Free
+                </Link>
+              </div>
+            </div>
+          ) : isCurrentPlanActive ? (
+            /* 2. Active Subscription state: Button is disabled */
+            <div className="space-y-2">
+              <Button
+                disabled
+                variant="outline"
+                size="lg"
+                className="w-full gap-2 font-bold text-xs sm:text-sm bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 cursor-not-allowed opacity-90"
+              >
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                Subscription Active ({daysRemaining} Days Left)
+              </Button>
+              <p className="text-center text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                You already hold an active 1-year pass for this certification track. All questions, study blueprints, and PDF exports are fully unlocked.
+              </p>
+            </div>
           ) : (
+            /* 3. Authenticated and eligible to purchase */
             <div className="space-y-2">
               <Button
                 variant="accent"
                 size="lg"
                 disabled={isProcessing}
-                onClick={() => handleInitiatePayment("razorpay")}
+                onClick={handleInitiatePayment}
                 className="w-full gap-2 shadow-sm font-bold text-sm cursor-pointer"
               >
                 {isProcessing ? (

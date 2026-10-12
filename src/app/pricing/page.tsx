@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "next-auth/react";
 import { SubscriptionModal } from "@/components/subscription/subscription-modal";
 import {
   PRICING_PLANS,
@@ -32,12 +33,19 @@ import {
 import { useEntitlements } from "@/hooks/use-entitlements";
 
 export default function PricingPage() {
+  const { data: session } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalReason, setModalReason] = useState<"general" | "export_pdf" | "unlock_questions">("general");
   const [selectedPlanId, setSelectedPlanId] = useState<"csa_pass" | "all_access">("all_access");
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
 
-  const { isPro, entitlement } = useEntitlements();
+  const { isPro, entitlement, daysRemaining, isCertificationActive } = useEntitlements();
+
+  const isAllAccessActive = Boolean(isCertificationActive && entitlement?.planId === "all_access");
+  const isCsaActive = Boolean(
+    isCertificationActive &&
+      (entitlement?.planId === "all_access" || entitlement?.certifications?.includes("csa"))
+  );
 
   const openSubscribe = (planId: "csa_pass" | "all_access", reason: "general" | "export_pdf" | "unlock_questions" = "general") => {
     setSelectedPlanId(planId);
@@ -157,13 +165,24 @@ export default function PricingPage() {
             </ul>
           </div>
 
-          <Button
-            variant="default"
-            onClick={() => openSubscribe("csa_pass", "unlock_questions")}
-            className="w-full text-xs font-semibold cursor-pointer"
-          >
-            {PRICING_PLANS.csa_pass.ctaText}
-          </Button>
+          {isCsaActive ? (
+            <Button
+              disabled
+              variant="outline"
+              className="w-full text-xs font-semibold cursor-not-allowed bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 opacity-90 gap-1.5"
+            >
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              Active Plan ({daysRemaining}d left)
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              onClick={() => openSubscribe("csa_pass", "unlock_questions")}
+              className="w-full text-xs font-semibold cursor-pointer"
+            >
+              {PRICING_PLANS.csa_pass.ctaText}
+            </Button>
+          )}
         </Card>
 
         {/* Tier 3: All-Access Pass (Highlighted) */}
@@ -207,14 +226,26 @@ export default function PricingPage() {
             </ul>
           </div>
 
-          <Button
-            variant="accent"
-            size="lg"
-            onClick={() => openSubscribe("all_access", "general")}
-            className="w-full text-xs font-bold gap-2 shadow-sm cursor-pointer"
-          >
-            {PRICING_PLANS.all_access.ctaText} <ArrowRight className="h-4 w-4" />
-          </Button>
+          {isAllAccessActive ? (
+            <Button
+              disabled
+              variant="outline"
+              size="lg"
+              className="w-full text-xs font-bold cursor-not-allowed bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 opacity-90 gap-1.5"
+            >
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              Active Plan ({daysRemaining}d left)
+            </Button>
+          ) : (
+            <Button
+              variant="accent"
+              size="lg"
+              onClick={() => openSubscribe("all_access", "general")}
+              className="w-full text-xs font-bold gap-2 shadow-sm cursor-pointer"
+            >
+              {PRICING_PLANS.all_access.ctaText} <ArrowRight className="h-4 w-4" />
+            </Button>
+          )}
         </Card>
       </div>
 

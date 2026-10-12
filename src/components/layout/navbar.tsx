@@ -86,13 +86,13 @@ export function Navbar({ user }: NavbarProps) {
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-slate-700">
+                <Button variant="ghost" size="sm" className="text-slate-700 dark:text-slate-200">
                   Sign In
                 </Button>
               </Link>
-              <Link href="/certifications/csa">
+              <Link href="/signup">
                 <Button variant="accent" size="sm">
-                  Start Practice Test
+                  Sign Up
                 </Button>
               </Link>
             </div>

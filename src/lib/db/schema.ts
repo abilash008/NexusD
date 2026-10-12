@@ -19,7 +19,9 @@ export const users = pgTable("users", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
+  username: text("username"),
   email: text("email").unique(),
+  password: text("password"), // Secure bcrypt hash
   emailVerified: timestamp("email_verified", { mode: "date" }),
   image: text("image"),
   role: text("role").default("user").notNull(), // 'user' | 'admin' | 'mentor'

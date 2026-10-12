@@ -1,19 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { PRICING_PLANS } from "@/lib/pricing-plans";
-import { db, payments } from "@/lib/db";
+import { db, payments, userEntitlements, users } from "@/lib/db";
+import { eq, and, gt } from "drizzle-orm";
 import { getRazorpayServerInstance } from "@/lib/razorpay";
 
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
+
+    // 1. User must be signed in to make a payment
+    if (!session?.user) {
+      return NextResponse.json(
+        { success: false, error: "Authentication required. Please sign in to purchase." },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
 
-    const {
-      planId,
-      userEmail: providedEmail,
-      userName: providedName,
-    } = body;
+    const { planId } = body;
 
     if (!planId || !(planId in PRICING_PLANS)) {
       return NextResponse.json(
@@ -30,9 +36,57 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const userEmail = session?.user?.email || providedEmail || "aspirant@nexusd.in";
-    const userName = session?.user?.name || providedName || "ServiceNow Aspirant";
-    const userId = session?.user?.id || null;
+    const userEmail = session.user.email || "aspirant@nexusd.in";
+    const userName = session.user.name || "ServiceNow Aspirant";
+    let userId = session.user.id || null;
+
+    if (!userId && session.user.email) {
+      const [u] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, session.user.email.toLowerCase()))
+        .limit(1);
+      if (u) userId = u.id;
+    }
+
+    // 2. Check if user already holds an active subscription for this certification
+    if (userId) {
+      const now = new Date();
+      const activeRows = await db
+        .select()
+        .from(userEntitlements)
+        .where(
+          and(
+            eq(userEntitlements.userId, userId),
+            gt(userEntitlements.expiresAt, now)
+          )
+        );
+
+      const hasAllAccess = activeRows.some((r) => r.accessType === "all_access");
+      const hasCsaActive = activeRows.some(
+        (r) => r.certificationId === "csa" || r.accessType === "all_access"
+      );
+
+      if (hasAllAccess) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "You already hold an active 1-year All-Access Pass for all certifications.",
+          },
+          { status: 400 }
+        );
+      }
+
+      if (planId === "csa_pass" && hasCsaActive) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "You already hold an active 1-year pass for the CSA certification.",
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     const receipt = `rcpt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const keyId = process.env.RAZORPAY_KEY_ID;

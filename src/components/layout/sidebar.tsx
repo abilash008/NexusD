@@ -346,7 +346,7 @@ export function Sidebar({ user }: SidebarProps) {
                     </Button>
                   </Link>
                   <Link
-                    href="/onboarding"
+                    href="/signup"
                     onClick={() => setIsOpenMobile(false)}
                     className="block"
                   >
@@ -355,7 +355,7 @@ export function Sidebar({ user }: SidebarProps) {
                       size="sm"
                       className="w-full text-xs font-semibold shadow-xs"
                     >
-                      Get Started Free
+                      Sign Up Free
                     </Button>
                   </Link>
                 </div>

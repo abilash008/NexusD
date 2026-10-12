@@ -2,16 +2,17 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { CheckCircle2, ArrowRight, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NexusLogo } from "@/components/brand/nexus-logo";
-import { loginWithGoogle, loginWithEmail } from "./actions";
+import { loginWithGoogle, loginWithCredentials } from "./actions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -23,20 +24,19 @@ export default function LoginPage() {
       await loginWithGoogle();
     } catch (err: any) {
       setIsGoogleLoading(false);
-      // Next.js redirect throws a NEXT_REDIRECT digest error which is expected during redirect
       if (err?.digest?.startsWith("NEXT_REDIRECT")) return;
-      setErrorMessage("Google Sign-in failed. Please verify your connection.");
+      setErrorMessage("Google Sign-in failed. Please verify your credentials.");
     }
   };
 
-  const handleEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCredentialsSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEmailLoading(true);
     setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
     try {
-      const res = await loginWithEmail(formData);
+      const res = await loginWithCredentials(formData);
       if (res?.error) {
         setErrorMessage(res.error);
         setIsEmailLoading(false);
@@ -44,7 +44,7 @@ export default function LoginPage() {
     } catch (err: any) {
       setIsEmailLoading(false);
       if (err?.digest?.startsWith("NEXT_REDIRECT")) return;
-      setErrorMessage("Authentication failed. Please check your credentials.");
+      setErrorMessage("Invalid email or password. Please sign up if you do not have an account.");
     }
   };
 
@@ -59,19 +59,19 @@ export default function LoginPage() {
             </Link>
           </div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Welcome to NexusD
+            Welcome Back to NexusD
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Sign in with Google to sync your practice exams, test analytics, and certifications.
+            Sign in to access your saved progress, practice tests, and analytics.
           </p>
         </div>
 
         {/* Card */}
         <Card className="border-slate-200 dark:border-slate-800 dark:bg-[#131D31] shadow-md transition-colors">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-lg text-slate-900 dark:text-white">Account Access</CardTitle>
+            <CardTitle className="text-lg text-slate-900 dark:text-white">Sign In</CardTitle>
             <CardDescription className="dark:text-slate-400">
-              Select your preferred method to authenticate.
+              Enter your account credentials to log in.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
@@ -127,27 +127,13 @@ export default function LoginPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white dark:bg-[#131D31] px-2 text-slate-400 font-medium">
-                  Or sign in with email
+                  Or sign in with email & password
                 </span>
               </div>
             </div>
 
-            {/* 2. SECONDARY: Real Email Credentials saved in Neon DB */}
-            <form onSubmit={handleEmailSignIn} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  Full Name
-                </label>
-                <Input
-                  name="name"
-                  type="text"
-                  placeholder="e.g. Rahul Sharma"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="dark:bg-[#0E1524] dark:border-slate-700 dark:text-white"
-                />
-              </div>
-
+            {/* 2. Credentials Sign In Form */}
+            <form onSubmit={handleCredentialsSignIn} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                   Email Address
@@ -163,6 +149,32 @@ export default function LoginPage() {
                 />
               </div>
 
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                    Password
+                  </label>
+                </div>
+                <div className="relative">
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="pr-10 dark:bg-[#0E1524] dark:border-slate-700 dark:text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
               <Button
                 type="submit"
                 variant="accent"
@@ -172,7 +184,7 @@ export default function LoginPage() {
                 {isEmailLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Verifying...</span>
+                    <span>Verifying Credentials...</span>
                   </>
                 ) : (
                   <>
@@ -185,12 +197,14 @@ export default function LoginPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 text-center text-xs text-slate-500 dark:text-slate-400">
-            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              <span>Full synchronization with Neon PostgreSQL Database</span>
+            <div>
+              Don&apos;t have an account yet?{" "}
+              <Link href="/signup" className="text-[#0066FF] hover:underline font-semibold">
+                Sign Up here
+              </Link>
             </div>
-            <p>
-              By signing in, you agree to our Terms of Service & Privacy Policy.
+            <p className="text-[11px] text-slate-400">
+              Only authenticated users with existing accounts can log in.
             </p>
           </CardFooter>
         </Card>

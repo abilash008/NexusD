@@ -17,9 +17,22 @@ export function useEntitlements() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Initial read
+    // Initial read from local storage
     setEntitlement(getStoredEntitlement());
     setIsLoaded(true);
+
+    // Sync from server if logged in
+    fetch("/api/user/entitlements")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && data?.entitlement) {
+          saveStoredEntitlement(data.entitlement);
+          setEntitlement(data.entitlement);
+        }
+      })
+      .catch(() => {
+        // Fallback gracefully to offline/local entitlement
+      });
 
     // Event listener for updates across tabs / components
     const handleUpdate = () => {
