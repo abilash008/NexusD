@@ -235,7 +235,7 @@ function DynamicPracticeExamContent() {
             </Button>
             <Link href={`/certifications/${trackId}/mock`}>
               <Button variant="accent" className="gap-2 cursor-pointer">
-                Launch 90-Min Timed Mock <ArrowRight className="h-4 w-4" />
+                Launch {examConfig.durationMinutes || 90}-Min Timed Mock <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>

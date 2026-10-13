@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Award,
@@ -10,32 +12,38 @@ import {
   Lock,
   Zap,
   BookOpen,
+  Filter,
+  Compass,
+  FileText,
+  Target,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-export const metadata = {
-  title: "ServiceNow Certifications Catalog — NexusD",
-  description:
-    "Choose your ServiceNow certification track: CSA, CAD, CIS-ITSM. Verified practice questions and timed mock simulations aligned to Australia & Brazil releases.",
-};
 
 const CERTIFICATIONS = [
   {
     id: "csa",
     code: "CSA",
     title: "Certified System Administrator",
+    category: "foundational",
     level: "Foundational & Prerequisite",
     release: "Australia & Brazil 2026",
     status: "available",
-    questions: "60 Questions",
-    duration: "90 Minutes",
-    passScore: "70%",
-    freeQuestions: "60 Free Questions Included",
+    questions: 60,
+    durationMinutes: 90,
+    passingPercentage: 70,
+    freeAllocation: "60 Free Questions Included",
     description:
-      "The mandatory prerequisite for all ServiceNow tracks. Covers Next Experience UI, User Administration & Groups, CMDB & Schema (30%), Flow Designer automation, and core scripting fundamentals.",
-    domainsCount: 5,
+      "The universal gateway into the ServiceNow ecosystem. Covers User Interface navigation, Collaboration & Tasks, Database Administration & Schema (30%), Flow Designer automation, and core scripting fundamentals.",
+    domains: [
+      { name: "Database Administration & Schema", weight: 30 },
+      { name: "User Interface & Navigation", weight: 20 },
+      { name: "Collaboration & Task Management", weight: 20 },
+      { name: "Self-Service & Process Automation", weight: 20 },
+      { name: "Introduction to Development", weight: 10 },
+    ],
     hubUrl: "/certifications/csa",
     practiceUrl: "/certifications/csa/practice",
     mockUrl: "/certifications/csa/mock",
@@ -45,16 +53,23 @@ const CERTIFICATIONS = [
     id: "cad",
     code: "CAD",
     title: "Certified Application Developer",
+    category: "developer",
     level: "Core Developer Track",
     release: "Australia & Brazil 2026",
     status: "available",
-    questions: "60 Questions",
-    duration: "90 Minutes",
-    passScore: "70%",
-    freeQuestions: "60 Free Questions Included",
+    questions: 60,
+    durationMinutes: 90,
+    passingPercentage: 70,
+    freeAllocation: "60 Free Questions Included",
     description:
-      "Advanced application development: Custom application scoping, Script Includes, Client Scripts, REST APIs, Flow Designer custom actions, and security ACL architectures.",
-    domainsCount: 5,
+      "Scoped application development, data model architecture, Script Includes, Client Scripts, Flow Designer custom actions, REST APIs, and application security ACLs.",
+    domains: [
+      { name: "Designing and Creating Applications", weight: 15 },
+      { name: "Application Data Model & Security", weight: 25 },
+      { name: "Automating Application Logic & Flows", weight: 30 },
+      { name: "Scripting, REST APIs & Integration", weight: 20 },
+      { name: "User Interface & Workspace Views", weight: 10 },
+    ],
     hubUrl: "/certifications/cad",
     practiceUrl: "/certifications/cad/practice",
     mockUrl: "/certifications/cad/mock",
@@ -64,16 +79,21 @@ const CERTIFICATIONS = [
     id: "cis-df",
     code: "CIS-DF (CMDB & CSDM)",
     title: "Certified Implementation Specialist — Data Foundation",
+    category: "specialist",
     level: "Data & Enterprise Architect",
     release: "Australia & Brazil 2026",
     status: "available",
-    questions: "75 Questions",
-    duration: "90 Minutes",
-    passScore: "70%",
-    freeQuestions: "Free Tier Included",
+    questions: 75,
+    durationMinutes: 90,
+    passingPercentage: 70,
+    freeAllocation: "Proportional Free Tier",
     description:
       "Enterprise Configuration Management Database (CMDB) data architecture, Common Service Data Model (CSDM v4.0), Identification and Reconciliation Engine (IRE), and Service Graph Connectors.",
-    domainsCount: 3,
+    domains: [
+      { name: "Discovery Setup & Mid Servers", weight: 35 },
+      { name: "CMDB Schema & Identification Rules", weight: 35 },
+      { name: "Diagnostics, Credentials & Schedules", weight: 30 },
+    ],
     hubUrl: "/certifications/cis-df",
     practiceUrl: "/certifications/cis-df/practice",
     mockUrl: "/certifications/cis-df/mock",
@@ -83,16 +103,23 @@ const CERTIFICATIONS = [
     id: "cis-itsm",
     code: "CIS-ITSM",
     title: "Certified Implementation Specialist — ITSM",
+    category: "specialist",
     level: "Implementation Consultant",
     release: "Australia & Brazil 2026",
     status: "available",
-    questions: "75 Questions",
-    duration: "90 Minutes",
-    passScore: "70%",
-    freeQuestions: "Free Tier Included",
+    questions: 75,
+    durationMinutes: 90,
+    passingPercentage: 70,
+    freeAllocation: "Proportional Free Tier",
     description:
       "Enterprise implementation of Incident Management, Problem Management, Change Management, Request Management, Service Catalog, and Service Level Management (SLA/OLA).",
-    domainsCount: 4,
+    domains: [
+      { name: "Incident Management Architecture & States", weight: 25 },
+      { name: "Change & Release Management Workflows", weight: 25 },
+      { name: "Service Catalog & Request Fulfillment", weight: 25 },
+      { name: "Problem Management & Knowledge Bases", weight: 15 },
+      { name: "Configuration Management & CSDM Alignment", weight: 10 },
+    ],
     hubUrl: "/certifications/cis-itsm",
     practiceUrl: "/certifications/cis-itsm/practice",
     mockUrl: "/certifications/cis-itsm/mock",
@@ -111,131 +138,162 @@ const ROADMAP_TRACKS = [
 ];
 
 export default function CertificationsCatalogPage() {
+  const [filterCategory, setFilterCategory] = useState<"all" | "foundational" | "developer" | "specialist">("all");
+
+  const filteredCerts = CERTIFICATIONS.filter((c) => {
+    if (filterCategory === "all") return true;
+    return c.category === filterCategory;
+  });
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-10">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-10 animate-in fade-in duration-300">
       {/* Header Banner */}
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-8 md:p-10 shadow-xs space-y-4 transition-colors">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-gradient-to-r from-blue-50/70 via-white to-blue-50/30 dark:from-[#131D31] dark:via-[#0E1524] dark:to-[#131D31] p-8 md:p-12 shadow-xs space-y-5">
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="accent" className="text-xs py-1 px-3">
+          <Badge variant="accent" className="text-xs py-1 px-3 font-semibold">
             ServiceNow Certification Catalog
           </Badge>
-          <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-            Multi-Exam Practice Engine
+          <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+            Australia & Brazil 2026 Releases Verified
           </span>
         </div>
 
-        <div className="space-y-2">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+        <div className="space-y-2 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B192C] dark:text-white tracking-tight">
             Choose Your ServiceNow Certification Path
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-base max-w-3xl leading-relaxed">
-            Select your target exam to launch high-accuracy practice drills, 90-minute timed mock simulations, or review official blueprint study guides.
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+            Every track is engineered with official domain quotas, 90-minute timed mock simulations with Pause/Resume, anti-memorization dual shuffling, and instant explanation blueprints.
           </p>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          {[
+            { id: "all", label: `All Tracks (${CERTIFICATIONS.length})` },
+            { id: "foundational", label: "Foundational (CSA)" },
+            { id: "developer", label: "Developer (CAD)" },
+            { id: "specialist", label: "Specialist (CIS Series)" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setFilterCategory(tab.id as any)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                filterCategory === tab.id
+                  ? "bg-[#0066FF] text-white shadow-xs"
+                  : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Certification Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {CERTIFICATIONS.map((cert) => {
-          const isAvailable = cert.status === "available";
-
-          return (
-            <Card
-              key={cert.id}
-              className={`p-6 md:p-8 flex flex-col justify-between space-y-6 transition-all ${
-                isAvailable
-                  ? "border-slate-300 dark:border-slate-800 shadow-sm bg-white dark:bg-[#131D31] hover:border-[#0066FF] dark:hover:border-[#0066FF] hover:shadow-md"
-                  : "border-slate-200 dark:border-slate-800/60 bg-slate-50/60 dark:bg-[#0E1524]/60 opacity-80"
-              }`}
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
-                    EXAM CODE: {cert.code}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {filteredCerts.map((cert) => (
+          <Card
+            key={cert.id}
+            className="p-6 sm:p-8 rounded-3xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-6 shadow-xs hover:border-[#0066FF] hover:shadow-lg transition-all"
+          >
+            <div className="space-y-5">
+              {/* Header Badges */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="font-mono text-xs font-bold text-[#0066FF] dark:text-[#38BDF8] dark:border-slate-700">
+                    {cert.code}
+                  </Badge>
+                  <span className="text-xs font-semibold text-slate-500">
+                    {cert.level}
                   </span>
-                  {isAvailable ? (
-                    <Badge variant="success" className="text-xs">
-                      Available • Australia & Brazil
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="text-xs gap-1 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700">
-                      <Lock className="h-3 w-3" /> Coming Soon
-                    </Badge>
-                  )}
                 </div>
+                <Badge variant="success" className="text-[11px] py-0.5 px-2">
+                  {cert.freeAllocation}
+                </Badge>
+              </div>
 
-                <div className="space-y-1">
-                  <h3 className="text-xl md:text-2xl font-bold text-[#0B192C] dark:text-white">
-                    {cert.title}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[#0066FF] dark:text-[#38BDF8]">
-                      {cert.level}
-                    </span>
-                    <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px]">
-                      {cert.freeQuestions}
-                    </Badge>
-                  </div>
-                </div>
-
-                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              {/* Title & Description */}
+              <div className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B192C] dark:text-white">
+                  {cert.title}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {cert.description}
                 </p>
+              </div>
 
-                {/* Exam Metadata Stats */}
-                <div className="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 dark:border-slate-800 text-center">
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 block">Questions</span>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{cert.questions}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 block">Duration</span>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{cert.duration}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 block">Pass Mark</span>
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{cert.passScore}</span>
-                  </div>
+              {/* Exam Specs Strip */}
+              <div className="grid grid-cols-3 gap-2 py-3 px-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 text-center text-xs">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Questions</span>
+                  <span className="font-bold font-mono text-slate-900 dark:text-white">{cert.questions} Qs</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Time Limit</span>
+                  <span className="font-bold font-mono text-slate-900 dark:text-white">{cert.durationMinutes} Mins</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Benchmark</span>
+                  <span className="font-bold font-mono text-emerald-600 dark:text-emerald-400">{cert.passingPercentage}%</span>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-2">
-                {isAvailable ? (
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Link href={cert.hubUrl} className="flex-1">
-                      <Button variant="accent" className="w-full gap-2 text-xs">
-                        <Zap className="h-4 w-4" /> Open Practice Engine
-                      </Button>
-                    </Link>
-                    <Link href={cert.studyUrl}>
-                      <Button variant="outline" className="gap-2 text-xs dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
-                        <BookOpen className="h-4 w-4" /> Study Guides
-                      </Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <Button variant="outline" disabled className="w-full text-xs text-slate-400 dark:text-slate-600 border-slate-200 dark:border-slate-800 cursor-not-allowed">
-                    Authoring in Progress • Launches Soon
-                  </Button>
-                )}
+              {/* Domains Breakdown Preview */}
+              <div className="space-y-2 text-xs">
+                <div className="font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                  <span>Blueprint Knowledge Domains:</span>
+                  <span className="text-[11px] text-slate-400">{cert.domains.length} Domains</span>
+                </div>
+                <div className="space-y-1.5">
+                  {cert.domains.slice(0, 3).map((dom, dIdx) => (
+                    <div key={dIdx} className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
+                      <span className="truncate pr-2">• {dom.name}</span>
+                      <span className="font-mono font-bold text-slate-700 dark:text-slate-300 shrink-0">{dom.weight}%</span>
+                    </div>
+                  ))}
+                  {cert.domains.length > 3 && (
+                    <div className="text-[11px] text-[#0066FF] dark:text-[#38BDF8] font-medium">
+                      + {cert.domains.length - 3} more blueprint areas
+                    </div>
+                  )}
+                </div>
               </div>
-            </Card>
-          );
-        })}
+            </div>
+
+            {/* Launch Action Buttons */}
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-2.5">
+              <Link href={cert.practiceUrl} className="flex-1">
+                <Button variant="accent" className="w-full text-xs font-bold gap-1.5 shadow-xs cursor-pointer">
+                  <Zap className="h-3.5 w-3.5" /> Start Free Practice
+                </Button>
+              </Link>
+              <Link href={cert.mockUrl} className="flex-1">
+                <Button variant="default" className="w-full text-xs font-bold gap-1.5 bg-[#0B192C] hover:bg-[#1A2E44] text-white cursor-pointer">
+                  <Clock className="h-3.5 w-3.5 text-[#38BDF8]" /> Launch Timed Mock
+                </Button>
+              </Link>
+              <Link href={cert.studyUrl}>
+                <Button variant="outline" className="text-xs dark:border-slate-700 cursor-pointer" title="Study Guides">
+                  <BookOpen className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        ))}
       </div>
 
-      {/* Subsequent Certification Roadmap (Phase 2 & Phase 3) */}
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 sm:p-8 space-y-6">
+      {/* Roadmap & Upcoming Tracks */}
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 sm:p-8 space-y-6">
         <div className="space-y-1">
           <Badge variant="outline" className="text-xs dark:border-slate-700">
-            Platform Roadmap
+            Roadmap Pipeline
           </Badge>
-          <h2 className="text-xl font-bold text-[#0B192C] dark:text-white">
-            Upcoming Specialist & Architect Tracks
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0B192C] dark:text-white">
+            Upcoming Specialist & Architect Exam Simulators
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Following our core tracks (CSA, CAD, CIS-DF, CIS-ITSM), the following certification engines will be rolled out.
+            Following our core 4 tracks, these specialist simulators are currently in authoring.
           </p>
         </div>
 
@@ -254,16 +312,10 @@ export default function CertificationsCatalogPage() {
                 </div>
               </div>
               <Badge variant="outline" className="text-[10px] shrink-0 dark:border-slate-700">
-                Roadmap
+                Coming Soon
               </Badge>
             </div>
           ))}
-        </div>
-
-        {/* Free Question Volume Note */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-          <span className="font-semibold text-slate-700 dark:text-slate-300">Free Practice Allocation Note: </span>
-          Practice engines provide free blueprint questions upon launch (60 questions for broad certifications with hundreds in the repository like CSA; 40 or 20 for targeted specialist tracks). Pro members receive full question vault access and 3-mode PDF export.
         </div>
       </div>
     </div>
