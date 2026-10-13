@@ -97,15 +97,17 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        // Compute 1-year expiration for certification tracks
-        const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+        // Compute expiration: 2 years (730 days) for all_access, 1 year (365 days) for single tracks
+        const validityDays = (plan.validityYears || (plan.id === "all_access" ? 2 : 1)) * 365;
+        const expiresAt = new Date(Date.now() + validityDays * 24 * 60 * 60 * 1000);
 
         // Grant entitlement in database if userId exists
         if (userId) {
-          const certsToGrant =
+          const certsToGrant = plan.certificationsIncluded || (
             plan.id === "all_access"
               ? ["csa", "cad", "cis-df", "cis-itsm"]
-              : ["csa"];
+              : ["csa"]
+          );
 
           for (const certId of certsToGrant) {
             await db.insert(userEntitlements).values({
@@ -113,7 +115,7 @@ export async function POST(req: NextRequest) {
               certificationId: certId,
               accessType: plan.id,
               orderId,
-              expiresAt, // 1-year certification validity
+              expiresAt,
             });
           }
         }
@@ -122,16 +124,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const certsGranted =
+    const certsGranted = plan.certificationsIncluded || (
       plan.id === "all_access"
         ? ["csa", "cad", "cis-df", "cis-itsm"]
-        : ["csa"];
+        : ["csa"]
+    );
 
-    const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+    const validityDays = (plan.validityYears || (plan.id === "all_access" ? 2 : 1)) * 365;
+    const expiresAt = new Date(Date.now() + validityDays * 24 * 60 * 60 * 1000);
 
     return NextResponse.json({
       success: true,
-      message: "Payment successfully verified and Pro entitlement activated for 1 year.",
+      message: `Payment successfully verified and Pro entitlement activated for ${plan.validityYears || (plan.id === "all_access" ? 2 : 1)} year(s).`,
       entitlement: {
         planId: plan.id,
         planName: plan.name,

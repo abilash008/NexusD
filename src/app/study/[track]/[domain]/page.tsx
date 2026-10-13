@@ -17,51 +17,74 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CSA_STUDY_GUIDES } from "@/data/csa-study-guides";
+import { getDomainStudyGuide, DomainStudyGuide } from "@/data/csa-study-guides";
+import { getExamConfig } from "@/lib/exam-engine";
 
 interface PageProps {
-  params: Promise<{ domain: string }>;
-}
-
-export async function generateStaticParams() {
-  return CSA_STUDY_GUIDES.map((guide) => ({
-    domain: guide.slug,
-  }));
+  params: Promise<{ track: string; domain: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { domain } = await params;
-  const guide = CSA_STUDY_GUIDES.find((g) => g.slug === domain);
+  const { track, domain } = await params;
+  const trackId = (track || "csa").toLowerCase();
+  const config = getExamConfig(trackId);
+  const guide = getDomainStudyGuide(trackId, domain);
 
   if (!guide) {
+    const domainMatch = config.domains?.find((d) => d.slug === domain);
+    const domainName = domainMatch ? domainMatch.name : domain;
     return {
-      title: "Domain Study Guide Not Found — NexusD",
+      title: `${domainName} — ServiceNow ${config.code} Study Guide | NexusD`,
+      description: `Revision blueprint for ServiceNow ${config.title} ${domainName} domain.`,
     };
   }
 
   return {
-    title: `${guide.name} (${guide.weight}%) — ServiceNow CSA Study Guide | NexusD`,
-    description: `Comprehensive revision guide for the ServiceNow Certified System Administrator (CSA) ${guide.name} domain. Fully aligned to Australia & Brazil releases.`,
-    openGraph: {
-      title: `${guide.name} — CSA Exam Blueprint Guide | NexusD`,
-      description: guide.overview,
-      type: "article",
-      url: `https://nexusd.in/study/csa/${guide.slug}`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${guide.name} — ServiceNow CSA Blueprint`,
-      description: guide.overview,
-    },
+    title: `${guide.name} (${guide.weight}%) — ServiceNow ${config.code} Study Guide | NexusD`,
+    description: `Comprehensive revision guide for ServiceNow ${config.title} ${guide.name} domain. Aligned to Australia & Brazil releases.`,
   };
 }
 
-export default async function DomainStudyGuidePage({ params }: PageProps) {
-  const { domain } = await params;
-  const guide = CSA_STUDY_GUIDES.find((g) => g.slug === domain);
+export default async function DynamicDomainStudyGuidePage({ params }: PageProps) {
+  const { track, domain } = await params;
+  const trackId = (track || "csa").toLowerCase();
+  const config = getExamConfig(trackId);
+
+  let guide = getDomainStudyGuide(trackId, domain);
 
   if (!guide) {
-    notFound();
+    const matchedDomain = config.domains?.find(
+      (d) => d.slug.toLowerCase() === domain.toLowerCase()
+    );
+    if (!matchedDomain) {
+      notFound();
+    }
+
+    // Synthesize guide from registered domain configuration
+    guide = {
+      slug: matchedDomain.slug,
+      name: matchedDomain.name,
+      weight: matchedDomain.weight || 20,
+      questionCount: Math.round(((matchedDomain.weight || 20) / 100) * (config.totalQuestions || 60)),
+      overview: `Official blueprint syllabus guide for ${matchedDomain.name} on the ServiceNow ${config.code} examination.`,
+      releaseNotes: `Aligned to ServiceNow ${config.releaseVersion || "Australia & Brazil"} standards.`,
+      topics: [
+        {
+          title: `${matchedDomain.name} Core Architecture`,
+          summary: `Key functional patterns, architectural principles, and configuration options tested for ${matchedDomain.name}.`,
+          keyPoints: [
+            `Understand the standard configuration lifecycle for ${matchedDomain.name}.`,
+            `Identify best practices and security implications recommended by ServiceNow.`,
+            `Distinguish between out-of-the-box configuration and custom scripting.`
+          ],
+          examTips: `Review release notes and terminology specific to ${config.code} ${matchedDomain.name}.`,
+        }
+      ],
+      keyTerminology: [
+        { term: matchedDomain.name, definition: `Evaluated knowledge domain carrying ${matchedDomain.weight || 20}% exam blueprint weighting.` }
+      ],
+      practiceUrl: `/certifications/${trackId}/practice?domain=${matchedDomain.slug}`
+    };
   }
 
   return (
@@ -73,8 +96,12 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
           <span>Home</span>
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-400 dark:text-slate-600" />
-        <Link href="/study/csa" className="hover:text-slate-900 dark:hover:text-white">
+        <Link href="/study" className="hover:text-slate-900 dark:hover:text-white">
           Study Blueprints
+        </Link>
+        <ChevronRight className="h-3 w-3 text-slate-400 dark:text-slate-600" />
+        <Link href={`/study/${trackId}`} className="hover:text-slate-900 dark:hover:text-white">
+          {config.code} Guides
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-400 dark:text-slate-600" />
         <span className="text-slate-800 dark:text-slate-200 font-semibold truncate">{guide.name}</span>
@@ -90,7 +117,7 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
             {guide.questionCount} Exam Blueprint Questions
           </span>
           <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-            Australia & Brazil Releases
+            {config.releaseVersion || "Australia & Brazil Releases"}
           </span>
         </div>
 
@@ -110,9 +137,9 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
               <Zap className="h-4 w-4" /> Practice {guide.questionCount} Domain Questions
             </Button>
           </Link>
-          <Link href="/certifications/csa/mock">
+          <Link href={`/certifications/${trackId}/mock`}>
             <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
-              Full 90-Min Mock <ArrowRight className="h-4 w-4" />
+              Full {config.durationMinutes || 90}-Min Mock <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
@@ -125,7 +152,7 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
             Core Examination Topics & Architecture
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Every topic below maps directly to questions encountered on the official ServiceNow examination.
+            Every topic below maps directly to questions encountered on the official ServiceNow {config.code} examination.
           </p>
         </div>
 
@@ -184,26 +211,28 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
       </div>
 
       {/* Key Terminology Glossary */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
-          Key Terminology & Definitions
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {guide.keyTerminology.map((item, idx) => (
-            <div
-              key={idx}
-              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-1.5 shadow-2xs"
-            >
-              <span className="font-bold text-sm text-slate-900 dark:text-white font-mono">
-                {item.term}
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {item.definition}
-              </p>
-            </div>
-          ))}
+      {guide.keyTerminology && guide.keyTerminology.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
+            Key Terminology & Definitions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {guide.keyTerminology.map((item, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-1.5 shadow-2xs"
+              >
+                <span className="font-bold text-sm text-slate-900 dark:text-white font-mono">
+                  {item.term}
+                </span>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {item.definition}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Bottom Practice CTA */}
       <div className="rounded-2xl border border-blue-200 dark:border-blue-900/50 bg-gradient-to-r from-blue-50 to-indigo-50/30 dark:from-slate-900 dark:to-blue-950/30 p-8 text-center space-y-4">
@@ -219,9 +248,9 @@ export default async function DomainStudyGuidePage({ params }: PageProps) {
               <Zap className="h-4 w-4" /> Start {guide.name} Drills
             </Button>
           </Link>
-          <Link href="/study/csa">
+          <Link href={`/study/${trackId}`}>
             <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
-              <ArrowLeft className="h-4 w-4" /> Back to All Domains
+              <ArrowLeft className="h-4 w-4" /> Back to All {config.code} Domains
             </Button>
           </Link>
         </div>

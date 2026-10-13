@@ -395,3 +395,139 @@ export const CSA_STUDY_GUIDES: DomainStudyGuide[] = [
     practiceUrl: "/certifications/csa/practice?domain=development",
   },
 ];
+
+export const CAD_STUDY_GUIDES: DomainStudyGuide[] = [
+  {
+    slug: "app-design",
+    name: "Designing and Creating Applications",
+    weight: 15,
+    questionCount: 9,
+    overview: "Covers application scoping, ServiceNow Studio, App Engine Studio, source control integration (Git), and global vs private application architectures.",
+    releaseNotes: "Aligned with Australia & Brazil releases, featuring App Engine Studio templates and Git multi-branch development.",
+    topics: [
+      {
+        title: "Application Scoping & Isolation",
+        summary: "Private application scopes protect applications from being broken by global code changes and provide explicit access boundaries.",
+        keyPoints: [
+          "Every scoped app has an artifact prefix (e.g., x_company_app).",
+          "Scope isolation ensures tables and scripts are protected by default.",
+          "Cross-Scope Access (Restricted Caller Access) enforces permission checks at runtime."
+        ],
+        examTips: "Global scope is legacy; new applications should always be built in private scopes.",
+      }
+    ],
+    keyTerminology: [
+      { term: "Application Scope", definition: "A namespace boundary that encapsulates all artifacts for an application." },
+      { term: "RCA (Restricted Caller Access)", definition: "Mechanism to control cross-scope access to tables and script includes." }
+    ],
+    practiceUrl: "/certifications/cad/practice?domain=app-design"
+  },
+  {
+    slug: "data-model",
+    name: "Application Data Model & Security",
+    weight: 25,
+    questionCount: 15,
+    overview: "Data model design, extending tables, field types, and Access Control Lists (ACLs) evaluated in order of security precedence.",
+    releaseNotes: "Includes Data Filtration rules, ACL execution evaluation order, and Role-Based Access Control (RBAC).",
+    topics: [
+      {
+        title: "Table Extension vs New Tables",
+        summary: "Deciding when to extend an existing ServiceNow table (e.g., Task) versus creating a standalone new table.",
+        keyPoints: [
+          "Extending Task inherits workflow, assignment, state, and SLA capabilities.",
+          "Standalone tables are preferred when records do not represent work or task lifecycles.",
+          "Table limit pricing considerations apply when licensing custom tables."
+        ],
+        examTips: "Extending Task is best when you need assignment groups, work notes, and SLA tracking.",
+      }
+    ],
+    keyTerminology: [
+      { term: "ACL Precedence", definition: "Object-level ACL is checked first; if passed, field-level ACL is checked." }
+    ],
+    practiceUrl: "/certifications/cad/practice?domain=data-model"
+  },
+  {
+    slug: "app-automation",
+    name: "Automating Application Logic & Flows",
+    weight: 30,
+    questionCount: 18,
+    overview: "Flow Designer subflows, triggers, actions, Script Includes, and Business Rules (Before, After, Async, Display).",
+    releaseNotes: "Emphasizes Flow Designer over legacy Workflows, custom Action definitions, and Execution Forensics.",
+    topics: [
+      {
+        title: "Flow Designer Architecture",
+        summary: "Modern low-code automation engine replacing legacy graphical workflow editor.",
+        keyPoints: [
+          "Flows execute triggers (record created/updated, scheduled, or REST REST call).",
+          "Actions bundle reusable discrete tasks; Subflows can be called from multiple flows.",
+          "Execution details provide step-by-step auditing for troubleshooting."
+        ],
+        examTips: "Flow Designer is the default recommendation for business logic automation over legacy workflow.",
+      }
+    ],
+    keyTerminology: [
+      { term: "Subflow", definition: "A standalone, parameterized automation sequence with defined inputs and outputs." }
+    ],
+    practiceUrl: "/certifications/cad/practice?domain=app-automation"
+  },
+  {
+    slug: "integration",
+    name: "Scripting, REST APIs & Integration",
+    weight: 20,
+    questionCount: 12,
+    overview: "REST Message outbound integrations, Scripted REST APIs (inbound), GlideRecord vs GlideRecordSecure, and client/server data exchanges.",
+    releaseNotes: "Featuring OpenAPI specifications, OAuth 2.0 token profiles, and Integration Hub spokes.",
+    topics: [
+      {
+        title: "Scripted REST APIs",
+        summary: "Custom web service endpoints defined on the instance to process incoming HTTP requests.",
+        keyPoints: [
+          "Provides request and response GlideScriptable objects.",
+          "Supports JSON and XML serialization.",
+          "Security governed by ACLs of type 'rest_endpoint'."
+        ],
+        examTips: "Always use GlideRecordSecure or check canRead()/canWrite() when handling user input in REST APIs.",
+      }
+    ],
+    keyTerminology: [
+      { term: "Integration Hub", definition: "No-code integration spokes executing third-party API actions in Flow Designer." }
+    ],
+    practiceUrl: "/certifications/cad/practice?domain=integration"
+  },
+  {
+    slug: "ui-experience",
+    name: "User Interface & Workspace Views",
+    weight: 10,
+    questionCount: 6,
+    overview: "Next Experience UI Builder, Form views, UI Actions, and Client Scripts (onLoad, onChange, onSubmit).",
+    releaseNotes: "Next Experience component library and Workspace view rules.",
+    topics: [
+      {
+        title: "UI Builder & Configurable Workspaces",
+        summary: "Visual development environment for building web component-based portals and workspaces.",
+        keyPoints: [
+          "Uses Seiko component library and event handlers.",
+          "Data resources bind GraphQL and REST queries to components."
+        ],
+        examTips: "UI Builder creates responsive experiences decoupled from classic UI16 forms.",
+      }
+    ],
+    keyTerminology: [
+      { term: "UI Action", definition: "Buttons, context menus, and links on forms and lists executing client or server code." }
+    ],
+    practiceUrl: "/certifications/cad/practice?domain=ui-experience"
+  }
+];
+
+export function getTrackStudyGuides(trackId: string): DomainStudyGuide[] {
+  const normalized = (trackId || "csa").toLowerCase();
+  if (normalized === "csa") return CSA_STUDY_GUIDES;
+  if (normalized === "cad") return CAD_STUDY_GUIDES;
+  return CSA_STUDY_GUIDES;
+}
+
+export function getDomainStudyGuide(trackId: string, domainSlug: string): DomainStudyGuide | undefined {
+  const guides = getTrackStudyGuides(trackId);
+  return guides.find((g) => g.slug.toLowerCase() === domainSlug.toLowerCase());
+}
+

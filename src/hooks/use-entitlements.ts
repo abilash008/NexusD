@@ -69,13 +69,25 @@ export function useEntitlements() {
   }, [authStatus]);
 
   const grantPlan = (
-    planId: "csa_pass" | "all_access",
+    planId: string,
     meta?: { orderId?: string; paymentId?: string; receiptNumber?: string; expiresAt?: string }
   ) => {
-    const certs = planId === "all_access" ? ["csa", "cad", "cis-df", "cis-itsm"] : ["csa"];
+    let certs: string[] = ["csa"];
+    let validityDays = 365;
+
+    if (planId === "all_access") {
+      certs = ["csa", "cad", "cis-df", "cis-itsm"];
+      validityDays = 730; // 2 years
+    } else if (planId === "cad_pass") {
+      certs = ["cad"];
+    } else if (planId === "cis_df_pass") {
+      certs = ["cis-df"];
+    } else if (planId === "cis_itsm_pass") {
+      certs = ["cis-itsm"];
+    }
+
     const now = new Date();
-    // 1-year validity for certification tracks
-    const expiry = meta?.expiresAt || new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000).toISOString();
+    const expiry = meta?.expiresAt || new Date(now.getTime() + validityDays * 24 * 60 * 60 * 1000).toISOString();
 
     const newEntitlement: StoredEntitlement = {
       planId,

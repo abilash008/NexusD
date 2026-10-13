@@ -3,18 +3,30 @@ import {
   CSA_ALL_QUESTIONS,
   QuestionOption,
 } from "@/data/csa-questions";
+import {
+  CAD_SEED_QUESTIONS,
+  CIS_DF_SEED_QUESTIONS,
+  CIS_ITSM_SEED_QUESTIONS,
+} from "@/data/multi-track-questions";
 
 const CUSTOM_QUESTIONS_STORAGE_KEY = "nexusd_custom_questions";
 
 /**
- * Retrieves active questions (combining base seed bank with custom/edited questions)
+ * Retrieves active questions (combining base seed bank across all tracks with custom/edited questions)
  * Optionally filtered by certification track ID (e.g. "csa", "cad", "cis-df", etc.)
  */
 export function getAllQuestions(certificationId?: string): PracticeQuestion[] {
-  let list: PracticeQuestion[] = CSA_ALL_QUESTIONS.map((q) => ({
-    ...q,
-    certificationId: q.certificationId || "csa",
-  }));
+  const basePool: PracticeQuestion[] = [
+    ...CSA_ALL_QUESTIONS.map((q) => ({
+      ...q,
+      certificationId: q.certificationId || "csa",
+    })),
+    ...CAD_SEED_QUESTIONS,
+    ...CIS_DF_SEED_QUESTIONS,
+    ...CIS_ITSM_SEED_QUESTIONS,
+  ];
+
+  let list: PracticeQuestion[] = [...basePool];
 
   if (typeof window !== "undefined") {
     try {

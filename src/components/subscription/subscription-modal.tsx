@@ -31,6 +31,7 @@ interface SubscriptionModalProps {
   onClose: () => void;
   reason?: "export_pdf" | "unlock_questions" | "general";
   initialReason?: "export_pdf" | "unlock_questions" | "general";
+  initialPlanId?: string;
   onSimulateUnlock?: () => void;
   onSubscribed?: () => void;
 }
@@ -40,6 +41,7 @@ export function SubscriptionModal({
   onClose,
   reason,
   initialReason,
+  initialPlanId,
   onSimulateUnlock,
   onSubscribed,
 }: SubscriptionModalProps) {
@@ -53,27 +55,37 @@ export function SubscriptionModal({
 
   // Check which plans are currently active for this user
   const isAllAccessActive = Boolean(isCertificationActive && entitlement?.planId === "all_access");
-  const isCsaActive = Boolean(
-    isCertificationActive &&
-      (entitlement?.planId === "all_access" || entitlement?.certifications?.includes("csa"))
-  );
+  const isPlanActive = (planKey: string) => {
+    if (!isCertificationActive) return false;
+    if (entitlement?.planId === "all_access") return true;
+    if (entitlement?.planId === planKey) return true;
+    const certCode = planKey.replace("_pass", "");
+    return Boolean(entitlement?.certifications?.includes(certCode));
+  };
 
-  // Default to all_access unless already active and CSA isn't (or vice versa)
-  const [selectedPlan, setSelectedPlan] = useState<"csa_pass" | "all_access">(() => {
-    if (isCsaActive && !isAllAccessActive) return "all_access";
-    return "all_access";
+  const [selectedPlan, setSelectedPlan] = useState<string>(() => {
+    if (initialPlanId && PRICING_PLANS[initialPlanId]) return initialPlanId;
+    return isAllAccessActive ? "all_access" : "all_access";
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Synchronize when initialPlanId changes
+  React.useEffect(() => {
+    if (initialPlanId && PRICING_PLANS[initialPlanId]) {
+      setSelectedPlan(initialPlanId);
+    }
+  }, [initialPlanId]);
+
   if (!isOpen) return null;
 
-  const currentPlanConfig = PRICING_PLANS[selectedPlan];
-  const isCurrentPlanActive =
-    (selectedPlan === "all_access" && isAllAccessActive) ||
-    (selectedPlan === "csa_pass" && isCsaActive);
+  const currentPlanConfig = PRICING_PLANS[selectedPlan] || PRICING_PLANS.all_access;
+  const isCurrentPlanActive = isPlanActive(selectedPlan);
+
+  // Single tracks list
+  const singleTrackKeys = ["csa_pass", "cad_pass", "cis_df_pass", "cis_itsm_pass"];
 
   // Razorpay standard checkout flow
   const handleInitiatePayment = async () => {
@@ -87,7 +99,7 @@ export function SubscriptionModal({
     // 2. Cannot purchase if already active
     if (isCurrentPlanActive) {
       setErrorMessage(
-        `You already hold an active 1-year pass for this certification (${daysRemaining} days remaining).`
+        `You already hold an active pass covering this certification (${daysRemaining} days remaining).`
       );
       return;
     }
@@ -205,7 +217,7 @@ export function SubscriptionModal({
         <div className="text-center space-y-2 pt-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-xs font-semibold text-[#0066FF] dark:text-[#38BDF8]">
             <Sparkles className="h-3.5 w-3.5" />
-            NexusD Pro Certification Pass
+            NexusD Pro Certification Passes
           </div>
 
           <h2 className="text-2xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
@@ -217,7 +229,7 @@ export function SubscriptionModal({
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
             {effectiveReason === "export_pdf"
               ? "High-fidelity PDF and printable offline sheets are reserved for NexusD Pro members. Subscribe to download complete question papers, answer keys, and architectural explanations."
-              : "Get 1-year access to full certification question vaults, 3-mode printable PDF exporters, and Australia & Brazil release syllabus updates."}
+              : "Get full certification question vaults, 3-mode printable PDF exporters, and 2026 Australia & Brazil release syllabus updates."}
           </p>
         </div>
 
@@ -230,14 +242,14 @@ export function SubscriptionModal({
                 Sign In Required to Purchase
               </p>
               <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed">
-                You must be logged in to your NexusD account to purchase so your 1-year certification pass is securely linked to your account.
+                You must be logged in to your NexusD account to purchase so your certification pass is securely linked to your profile.
               </p>
             </div>
           </div>
         )}
 
         {/* Active plan banner if user already holds active pass */}
-        {isAuthenticated && (isAllAccessActive || isCsaActive) && (
+        {isAuthenticated && isCertificationActive && (
           <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-start gap-3">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
             <div className="space-y-1 text-left">
@@ -246,8 +258,8 @@ export function SubscriptionModal({
               </p>
               <p className="text-[11px] text-emerald-700 dark:text-emerald-300 leading-relaxed">
                 {isAllAccessActive
-                  ? "You have active 1-year access to all 4 certification tracks (CSA, CAD, CIS-DF, CIS-ITSM). No additional purchase is required."
-                  : "You have active 1-year access to the CSA certification track. You can upgrade to All-Access below if you wish to unlock CAD and CIS tracks."}
+                  ? "You have 2-year unlimited access to all 4 certification tracks (CSA, CAD, CIS-DF, CIS-ITSM). No additional purchase is required."
+                  : `You have an active pass covering your enrolled certifications. You can upgrade to the 2-Year All-Access Pass below.`}
               </p>
             </div>
           </div>
@@ -260,82 +272,83 @@ export function SubscriptionModal({
           </div>
         )}
 
-        {/* Plan Selection Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-          {/* Plan 1: CSA Specific Pass */}
-          <div
-            onClick={() => {
-              if (!isCsaActive) setSelectedPlan("csa_pass");
-            }}
-            className={`p-4 rounded-xl border-2 transition-all relative ${
-              isCsaActive
-                ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
-                : selectedPlan === "csa_pass"
-                ? "border-[#0066FF] bg-blue-50/40 dark:bg-blue-950/30 ring-1 ring-[#0066FF] cursor-pointer"
-                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
-            }`}
-          >
-            {isCsaActive && (
-              <div className="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> ACTIVE ({daysRemaining}d)
-              </div>
-            )}
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                CSA Exam Pass
-              </span>
-              <Badge variant="outline" className="text-[10px] dark:border-slate-700">
-                1-Year Pass
-              </Badge>
+        {/* Featured 2-Year All Access Card */}
+        <div
+          onClick={() => {
+            if (!isAllAccessActive) setSelectedPlan("all_access");
+          }}
+          className={`relative p-4 rounded-xl border-2 transition-all ${
+            isAllAccessActive
+              ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
+              : selectedPlan === "all_access"
+              ? "border-[#0066FF] bg-blue-50/60 dark:bg-blue-950/50 ring-2 ring-[#0066FF]/30 cursor-pointer"
+              : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
+          }`}
+        >
+          {isAllAccessActive ? (
+            <div className="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" /> ACTIVE ({daysRemaining}d)
             </div>
-            <div className="mt-2 text-2xl font-black text-slate-900 dark:text-white font-mono">
-              ₹499 <span className="text-xs font-normal text-slate-400">/ 1 year</span>
+          ) : (
+            <div className="absolute -top-2.5 right-3 bg-[#0066FF] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+              BEST VALUE • 2 YEARS ACCESS
             </div>
-            <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-              {isCsaActive
-                ? "Your CSA pass is currently active. All 85+ questions & PDF exports unlocked."
-                : "Full 85+ CSA question bank, unlimited PDF downloads & 1-year release updates."}
-            </p>
+          )}
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#0066FF] dark:text-[#38BDF8]">
+              All-Access Career Pass
+            </span>
+            <Badge variant="accent" className="text-[10px]">
+              All 4 Tracks
+            </Badge>
           </div>
+          <div className="mt-2 text-2xl font-black text-slate-900 dark:text-white font-mono">
+            ₹999 <span className="text-xs font-normal text-slate-400">/ 2 full years (730 days)</span>
+          </div>
+          <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+            2-Year unlimited access to CSA, CAD, CIS-DF, and CIS-ITSM question vaults, PDF downloads & mock exams.
+          </p>
+        </div>
 
-          {/* Plan 2: All Access Pass */}
-          <div
-            onClick={() => {
-              if (!isAllAccessActive) setSelectedPlan("all_access");
-            }}
-            className={`relative p-4 rounded-xl border-2 transition-all ${
-              isAllAccessActive
-                ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
-                : selectedPlan === "all_access"
-                ? "border-[#0066FF] bg-blue-50/60 dark:bg-blue-950/50 ring-2 ring-[#0066FF]/30 cursor-pointer"
-                : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
-            }`}
-          >
-            {isAllAccessActive ? (
-              <div className="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> ACTIVE ({daysRemaining}d)
-              </div>
-            ) : (
-              <div className="absolute -top-2.5 right-3 bg-[#0066FF] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
-                RECOMMENDED
-              </div>
-            )}
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0066FF] dark:text-[#38BDF8]">
-                All-Access Pass
-              </span>
-              <Badge variant="accent" className="text-[10px]">
-                All 4 Tracks
-              </Badge>
-            </div>
-            <div className="mt-2 text-2xl font-black text-slate-900 dark:text-white font-mono">
-              ₹999 <span className="text-xs font-normal text-slate-400">/ 1 year</span>
-            </div>
-            <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-300 font-medium">
-              {isAllAccessActive
-                ? "Full active 1-year access to CSA, CAD, CIS-DF, and CIS-ITSM question vaults."
-                : "1-Year access to CSA, CAD, CIS-DF, and CIS-ITSM question banks & exports."}
-            </p>
+        {/* Individual Track Passes */}
+        <div className="space-y-2">
+          <div className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+            Or Choose Single-Track 1-Year Pass (₹499 each):
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {singleTrackKeys.map((planKey) => {
+              const plan = PRICING_PLANS[planKey];
+              const isActive = isPlanActive(planKey);
+              const isSelected = selectedPlan === planKey;
+
+              return (
+                <div
+                  key={planKey}
+                  onClick={() => {
+                    if (!isActive) setSelectedPlan(planKey);
+                  }}
+                  className={`p-3 rounded-xl border transition-all relative text-left ${
+                    isActive
+                      ? "border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20 opacity-80 cursor-not-allowed"
+                      : isSelected
+                      ? "border-[#0066FF] bg-blue-50/40 dark:bg-blue-950/30 ring-1 ring-[#0066FF] cursor-pointer"
+                      : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/40 dark:bg-slate-900/40 cursor-pointer"
+                  }`}
+                >
+                  {isActive && (
+                    <div className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                      <CheckCircle2 className="h-2.5 w-2.5" /> ACTIVE
+                    </div>
+                  )}
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">
+                    {plan.name}
+                  </div>
+                  <div className="text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5">
+                    ₹{plan.priceInr} <span className="text-[10px] font-normal text-slate-400">/ 1 yr</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -444,7 +457,7 @@ export function SubscriptionModal({
             <span className="flex items-center gap-1">
               <Shield className="h-3.5 w-3.5 text-slate-400" /> 256-Bit SSL Secured
             </span>
-            <span>1-Year Certification Validity</span>
+            <span>{selectedPlan === "all_access" ? "2-Year Unlimited Access" : "1-Year Certification Validity"}</span>
             <span>Standard Platform Features Free</span>
           </div>
         </div>

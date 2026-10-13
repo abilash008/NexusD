@@ -1,8 +1,8 @@
 export interface StoredEntitlement {
-  planId: "csa_pass" | "all_access";
+  planId: "csa_pass" | "cad_pass" | "cis_df_pass" | "cis_itsm_pass" | "all_access" | string;
   certifications: string[];
   grantedAt: string;
-  expiresAt: string; // 1-year validity for certification tracks
+  expiresAt: string; // 1-year or 2-year validity for certification tracks
   orderId?: string;
   paymentId?: string;
   receiptNumber?: string;
@@ -85,7 +85,7 @@ export function isCertificationUnlocked(
 }
 
 /**
- * Checks if Pro features (PDF Export, Questions 61+) are unlocked within the 1-year window
+ * Checks if Pro features (PDF Export, Questions 61+) are unlocked within the validity window
  */
 export function isProFeatureUnlocked(
   entitlement: StoredEntitlement | null,
@@ -94,6 +94,9 @@ export function isProFeatureUnlocked(
   if (!entitlement) return false;
   if (!isEntitlementActive(entitlement)) return false;
   if (entitlement.planId === "all_access") return true;
-  if (entitlement.planId === "csa_pass" && certCode.toLowerCase() === "csa") return true;
+  const normalizedCert = certCode.toLowerCase();
+  if (entitlement.certifications.map((c) => c.toLowerCase()).includes(normalizedCert)) return true;
+  if (entitlement.planId === `${normalizedCert.replace("-", "_")}_pass`) return true;
   return false;
 }
+

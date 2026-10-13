@@ -92,9 +92,9 @@ const CERTIFICATION_TRACKS: CertTrack[] = [
     blueprintRelease: "Australia & Brazil (2025/2026)",
     questionCount: 75,
     passingScore: 70,
-    practiceUrl: "/certifications/csa/practice", // Active track router
-    mockUrl: "/certifications/csa/mock",
-    studyUrl: "/study/csa",
+    practiceUrl: "/certifications/cad/practice",
+    mockUrl: "/certifications/cad/mock",
+    studyUrl: "/study/cad",
     domains: [
       { slug: "cad-data-model", name: "Application Data Model & Tables", weight: "28%", weightNum: 28 },
       { slug: "cad-ui-design", name: "User Interface Design & Client Scripting", weight: "22%", weightNum: 22 },
@@ -106,14 +106,14 @@ const CERTIFICATION_TRACKS: CertTrack[] = [
   {
     id: "cis-df",
     code: "CIS-DF",
-    name: "CIS — Discovery Specialist",
+    name: "CIS — Discovery & Data Foundations",
     description: "Discovery schedules, pattern designer, CMDB identification, and MID server tuning.",
     blueprintRelease: "Australia & Brazil (2025/2026)",
-    questionCount: 65,
+    questionCount: 75,
     passingScore: 70,
-    practiceUrl: "/certifications/csa/practice",
-    mockUrl: "/certifications/csa/mock",
-    studyUrl: "/study/csa",
+    practiceUrl: "/certifications/cis-df/practice",
+    mockUrl: "/certifications/cis-df/mock",
+    studyUrl: "/study/cis-df",
     domains: [
       { slug: "cis-df-patterns", name: "Discovery Pattern Design & Syntax", weight: "35%", weightNum: 35 },
       { slug: "cis-df-architecture", name: "Architecture, Credentials & MID Servers", weight: "25%", weightNum: 25 },
@@ -127,11 +127,11 @@ const CERTIFICATION_TRACKS: CertTrack[] = [
     name: "CIS — IT Service Management",
     description: "Incident, problem, change workflows, service catalog, and CSDM architecture.",
     blueprintRelease: "Australia & Brazil (2025/2026)",
-    questionCount: 70,
+    questionCount: 75,
     passingScore: 70,
-    practiceUrl: "/certifications/csa/practice",
-    mockUrl: "/certifications/csa/mock",
-    studyUrl: "/study/csa",
+    practiceUrl: "/certifications/cis-itsm/practice",
+    mockUrl: "/certifications/cis-itsm/mock",
+    studyUrl: "/study/cis-itsm",
     domains: [
       { slug: "cis-itsm-incident", name: "Incident Management Architecture & States", weight: "25%", weightNum: 25 },
       { slug: "cis-itsm-change", name: "Change & Release Management Workflows", weight: "25%", weightNum: 25 },
@@ -186,17 +186,16 @@ export default function AnalyticsDashboardPage() {
           localStorage.removeItem("nexusd_csa_practice_history");
         } catch (e) {}
       } else {
-        // 2. Only if unauthenticated, read local storage for offline drills
+        // 2. If unauthenticated, purge mock history (mock tests require signing in)
         try {
-          const storageKey =
-            selectedCertId === "csa" ? "nexusd_csa_mock_history" : `nexusd_${selectedCertId}_mock_history`;
-          const localMocks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+          localStorage.removeItem("nexusd_csa_mock_history");
+          localStorage.removeItem(`nexusd_${selectedCertId}_mock_history`);
 
           const practiceKey =
             selectedCertId === "csa" ? "nexusd_csa_practice_history" : `nexusd_${selectedCertId}_practice_history`;
           const localPractices = JSON.parse(localStorage.getItem(practiceKey) || "[]");
 
-          loadedAttempts = [...localMocks, ...localPractices];
+          loadedAttempts = Array.isArray(localPractices) ? localPractices : [];
         } catch (e) {
           loadedAttempts = [];
         }
