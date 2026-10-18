@@ -197,7 +197,7 @@ export default function DashboardPage() {
           <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
             <Compass className="h-3.5 w-3.5 text-[#0066FF]" /> Active Certification Track:
           </div>
-          <div className="text-lg font-black text-slate-900 dark:text-white">
+          <div className="text-base font-bold text-slate-900 dark:text-white">
             {currentTrack.code} — {currentTrack.title}
           </div>
         </div>
@@ -254,11 +254,11 @@ export default function DashboardPage() {
               </span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {displayName ? `Welcome back, ${displayName}` : "Ready to Accelerate Your ServiceNow Career"}
             </h1>
 
-            <p className="text-slate-600 dark:text-slate-300 text-sm max-w-2xl leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
               {currentTrack.shortDescription} Practice with official blueprint quotas, instant explanations, and 90-minute timed mock simulations.
             </p>
           </div>
@@ -266,17 +266,17 @@ export default function DashboardPage() {
           {/* Quick Action CTAs targeting the active track */}
           <div className="flex flex-wrap gap-2.5">
             <Link href={`/certifications/${activeTrackId}/practice`}>
-              <Button variant="accent" size="lg" className="gap-2 shadow-sm whitespace-nowrap cursor-pointer">
+              <Button variant="accent" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 shadow-sm whitespace-nowrap cursor-pointer">
                 <Zap className="h-4 w-4" /> Start Practice Test
               </Button>
             </Link>
             <Link href={`/certifications/${activeTrackId}/mock`}>
-              <Button variant="default" size="lg" className="gap-2 whitespace-nowrap cursor-pointer bg-[#0B192C] hover:bg-[#1A2E44] text-white">
+              <Button variant="default" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 whitespace-nowrap cursor-pointer bg-[#0B192C] hover:bg-[#1A2E44] text-white">
                 <Clock className="h-4 w-4 text-[#38BDF8]" /> Start Mock Exam
               </Button>
             </Link>
             <Link href="/profile">
-              <Button variant="outline" size="lg" className="whitespace-nowrap border-slate-300 dark:border-slate-700 dark:text-slate-200 cursor-pointer">
+              <Button variant="outline" className="h-11 px-5 text-xs sm:text-sm font-semibold whitespace-nowrap border-slate-300 dark:border-slate-700 dark:text-slate-200 cursor-pointer">
                 Profile
               </Button>
             </Link>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
               </span>
               <Target className="h-4 w-4 text-[#0066FF] dark:text-[#38BDF8]" />
             </div>
-            <CardTitle className="text-xl text-slate-900 dark:text-white">
+            <CardTitle className="text-base font-semibold text-slate-900 dark:text-white">
               Readiness Gauge
             </CardTitle>
             <CardDescription className="text-slate-500 dark:text-slate-400">
@@ -334,7 +334,7 @@ export default function DashboardPage() {
           <CardContent className="space-y-4">
             <div className="rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 p-5 text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
-                <span className="text-4xl font-black text-slate-900 dark:text-white font-mono">
+                <span className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 dark:text-white">
                   {latestScore !== null ? `${latestScore}%` : "--"}
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${readinessStatus.color}`}>
@@ -379,7 +379,7 @@ export default function DashboardPage() {
               </span>
               <Flame className="h-4 w-4 text-amber-500" />
             </div>
-            <CardTitle className="text-xl text-slate-900 dark:text-white">
+            <CardTitle className="text-base font-semibold text-slate-900 dark:text-white">
               7-Day Study Momentum
             </CardTitle>
             <CardDescription className="text-slate-500 dark:text-slate-400">
@@ -389,7 +389,7 @@ export default function DashboardPage() {
 
           <CardContent className="space-y-4">
             <div className="rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 p-4 text-center space-y-1">
-              <div className="text-2xl font-black text-amber-600 dark:text-amber-400 flex items-center justify-center gap-1.5">
+              <div className="text-xl font-bold text-amber-600 dark:text-amber-400 flex items-center justify-center gap-1.5">
                 <Flame className="h-5 w-5 fill-amber-500" />
                 <span>{attemptsCount > 0 ? `${Math.min(attemptsCount, 7)}-Day Habit Streak` : "Start Streak Today"}</span>
               </div>
@@ -437,7 +437,7 @@ export default function DashboardPage() {
               </span>
               <Layers className="h-4 w-4 text-[#0066FF] dark:text-[#38BDF8]" />
             </div>
-            <CardTitle className="text-xl text-slate-900 dark:text-white">
+            <CardTitle className="text-base font-semibold text-slate-900 dark:text-white">
               Domain Competencies
             </CardTitle>
             <CardDescription className="text-slate-500 dark:text-slate-400">
@@ -479,7 +479,7 @@ export default function DashboardPage() {
             <Badge variant="accent" className="text-[10px]">
               Proven 4-Step Methodology
             </Badge>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               {currentTrack.code} Certification Roadmap
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">

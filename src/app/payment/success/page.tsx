@@ -69,10 +69,10 @@ function SuccessContent() {
           <Badge variant="accent" className="px-3 py-1 text-xs">
             Payment Verified & Entitlement Active
           </Badge>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Welcome to NexusD Pro!
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
             Your transaction has been confirmed via Razorpay. Full question vaults, 3-mode printable PDF exports, and simulation engines are now unlocked for your account.
           </p>
         </div>
@@ -84,7 +84,7 @@ function SuccessContent() {
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-[#0066FF] dark:text-[#38BDF8]">
               <BookOpen className="h-5 w-5" />
-              <h3 className="font-bold text-slate-900 dark:text-white">CSA Question Bank Vault</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">CSA Question Bank Vault</h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               Explore all 85+ blueprint-aligned questions with answers, explanations, and generate high-res printable PDFs.
@@ -101,7 +101,7 @@ function SuccessContent() {
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
               <Zap className="h-5 w-5" />
-              <h3 className="font-bold text-slate-900 dark:text-white">Timed 90-Min Mock Exam</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">Timed 90-Min Mock Exam</h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               Test yourself under realistic Webassessor examination conditions with 60 randomized questions and instant diagnostic scoring.
@@ -120,7 +120,7 @@ function SuccessContent() {
         {/* Receipt Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
           <div className="space-y-1">
-            <div className="text-2xl font-black tracking-tight text-[#0B192C] dark:text-white flex items-center gap-2">
+            <div className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
               <span className="text-[#0066FF] dark:text-[#38BDF8]">Nexus</span>D
               <Badge variant="outline" className="text-[10px] uppercase font-mono tracking-wider ml-1">
                 Official Receipt

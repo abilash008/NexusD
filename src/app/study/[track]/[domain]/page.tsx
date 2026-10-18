@@ -122,23 +122,23 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {guide.name}
           </h1>
-          <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
             {guide.overview}
           </p>
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
           <Link href={guide.practiceUrl}>
-            <Button variant="accent" size="lg" className="gap-2">
+            <Button variant="accent" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2">
               <Zap className="h-4 w-4" /> Practice {guide.questionCount} Domain Questions
             </Button>
           </Link>
           <Link href={`/certifications/${trackId}/mock`}>
-            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
+            <Button variant="outline" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 dark:border-slate-700">
               Full {config.durationMinutes || 90}-Min Mock <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -148,10 +148,10 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
       {/* Topics In-Depth Breakdown */}
       <div className="space-y-8">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Core Examination Topics & Architecture
           </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Every topic below maps directly to questions encountered on the official ServiceNow {config.code} examination.
           </p>
         </div>
@@ -163,7 +163,7 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
                 <div className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Module {idx + 1}
                 </div>
-                <h3 className="text-xl font-bold text-[#0B192C] dark:text-white">
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                   {topic.title}
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -213,7 +213,7 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
       {/* Key Terminology Glossary */}
       {guide.keyTerminology && guide.keyTerminology.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Key Terminology & Definitions
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -222,7 +222,7 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
                 key={idx}
                 className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-1.5 shadow-2xs"
               >
-                <span className="font-bold text-sm text-slate-900 dark:text-white font-mono">
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white font-mono">
                   {item.term}
                 </span>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -236,20 +236,20 @@ export default async function DynamicDomainStudyGuidePage({ params }: PageProps)
 
       {/* Bottom Practice CTA */}
       <div className="rounded-2xl border border-blue-200 dark:border-blue-900/50 bg-gradient-to-r from-blue-50 to-indigo-50/30 dark:from-slate-900 dark:to-blue-950/30 p-8 text-center space-y-4">
-        <h3 className="text-xl font-bold text-[#0B192C] dark:text-white">
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           Reinforce Your Knowledge in Practice Mode
         </h3>
-        <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
           Test your mastery of {guide.name} with instant architectural feedback and step-by-step explanations.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <Link href={guide.practiceUrl}>
-            <Button variant="accent" size="lg" className="gap-2">
+            <Button variant="accent" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2">
               <Zap className="h-4 w-4" /> Start {guide.name} Drills
             </Button>
           </Link>
           <Link href={`/study/${trackId}`}>
-            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
+            <Button variant="outline" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 dark:border-slate-700">
               <ArrowLeft className="h-4 w-4" /> Back to All {config.code} Domains
             </Button>
           </Link>

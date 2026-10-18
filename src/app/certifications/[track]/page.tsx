@@ -49,34 +49,34 @@ export default function DynamicCertificationHubPage() {
           </span>
         </div>
 
-        <div className="space-y-3 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B192C] dark:text-white tracking-tight">
+        <div className="space-y-2 max-w-3xl">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {examConfig.title}
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             {examConfig.shortDescription}
           </p>
         </div>
 
         {/* Quick Exam Specifications Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-200/60 dark:border-slate-800">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-slate-200/60 dark:border-slate-800">
           <div className="space-y-1">
-            <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+            <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
               Exam Questions
             </span>
-            <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+            <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-mono">
               {examConfig.totalQuestions} Qs
             </div>
-            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold block">
+            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium block">
               Stratified Blueprint Quota
             </span>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+            <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
               Time Allowed
             </span>
-            <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+            <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-mono">
               {examConfig.durationMinutes} Mins
             </div>
             <span className="text-[11px] text-slate-500 font-mono block">
@@ -85,10 +85,10 @@ export default function DynamicCertificationHubPage() {
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+            <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
               Passing Mark
             </span>
-            <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+            <div className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
               {examConfig.passingPercentage}%
             </div>
             <span className="text-[11px] text-slate-500 block">
@@ -97,32 +97,32 @@ export default function DynamicCertificationHubPage() {
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+            <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
               Blueprint Areas
             </span>
-            <div className="text-2xl font-black text-[#0066FF] dark:text-[#38BDF8] font-mono">
+            <div className="text-xl sm:text-2xl font-bold text-[#0066FF] dark:text-[#38BDF8] font-mono">
               {examConfig.domains?.length || 5} Domains
             </div>
-            <span className="text-[11px] text-blue-600 dark:text-blue-400 block font-semibold">
+            <span className="text-[11px] text-blue-600 dark:text-blue-400 block font-medium">
               Weighted Practice Available
             </span>
           </div>
         </div>
 
         {/* Launch Buttons Row */}
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="flex flex-wrap gap-3 pt-1">
           <Link href={`/certifications/${trackId}/practice`}>
-            <Button variant="accent" size="lg" className="gap-2 font-bold text-xs sm:text-sm py-6 px-7 shadow-md cursor-pointer">
+            <Button variant="accent" size="lg" className="gap-2 font-semibold text-xs sm:text-sm h-11 px-5 shadow-sm cursor-pointer">
               <Zap className="h-4 w-4" /> Start Free Practice Mode (60 Qs)
             </Button>
           </Link>
           <Link href={`/certifications/${trackId}/mock`}>
-            <Button variant="default" size="lg" className="gap-2 bg-[#0B192C] hover:bg-[#1A2E44] text-white font-bold text-xs sm:text-sm py-6 px-7 cursor-pointer">
+            <Button variant="default" size="lg" className="gap-2 bg-[#0B192C] hover:bg-[#1A2E44] text-white font-semibold text-xs sm:text-sm h-11 px-5 cursor-pointer">
               <Clock className="h-4 w-4 text-[#38BDF8]" /> Launch {examConfig.durationMinutes}-Min Timed Mock
             </Button>
           </Link>
           <Link href={`/study/${trackId}`}>
-            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700 font-bold text-xs sm:text-sm py-6 px-6 cursor-pointer">
+            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700 font-semibold text-xs sm:text-sm h-11 px-5 cursor-pointer">
               <BookOpen className="h-4 w-4" /> Study Blueprints
             </Button>
           </Link>
@@ -132,15 +132,15 @@ export default function DynamicCertificationHubPage() {
       {/* Main Pillars: Practice, Mock, Study Guide, Question Bank */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1: Practice Mode */}
-        <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:border-[#0066FF] transition-all">
-          <div className="space-y-3">
+        <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-4 shadow-xs hover:border-[#0066FF] transition-all">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <Badge variant="accent" className="text-[10px]">
                 Untimed Learning
               </Badge>
               <Zap className="h-4 w-4 text-[#0066FF]" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">
               Domain Practice Drills
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -148,23 +148,23 @@ export default function DynamicCertificationHubPage() {
             </p>
           </div>
 
-          <Link href={`/certifications/${trackId}/practice`} className="block pt-2">
-            <Button variant="accent" className="w-full text-xs font-bold gap-1.5 cursor-pointer">
+          <Link href={`/certifications/${trackId}/practice`} className="block pt-1">
+            <Button variant="accent" className="w-full text-xs font-semibold gap-1.5 cursor-pointer">
               Launch Practice Mode <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
         </Card>
 
         {/* Card 2: Timed Mock Simulation */}
-        <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:border-[#0066FF] transition-all">
-          <div className="space-y-3">
+        <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-4 shadow-xs hover:border-[#0066FF] transition-all">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <Badge variant="default" className="text-[10px] bg-[#0B192C] text-white">
                 Exam Conditions
               </Badge>
               <Clock className="h-4 w-4 text-[#0066FF]" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">
               Timed Mock Simulator
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -172,23 +172,23 @@ export default function DynamicCertificationHubPage() {
             </p>
           </div>
 
-          <Link href={`/certifications/${trackId}/mock`} className="block pt-2">
-            <Button variant="default" className="w-full text-xs font-bold gap-1.5 bg-[#0B192C] hover:bg-[#1A2E44] text-white cursor-pointer">
+          <Link href={`/certifications/${trackId}/mock`} className="block pt-1">
+            <Button variant="default" className="w-full text-xs font-semibold gap-1.5 bg-[#0B192C] hover:bg-[#1A2E44] text-white cursor-pointer">
               Launch Timed Exam <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
         </Card>
 
         {/* Card 3: Question Bank & PDF Exporter */}
-        <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:border-[#0066FF] transition-all">
-          <div className="space-y-3">
+        <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-4 shadow-xs hover:border-[#0066FF] transition-all">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <Badge variant="outline" className="text-[10px] dark:border-slate-700">
                 Print & Revise
               </Badge>
               <Download className="h-4 w-4 text-emerald-600" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">
               Question Bank & PDF Sheets
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -196,7 +196,7 @@ export default function DynamicCertificationHubPage() {
             </p>
           </div>
 
-          <Link href={`/study/${trackId}/question-bank`} className="block pt-2">
+          <Link href={`/study/${trackId}/question-bank`} className="block pt-1">
             <Button variant="outline" className="w-full text-xs font-semibold dark:border-slate-700 cursor-pointer">
               Browse Vault & PDFs <ArrowRight className="h-3.5 w-3.5" />
             </Button>
@@ -205,9 +205,9 @@ export default function DynamicCertificationHubPage() {
       </div>
 
       {/* Blueprint Domain Breakdown Section */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Official {examConfig.code} Examination Blueprint Breakdown
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">

@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
       {/* Page Title & Status */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Administrator Command Center
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
               <BookOpen className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
             {questions.length || 85}
           </div>
           <p className="text-[11px] text-slate-500">
@@ -109,7 +109,7 @@ export default function AdminDashboardPage() {
                 <Award className="h-4 w-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+            <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
               {certs.length || 4} Tracks
             </div>
             <p className="text-[11px] text-emerald-600 dark:text-emerald-400 truncate">
@@ -125,7 +125,7 @@ export default function AdminDashboardPage() {
               <Flag className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
             {pendingReports.length}
           </div>
           <p className="text-[11px] text-amber-600 dark:text-amber-400">
@@ -140,11 +140,11 @@ export default function AdminDashboardPage() {
               <CreditCard className="h-4 w-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
-            1-Year Access
+          <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            2-Year Access
           </div>
           <p className="text-[11px] text-slate-500">
-            ₹499 CSA Pass • ₹999 All-Access Pass
+            ₹499 Single Pass • ₹999 2-Year All-Access
           </p>
         </Card>
       </div>

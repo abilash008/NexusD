@@ -158,17 +158,17 @@ export default function CertificationsCatalogPage() {
           </span>
         </div>
 
-        <div className="space-y-2 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B192C] dark:text-white tracking-tight">
+        <div className="space-y-1.5 max-w-3xl">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Choose Your ServiceNow Certification Path
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             Every track is engineered with official domain quotas, 90-minute timed mock simulations with Pause/Resume, anti-memorization dual shuffling, and instant explanation blueprints.
           </p>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 pt-2">
+        <div className="flex flex-wrap items-center gap-2 pt-1">
           {[
             { id: "all", label: `All Tracks (${CERTIFICATIONS.length})` },
             { id: "foundational", label: "Foundational (CSA)" },
@@ -178,7 +178,7 @@ export default function CertificationsCatalogPage() {
             <button
               key={tab.id}
               onClick={() => setFilterCategory(tab.id as any)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 filterCategory === tab.id
                   ? "bg-[#0066FF] text-white shadow-xs"
                   : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -191,20 +191,20 @@ export default function CertificationsCatalogPage() {
       </div>
 
       {/* Certification Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredCerts.map((cert) => (
           <Card
             key={cert.id}
-            className="p-6 sm:p-8 rounded-3xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-6 shadow-xs hover:border-[#0066FF] hover:shadow-lg transition-all"
+            className="p-6 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:border-[#0066FF] hover:shadow-md transition-all"
           >
-            <div className="space-y-5">
+            <div className="space-y-4">
               {/* Header Badges */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className="font-mono text-xs font-bold text-[#0066FF] dark:text-[#38BDF8] dark:border-slate-700">
                     {cert.code}
                   </Badge>
-                  <span className="text-xs font-semibold text-slate-500">
+                  <span className="text-xs font-medium text-slate-500">
                     {cert.level}
                   </span>
                 </div>
@@ -214,8 +214,8 @@ export default function CertificationsCatalogPage() {
               </div>
 
               {/* Title & Description */}
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-black text-[#0B192C] dark:text-white">
+              <div className="space-y-1">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                   {cert.title}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -289,7 +289,7 @@ export default function CertificationsCatalogPage() {
           <Badge variant="outline" className="text-xs dark:border-slate-700">
             Roadmap Pipeline
           </Badge>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
             Upcoming Specialist & Architect Exam Simulators
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">

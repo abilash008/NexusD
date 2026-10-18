@@ -304,10 +304,10 @@ export default function AnalyticsDashboardPage() {
               Calibrated to {selectedTrack.passingScore}% Passing Threshold
             </span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             ServiceNow Certification Readiness Analytics
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm max-w-2xl">
+          <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl">
             Select your subscribed or targeted certification below to view domain accuracy, mock velocity, and pacing telemetry.
           </p>
         </div>
@@ -365,7 +365,7 @@ export default function AnalyticsDashboardPage() {
               >
                 <div>
                   <div className="flex items-center justify-between gap-1 mb-1">
-                    <span className="text-xs font-black tracking-wide text-slate-900 dark:text-white font-mono">
+                    <span className="text-xs font-bold tracking-wide text-slate-900 dark:text-white font-mono">
                       {track.code}
                     </span>
                     {isSubscribed ? (
@@ -414,7 +414,7 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           <div className="flex items-baseline gap-2">
-            <span className={`text-3xl font-extrabold font-mono ${readinessBadge.colorClass}`}>
+            <span className={`text-2xl sm:text-3xl font-bold font-mono ${readinessBadge.colorClass}`}>
               {readinessScore !== null ? `${readinessScore}%` : "--"}
             </span>
             <Badge variant={readinessBadge.variant} className="text-[10px]">
@@ -446,7 +446,7 @@ export default function AnalyticsDashboardPage() {
             <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
           </div>
 
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-mono">
             {totalQuestionsSolved}{" "}
             <span className="text-sm font-normal text-slate-500 dark:text-slate-400">Questions</span>
           </div>
@@ -464,7 +464,7 @@ export default function AnalyticsDashboardPage() {
             <Clock className="h-4 w-4 text-[#0066FF] dark:text-[#38BDF8]" />
           </div>
 
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-mono">
             {mockAttempts.length}{" "}
             <span className="text-sm font-normal text-slate-500 dark:text-slate-400">Completed</span>
           </div>
@@ -482,7 +482,7 @@ export default function AnalyticsDashboardPage() {
             <Gauge className="h-4 w-4 text-[#0066FF] dark:text-[#38BDF8]" />
           </div>
 
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-mono">
             {averagePace !== null ? `${averagePace}s` : "--"}{" "}
             <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ question</span>
           </div>
@@ -523,7 +523,7 @@ export default function AnalyticsDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Official Domain Breakdown ({selectedTrack.code})
             </h2>
             <span className="text-xs text-slate-500 dark:text-slate-400">
@@ -590,7 +590,7 @@ export default function AnalyticsDashboardPage() {
 
         {/* 6. Contextual Study Directives */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Study Recommendations
           </h2>
 
@@ -644,7 +644,7 @@ export default function AnalyticsDashboardPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <History className="h-5 w-5 text-[#0066FF] dark:text-[#38BDF8]" />
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Exam History & Score Log ({selectedTrack.code})
               </h2>
             </div>

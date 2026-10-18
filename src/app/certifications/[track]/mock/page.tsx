@@ -491,10 +491,10 @@ export default function DynamicTimedMockExamPage() {
           <Badge variant="warning" className="text-xs py-1 px-3.5 gap-1.5 font-semibold">
             <Lock className="h-3.5 w-3.5" /> Authentication Required for Mock Exams
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {examConfig.title} Timed Mock Simulation
           </h1>
-          <p className="text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Strict {examConfig.durationMinutes}-minute timed simulation with {examConfig.totalQuestions} questions and official {examConfig.passingPercentage}% passing benchmark.
           </p>
         </div>
@@ -565,7 +565,7 @@ export default function DynamicTimedMockExamPage() {
         <Badge variant="outline" className="text-xs py-1 px-3">
           {examConfig.code} Repository Status
         </Badge>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {examConfig.title} Mock Simulator
         </h1>
         <Card className="p-8 space-y-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-left">
@@ -612,7 +612,7 @@ export default function DynamicTimedMockExamPage() {
           <Badge variant="accent" className="text-xs py-1 px-3 gap-1.5 font-semibold">
             <PauseCircle className="h-3.5 w-3.5" /> Saved Exam in Progress
           </Badge>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Resume {examConfig.code} Timed Mock Simulation
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -703,17 +703,17 @@ export default function DynamicTimedMockExamPage() {
               ? `OFFICIAL BENCHMARK PASSED (≥${examConfig.passingPercentage}%)`
               : `RE-STUDY RECOMMENDED (<${examConfig.passingPercentage}%)`}
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {examConfig.code} Timed Mock Exam Scorecard
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">
+          <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">
             Completed in {formatTimer(timeSpentSeconds)} • {results.correctCount} of {totalQuestions} Questions Correct
           </p>
         </div>
 
         <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-sm p-6 md:p-8 text-center space-y-6">
           <div className="space-y-2">
-            <div className="text-6xl md:text-7xl font-extrabold text-[#0B192C] dark:text-white font-mono">
+            <div className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white font-mono">
               {results.scorePercentage}%
             </div>
             <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">
@@ -755,7 +755,7 @@ export default function DynamicTimedMockExamPage() {
 
         {/* Domain Breakdown */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Domain Accuracy Breakdown ({totalQuestions} Questions)
           </h2>
           <div className="space-y-3">
@@ -793,7 +793,7 @@ export default function DynamicTimedMockExamPage() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <History className="h-5 w-5 text-[#0066FF] dark:text-blue-400" />
-              <h2 className="text-xl font-bold text-[#0B192C] dark:text-white">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Recent {examConfig.code} Mock Attempts
               </h2>
             </div>

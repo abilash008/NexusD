@@ -212,16 +212,16 @@ function DynamicPracticeExamContent() {
           <Badge variant={isPassing ? "success" : "warning"} className="text-xs py-1 px-3">
             {isPassing ? "BENCHMARK MET (≥70%)" : "PRACTICE RECOMMENDED (<70%)"}
           </Badge>
-          <h1 className="text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {examConfig.code} Practice Drill Summary
           </h1>
-          <p className="text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500">
             Time elapsed: {formatTimer(timeElapsedSeconds)} • {correctCount} of {totalQuestions} Correct ({percentage}%)
           </p>
         </div>
 
         <Card className="p-6 sm:p-8 text-center space-y-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-          <div className="text-6xl font-extrabold font-mono text-[#0B192C] dark:text-white">
+          <div className="text-3xl sm:text-4xl font-bold font-mono text-slate-900 dark:text-white">
             {percentage}%
           </div>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
@@ -243,7 +243,7 @@ function DynamicPracticeExamContent() {
 
         {/* Detailed Review */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-[#0B192C] dark:text-white">Question Drill Review</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">Question Drill Review</h2>
           <div className="space-y-4">
             {activeQuestions.map((q, idx) => {
               const userChoices = selectedAnswers[q.id] || [];

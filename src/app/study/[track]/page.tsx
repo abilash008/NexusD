@@ -81,29 +81,29 @@ export default async function DynamicStudyGuidePage({ params }: PageProps) {
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {config.title} Study Blueprints
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-3xl">
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">
             {config.shortDescription ||
               `Master the official knowledge domains evaluated on the ServiceNow ${config.code} exam.`}{" "}
             Includes core architecture deep-dives, key terminology, common exam pitfalls, and 1-click practice drills.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
           <Link href={`/study/${trackId}/question-bank`}>
-            <Button variant="accent" size="lg" className="gap-2">
+            <Button variant="accent" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2">
               <Download className="h-4 w-4" /> Master Question Bank & PDF Exporter
             </Button>
           </Link>
           <Link href={`/certifications/${trackId}/practice`}>
-            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
+            <Button variant="outline" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 dark:border-slate-700">
               <Zap className="h-4 w-4 text-[#0066FF] dark:text-blue-400" /> Free Practice Mode
             </Button>
           </Link>
           <Link href={`/certifications/${trackId}/mock`}>
-            <Button variant="outline" size="lg" className="gap-2 dark:border-slate-700">
+            <Button variant="outline" className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 dark:border-slate-700">
               Launch {config.durationMinutes || 90}-Min Timed Mock <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -113,10 +113,10 @@ export default async function DynamicStudyGuidePage({ params }: PageProps) {
       {/* Blueprint Domain Modules Grid */}
       <div className="space-y-6">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Explore the {studyGuides.length} Knowledge Domains
           </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Select a domain below for comprehensive revision notes, architectural diagrams, and targeted practice questions.
           </p>
         </div>
@@ -140,7 +140,7 @@ export default async function DynamicStudyGuidePage({ params }: PageProps) {
                   </Badge>
                 </div>
 
-                <h3 className="text-lg font-bold text-[#0B192C] dark:text-white">
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                   {guide.name}
                 </h3>
 
@@ -187,7 +187,7 @@ export default async function DynamicStudyGuidePage({ params }: PageProps) {
 
       {/* Blueprint Strategy Callout */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 space-y-4">
-        <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-lg">
+        <div className="flex items-center gap-2 text-base sm:text-lg font-bold text-slate-900 dark:text-white">
           <Sparkles className="h-5 w-5 text-[#0066FF] dark:text-blue-400" />
           Official {config.code} Exam Strategy & Best Practices
         </div>

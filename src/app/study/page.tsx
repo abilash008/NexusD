@@ -37,24 +37,24 @@ export default function StudyCatalogPage() {
           </span>
         </div>
 
-        <div className="space-y-2 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B192C] dark:text-white tracking-tight">
+        <div className="space-y-1.5 max-w-3xl">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Certification Study Blueprints & PDF Vaults
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             In-depth architectural syllabus breakdowns, question bank browsers with verified answers, and 3-mode high-resolution printable PDF exports for offline revision.
           </p>
         </div>
       </div>
 
       {/* 3-Mode Printable PDF Feature Callout */}
-      <Card className="p-6 sm:p-8 rounded-3xl border-2 border-blue-200/80 dark:border-blue-900/60 bg-gradient-to-r from-blue-50/50 via-white to-slate-50 dark:from-[#131D31] dark:via-[#0F172A] dark:to-[#131D31] shadow-xs">
+      <Card className="p-6 rounded-2xl border border-blue-200/80 dark:border-blue-900/60 bg-gradient-to-r from-blue-50/50 via-white to-slate-50 dark:from-[#131D31] dark:via-[#0F172A] dark:to-[#131D31] shadow-xs">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-xs font-bold text-[#0066FF] dark:text-[#38BDF8]">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-[11px] font-semibold text-[#0066FF] dark:text-[#38BDF8]">
               <Printer className="h-3.5 w-3.5" /> Native 3-Mode PDF Exporter
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
               Revise Offline Anywhere with Clean PDF Packs
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -63,45 +63,45 @@ export default function StudyCatalogPage() {
           </div>
 
           <Link href="/pricing" className="shrink-0">
-            <Button variant="accent" size="lg" className="text-xs sm:text-sm font-bold gap-2 py-6 px-6 shadow-sm cursor-pointer">
-              <Sparkles className="h-4 w-4" /> Unlock Pro Exporter
+            <Button variant="accent" size="sm" className="text-xs font-semibold gap-2 h-10 px-4 shadow-xs cursor-pointer">
+              <Sparkles className="h-3.5 w-3.5" /> Unlock Pro Exporter
             </Button>
           </Link>
         </div>
       </Card>
 
       {/* Grid of All Certification Tracks */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-black text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Official Certification Syllabus Blueprints
           </h2>
-          <span className="text-xs text-slate-500 font-mono font-bold">
+          <span className="text-xs text-slate-500 font-mono font-medium">
             {tracks.length} Active Tracks Available
           </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {tracks.map((track) => (
             <Card
               key={track.id}
-              className="p-6 md:p-8 rounded-3xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] shadow-xs space-y-6 flex flex-col justify-between hover:border-[#0066FF] hover:shadow-md transition-all"
+              className="p-6 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] shadow-xs space-y-5 flex flex-col justify-between hover:border-[#0066FF] hover:shadow-md transition-all"
             >
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                    <span className="text-xs font-bold font-mono text-[#0066FF] dark:text-[#38BDF8] uppercase tracking-wider">
+                    <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="text-xs font-semibold font-mono text-[#0066FF] dark:text-[#38BDF8] uppercase tracking-wider">
                       {track.code} Track
                     </span>
                   </div>
-                  <Badge variant="accent" className="font-mono text-xs">
+                  <Badge variant="accent" className="font-mono text-[11px]">
                     {track.totalQuestions} Questions • {track.durationMinutes}m
                   </Badge>
                 </div>
 
-                <div className="space-y-1.5">
-                  <h3 className="text-xl md:text-2xl font-black text-[#0B192C] dark:text-white">
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                     {track.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">

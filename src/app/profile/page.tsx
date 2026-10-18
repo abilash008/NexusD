@@ -449,7 +449,7 @@ export default function CandidateProfilePage() {
             {/* Avatar & Core Metadata */}
             <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
               <div className="relative group">
-                <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-3xl bg-gradient-to-tr from-[#0066FF] to-[#38BDF8] border-4 border-white dark:border-[#131D31] flex items-center justify-center text-white font-black text-3xl sm:text-4xl shadow-xl shrink-0">
+                <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-3xl bg-gradient-to-tr from-[#0066FF] to-[#38BDF8] border-4 border-white dark:border-[#131D31] flex items-center justify-center text-white font-bold text-2xl sm:text-3xl shadow-xl shrink-0">
                   {userInitials || "SC"}
                 </div>
                 <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#131D31]" title="Active Status" />
@@ -457,7 +457,7 @@ export default function CandidateProfilePage() {
 
               <div className="space-y-1.5 pt-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                     {displayName}
                   </h1>
                   <Badge variant="accent" className="text-xs font-bold gap-1">

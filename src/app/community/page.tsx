@@ -93,23 +93,23 @@ export default function CommunityPage() {
           </span>
         </div>
 
-        <div className="space-y-2 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B192C] dark:text-white tracking-tight">
+        <div className="space-y-1.5 max-w-3xl">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Connect, Collaborate & Clear Your Exams
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
             Collaborate with peers preparing for the same ServiceNow release, discuss tricky scenario questions, share exam-day experiences, and connect with certified practitioners.
           </p>
         </div>
       </div>
 
       {/* Cohorts Grid */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-black text-[#0B192C] dark:text-white">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Active Study Circles & WhatsApp Cohorts
           </h2>
-          <span className="text-xs text-slate-500 font-mono font-bold">
+          <span className="text-xs text-slate-500 font-mono font-medium">
             Live Peer Groups
           </span>
         </div>
@@ -118,23 +118,23 @@ export default function CommunityPage() {
           {COHORTS.map((ch, idx) => (
             <Card
               key={idx}
-              className="p-6 sm:p-8 rounded-3xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-6 shadow-xs hover:border-[#0066FF] hover:shadow-md transition-all"
+              className="p-6 rounded-2xl border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:border-[#0066FF] hover:shadow-md transition-all"
             >
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
-                  <Badge className={`text-[10px] font-bold border ${ch.badgeColor}`}>
+                  <Badge className={`text-[10px] font-semibold border ${ch.badgeColor}`}>
                     {ch.tag}
                   </Badge>
-                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">
+                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold">
                     {ch.members}
                   </span>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-xs font-bold text-[#0066FF] dark:text-[#38BDF8] uppercase tracking-wider">
+                  <div className="text-[11px] font-semibold text-[#0066FF] dark:text-[#38BDF8] uppercase tracking-wider">
                     {ch.track}
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                     {ch.title}
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -164,10 +164,10 @@ export default function CommunityPage() {
       </div>
 
       {/* Recent Discussion Topics Strip */}
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 sm:p-8 space-y-5 shadow-xs">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 space-y-4 shadow-xs">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-[#0066FF]" /> Community Exam Debriefs & Q&A
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -178,9 +178,9 @@ export default function CommunityPage() {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800">
           {RECENT_DISCUSSIONS.map((d) => (
-            <div key={d.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div key={d.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div className="space-y-1">
-                <span className="font-bold text-slate-900 dark:text-white hover:text-[#0066FF] cursor-pointer transition-colors">
+                <span className="font-semibold text-slate-900 dark:text-white hover:text-[#0066FF] cursor-pointer transition-colors">
                   {d.topic}
                 </span>
                 <div className="flex items-center gap-3 text-slate-500">
@@ -190,7 +190,7 @@ export default function CommunityPage() {
                   <span>Shared by {d.author}</span>
                 </div>
               </div>
-              <span className="font-mono text-slate-400 text-xs shrink-0 font-semibold">
+              <span className="font-mono text-slate-400 text-xs shrink-0 font-medium">
                 {d.replies} responses
               </span>
             </div>
@@ -199,9 +199,9 @@ export default function CommunityPage() {
       </div>
 
       {/* Bottom CTA Banner */}
-      <div className="rounded-3xl border border-blue-200/80 dark:border-blue-900/60 bg-gradient-to-r from-blue-50/60 via-white to-blue-50/30 dark:from-[#131D31] dark:via-[#0E1524] dark:to-[#131D31] p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="rounded-2xl border border-blue-200/80 dark:border-blue-900/60 bg-gradient-to-r from-blue-50/60 via-white to-blue-50/30 dark:from-[#131D31] dark:via-[#0E1524] dark:to-[#131D31] p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-1 max-w-2xl">
-          <h3 className="text-xl font-bold text-[#0B192C] dark:text-white">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
             Ready to calibrate your exam readiness score?
           </h3>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
@@ -209,14 +209,14 @@ export default function CommunityPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <Link href="/certifications">
-            <Button variant="accent" size="sm" className="gap-2 text-xs font-bold cursor-pointer">
+            <Button variant="accent" size="sm" className="gap-2 text-xs font-semibold cursor-pointer h-10 px-4">
               <Zap className="h-4 w-4" /> Start Practice Drill
             </Button>
           </Link>
           <Link href="/dashboard">
-            <Button variant="default" size="sm" className="gap-2 text-xs font-bold bg-[#0B192C] hover:bg-[#1A2E44] text-white cursor-pointer">
+            <Button variant="default" size="sm" className="gap-2 text-xs font-semibold bg-[#0B192C] hover:bg-[#1A2E44] text-white cursor-pointer h-10 px-4">
               <Compass className="h-4 w-4" /> Go to Dashboard
             </Button>
           </Link>

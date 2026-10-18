@@ -89,10 +89,10 @@ export default function OnboardingPage() {
           <Sparkles className="h-3.5 w-3.5" />
           <span>Step {step} of 2 • Personalize Your Experience</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-[#0B192C] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {step === 1 ? "What best describes your background?" : "Which ServiceNow roles are you targeting?"}
         </h1>
-        <p className="text-slate-600 text-sm max-w-xl mx-auto">
+        <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
           {step === 1
             ? "We tailor practice question difficulties and career roadmaps based on your current starting point."
             : "Select one or more roles from the official ServiceNow career track taxonomy."}
@@ -114,7 +114,7 @@ export default function OnboardingPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-[#0066FF] mb-4">
               <GraduationCap className="h-6 w-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">College Fresher</h3>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2">College Fresher</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               Recent graduate (B.Tech, BCA, MCA, or similar) breaking into enterprise software via the ServiceNow ecosystem.
             </p>
@@ -135,7 +135,7 @@ export default function OnboardingPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 mb-4">
               <Briefcase className="h-6 w-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Career Switcher</h3>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2">Career Switcher</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               Non-IT professional transitioning from operations, customer support, or domain sales into ServiceNow development or administration.
             </p>
@@ -156,7 +156,7 @@ export default function OnboardingPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-100 text-amber-700 mb-4">
               <Layers className="h-6 w-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">ServiceNow Trainee</h3>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2">ServiceNow Trainee</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               Junior developer (0–2 years) currently undergoing internal training at TCS, Infosys, Deloitte, or working on initial client implementations.
             </p>

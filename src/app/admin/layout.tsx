@@ -60,7 +60,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-xl tracking-tight text-white">
+              <span className="font-bold text-lg tracking-tight text-white">
                 Nexus<span className="text-[#0066FF] dark:text-[#38BDF8]">D</span>
               </span>
               <Badge className="bg-blue-500/20 text-[#38BDF8] border border-blue-400/30 text-[10px] uppercase font-mono tracking-wider">

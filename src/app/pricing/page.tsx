@@ -73,19 +73,19 @@ export default function PricingPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 space-y-16">
       {/* 1. Page Header */}
-      <div className="text-center space-y-4 max-w-3xl mx-auto">
+      <div className="text-center space-y-3 max-w-3xl mx-auto">
         <Badge variant="accent" className="px-3 py-1 text-xs font-semibold">
           Transparent, Fair Indian Pricing • Razorpay Secured
         </Badge>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           Invest in Your ServiceNow Career
         </h1>
-        <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
           Start free with <strong>60 blueprint-aligned practice questions</strong> and real-time timed mock simulations. Upgrade anytime for full question vaults, 3-mode printable PDF packs, and career multi-track passes.
         </p>
 
         {isAuthenticated && isPro && entitlement && (
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
             <CheckCircle2 className="h-4 w-4" />
             Your Account is Active: {entitlement.planId === "all_access" ? "All-Access 2-Year Pass" : "Certification Pro Pass"} ({daysRemaining} days left)
           </div>
@@ -93,33 +93,33 @@ export default function PricingPage() {
       </div>
 
       {/* 2. Flagship Hero Tier: 2-Year All-Access Pass */}
-      <div className="relative rounded-3xl border-2 border-[#0066FF] dark:border-[#38BDF8] bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 dark:from-[#131D31] dark:via-[#0F172A] dark:to-[#172554]/40 p-6 sm:p-10 shadow-2xl ring-4 ring-[#0066FF]/10">
-        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-1 rounded-full bg-[#0066FF] text-white text-xs font-bold shadow-md tracking-wide uppercase">
+      <div className="relative rounded-2xl border-2 border-[#0066FF] dark:border-[#38BDF8] bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 dark:from-[#131D31] dark:via-[#0F172A] dark:to-[#172554]/40 p-6 sm:p-8 shadow-xl ring-2 ring-[#0066FF]/10">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-0.5 rounded-full bg-[#0066FF] text-white text-[11px] font-bold shadow-xs tracking-wide uppercase">
           ⭐ Most Popular • 2 Full Years (730 Days) Access
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-1">
           {/* Left Column: Details */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="space-y-1.5">
+          <div className="lg:col-span-7 space-y-3.5">
+            <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {allAccessPlan.name}
                 </h2>
-                <Badge variant="accent" className="text-xs font-bold">
+                <Badge variant="accent" className="text-[11px] font-semibold">
                   CSA + CAD + CIS-DF + CIS-ITSM
                 </Badge>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                 {allAccessPlan.tagline} Perfect for aspirants aiming to advance from System Administrator to Application Developer and Implementation Specialist over the next two years.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               {allAccessPlan.features.slice(0, 6).map((feat, idx) => (
                 <div key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-200">
-                  <Check className="h-4 w-4 text-[#0066FF] dark:text-[#38BDF8] shrink-0 mt-0.5" />
-                  <span className={feat.bold ? "font-bold text-slate-900 dark:text-white" : ""}>
+                  <Check className="h-3.5 w-3.5 text-[#0066FF] dark:text-[#38BDF8] shrink-0 mt-0.5" />
+                  <span className={feat.bold ? "font-semibold text-slate-900 dark:text-white" : ""}>
                     {feat.text}
                   </span>
                 </div>
@@ -128,18 +128,18 @@ export default function PricingPage() {
           </div>
 
           {/* Right Column: Pricing CTA */}
-          <div className="lg:col-span-5 bg-white dark:bg-slate-900/80 rounded-2xl p-6 sm:p-8 border border-blue-100 dark:border-slate-800 shadow-md text-center space-y-5">
+          <div className="lg:col-span-5 bg-white dark:bg-slate-900/80 rounded-xl p-5 sm:p-6 border border-blue-100 dark:border-slate-800 shadow-sm text-center space-y-4">
             <div className="space-y-1">
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-5xl font-black text-[#0066FF] dark:text-[#38BDF8] font-mono">
+                <span className="text-3xl sm:text-4xl font-bold text-[#0066FF] dark:text-[#38BDF8] font-mono">
                   ₹{allAccessPlan.priceInr}
                 </span>
-                <span className="text-sm text-slate-400 line-through">₹{allAccessPlan.originalPriceInr}</span>
+                <span className="text-xs text-slate-400 line-through">₹{allAccessPlan.originalPriceInr}</span>
               </div>
-              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
                 one-time payment • <strong>2 full years (730 days)</strong> unlimited access
               </div>
-              <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+              <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
                 Just ₹41 / month across 4 complete certifications
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function PricingPage() {
                 disabled
                 variant="outline"
                 size="lg"
-                className="w-full text-xs font-bold cursor-not-allowed bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 opacity-90 gap-1.5"
+                className="w-full text-xs font-semibold cursor-not-allowed bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 opacity-90 gap-1.5 h-11"
               >
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 Active All-Access Plan ({daysRemaining}d left)
@@ -159,7 +159,7 @@ export default function PricingPage() {
                 variant="accent"
                 size="lg"
                 onClick={() => openSubscribe("all_access", "general")}
-                className="w-full text-sm font-bold gap-2 shadow-md cursor-pointer py-6"
+                className="w-full text-xs sm:text-sm font-semibold gap-2 shadow-sm cursor-pointer h-11"
               >
                 {allAccessPlan.ctaText} <ArrowRight className="h-4 w-4" />
               </Button>
@@ -178,7 +178,7 @@ export default function PricingPage() {
           <Badge variant="outline" className="text-xs font-semibold">
             Single-Track Certification Passes
           </Badge>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Target a Specific Certification Track
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
@@ -193,12 +193,12 @@ export default function PricingPage() {
             return (
               <Card
                 key={key}
-                className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-5 shadow-xs hover:shadow-md transition-shadow"
+                className="p-5 sm:p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md transition-shadow"
               >
-                <div className="space-y-3.5">
+                <div className="space-y-3">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
                         {plan.name}
                       </h3>
                       <Badge variant="outline" className="text-[10px] font-mono">
@@ -211,14 +211,14 @@ export default function PricingPage() {
                   </div>
 
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+                    <span className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
                       ₹{plan.priceInr}
                     </span>
                     <span className="text-xs text-slate-400 line-through">₹{plan.originalPriceInr}</span>
                     <span className="text-[11px] text-slate-500">/ 1 yr</span>
                   </div>
 
-                  <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-slate-100 dark:border-slate-800">
                     {plan.features.slice(0, 4).map((feat, idx) => (
                       <li key={idx} className="flex items-start gap-1.5">
                         <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
@@ -257,13 +257,13 @@ export default function PricingPage() {
       </div>
 
       {/* 4. Free Starter Tier Overview */}
-      <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#131D31]/80 max-w-4xl mx-auto shadow-xs">
+      <Card className="p-6 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#131D31]/80 max-w-4xl mx-auto shadow-xs">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-bold">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-[11px] font-semibold">
               Free Starter Tier
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
               Try Before You Subscribe
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl">
@@ -285,7 +285,7 @@ export default function PricingPage() {
           <Badge variant="outline" className="text-xs">
             Architectural Benchmark
           </Badge>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             How NexusD Outperforms Other Providers
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
@@ -340,7 +340,7 @@ export default function PricingPage() {
           <Badge variant="outline" className="text-xs">
             Got Questions?
           </Badge>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Frequently Asked Questions
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">

@@ -105,8 +105,8 @@ export default function AdminExamsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight flex items-center gap-2.5">
-            <Award className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
+            <Award className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
             Certification Tracks & Exam Management
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -141,7 +141,7 @@ export default function AdminExamsPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-base font-black px-2.5 py-1 rounded-lg bg-[#0B192C] text-white tracking-wide">
+                      <span className="font-mono text-base font-bold px-2.5 py-1 rounded-lg bg-[#0B192C] text-white tracking-wide">
                         {track.code}
                       </span>
                       <Badge

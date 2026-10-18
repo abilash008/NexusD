@@ -274,7 +274,7 @@ export default function DynamicQuestionBankPage() {
                 {examConfig.releaseVersion || "Australia & Brazil Releases"}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               ServiceNow {examConfig.code} Master Question Bank
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -286,7 +286,6 @@ export default function DynamicQuestionBankPage() {
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <Button
               variant="accent"
-              size="lg"
               onClick={() => {
                 if (!isSubscribed) {
                   setSubscriptionReason("export_pdf");
@@ -295,7 +294,7 @@ export default function DynamicQuestionBankPage() {
                   setShowExportModal(true);
                 }
               }}
-              className="gap-2 shadow-sm font-semibold cursor-pointer"
+              className="h-11 px-5 text-xs sm:text-sm font-semibold gap-2 shadow-sm cursor-pointer"
             >
               <Download className="h-4 w-4" /> Export to PDF / Print
             </Button>
@@ -951,7 +950,7 @@ export default function DynamicQuestionBankPage() {
         <div className="border-b-2 border-slate-900 pb-4 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <div className="text-xl font-black tracking-tight text-slate-900">
+              <div className="text-lg font-bold tracking-tight text-slate-900">
                 NexusD — Certification Practice Engine
               </div>
               <div className="text-sm font-bold text-slate-800 mt-1">

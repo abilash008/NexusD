@@ -101,8 +101,8 @@ export default function HomePage() {
                 <span>Australia & Brazil 2026 Exam Syllabus Sync</span>
               </div>
 
-              {/* Main Punchy Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0B192C] dark:text-white leading-[1.12]">
+              {/* Main Headline */}
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                 Pass Your ServiceNow Exam on the{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0066FF] to-[#38BDF8]">
                   First Attempt
@@ -110,17 +110,17 @@ export default function HomePage() {
               </h1>
 
               {/* Subtitle */}
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 The high-performance practice engine built exclusively for the ServiceNow ecosystem. <strong>60 free blueprint questions per track</strong>, realistic 90-minute timed mock exams with pause/resume, and stratified domain quotas.
               </p>
 
               {/* Primary Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
                 <Link href="/certifications/csa/practice" className="w-full sm:w-auto">
                   <Button
                     variant="accent"
                     size="lg"
-                    className="w-full sm:w-auto text-sm font-bold gap-2 shadow-lg shadow-blue-500/20 py-6 px-7 cursor-pointer"
+                    className="w-full sm:w-auto text-xs sm:text-sm font-semibold gap-2 shadow-md shadow-blue-500/10 h-11 px-5 cursor-pointer"
                   >
                     <Zap className="h-4 w-4" /> Start Free Practice Exam (60 Qs)
                   </Button>
@@ -130,7 +130,7 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto text-sm font-bold gap-2 dark:border-slate-700 dark:text-slate-200 py-6 px-6 cursor-pointer"
+                    className="w-full sm:w-auto text-xs sm:text-sm font-semibold gap-2 dark:border-slate-700 dark:text-slate-200 h-11 px-5 cursor-pointer"
                   >
                     <Compass className="h-4 w-4" /> Explore All Certifications
                   </Button>
@@ -287,37 +287,37 @@ export default function HomePage() {
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 sm:p-8 shadow-xs">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
             <div className="space-y-1 pt-2 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-[#0066FF] dark:text-[#38BDF8] font-mono">
+              <div className="text-2xl sm:text-3xl font-bold text-[#0066FF] dark:text-[#38BDF8] font-mono">
                 60 Qs
               </div>
-              <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 Free per Track (Shuffled)
               </div>
             </div>
 
             <div className="space-y-1 pt-2 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white font-mono">
+              <div className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white font-mono">
                 4+
               </div>
-              <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 ServiceNow Certification Tracks
               </div>
             </div>
 
             <div className="space-y-1 pt-2 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+              <div className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
                 70%
               </div>
-              <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 Official Passing Standard
               </div>
             </div>
 
             <div className="space-y-1 pt-2 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-purple-600 dark:text-purple-400 font-mono">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 font-mono">
                 2 Years
               </div>
-              <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 All-Access Pass Validity
               </div>
             </div>
@@ -326,13 +326,13 @@ export default function HomePage() {
       </section>
 
       {/* 3. Multi-Track Certification Catalog */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Badge variant="accent" className="text-xs">
               Multi-Exam Architecture
             </Badge>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               ServiceNow Certification Tracks
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl">
@@ -341,7 +341,7 @@ export default function HomePage() {
           </div>
 
           <Link href="/certifications">
-            <Button variant="outline" size="sm" className="text-xs gap-1.5 dark:border-slate-700">
+            <Button variant="outline" size="sm" className="text-xs font-semibold gap-1.5 dark:border-slate-700">
               View All 4+ Tracks <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
@@ -399,12 +399,12 @@ export default function HomePage() {
 
       {/* 4. Four-Stage Certification Mastery Roadmap (Storytelling) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-8 sm:p-12 shadow-xs space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] p-6 sm:p-10 shadow-xs space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-1.5">
             <Badge variant="accent" className="text-xs">
               Proven 4-Step Methodology
             </Badge>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               From Beginner to Certified in 4 Milestones
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -412,12 +412,12 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
-            <div className="rounded-2xl border border-blue-200/80 dark:border-blue-900/60 bg-blue-50/30 dark:bg-blue-950/20 p-5 space-y-3">
-              <div className="text-xs font-mono font-bold text-[#0066FF] dark:text-[#38BDF8]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+            <div className="rounded-xl border border-blue-200/80 dark:border-blue-900/60 bg-blue-50/30 dark:bg-blue-950/20 p-4 space-y-2">
+              <div className="text-[11px] font-mono font-bold text-[#0066FF] dark:text-[#38BDF8]">
                 STEP 01
               </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                 Diagnostic Baseline
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -425,11 +425,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-5 space-y-3">
-              <div className="text-xs font-mono font-bold text-slate-500">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 space-y-2">
+              <div className="text-[11px] font-mono font-bold text-slate-500">
                 STEP 02
               </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                 Domain Deep-Dives
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -437,11 +437,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-5 space-y-3">
-              <div className="text-xs font-mono font-bold text-slate-500">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 space-y-2">
+              <div className="text-[11px] font-mono font-bold text-slate-500">
                 STEP 03
               </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                 Timed 90-Min Simulations
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -449,11 +449,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-5 space-y-3">
-              <div className="text-xs font-mono font-bold text-slate-500">
+            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-4 space-y-2">
+              <div className="text-[11px] font-mono font-bold text-slate-500">
                 STEP 04
               </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                 Exam-Day Readiness
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -466,11 +466,11 @@ export default function HomePage() {
 
       {/* 5. Architectural Benchmark: NexusD vs Outdated Alternatives */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
+        <div className="text-center max-w-2xl mx-auto space-y-1.5">
           <Badge variant="outline" className="text-xs">
             Why NexusD Works
           </Badge>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             Engineered Beyond Static Dumps & Outdated Quizzes
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -479,11 +479,11 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-3">
-            <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0066FF] dark:text-[#38BDF8] w-fit">
-              <Target className="h-5 w-5" />
+          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-2.5">
+            <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-[#0066FF] dark:text-[#38BDF8] w-fit">
+              <Target className="h-4 w-4" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
               Stratified Domain Quotas
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -491,11 +491,11 @@ export default function HomePage() {
             </p>
           </Card>
 
-          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-3">
-            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 w-fit">
-              <RotateCcw className="h-5 w-5" />
+          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-2.5">
+            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 w-fit">
+              <RotateCcw className="h-4 w-4" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
               Anti-Memorization Dual Shuffling
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -503,11 +503,11 @@ export default function HomePage() {
             </p>
           </Card>
 
-          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-3">
-            <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 w-fit">
-              <BarChart3 className="h-5 w-5" />
+          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] space-y-2.5">
+            <div className="p-2 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 w-fit">
+              <BarChart3 className="h-4 w-4" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
               Neon DB Telemetry & Analytics
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -519,12 +519,12 @@ export default function HomePage() {
 
       {/* 6. Built for Your Background */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#131D31]/80 p-8 sm:p-12 space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#131D31]/80 p-6 sm:p-10 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-1.5">
             <Badge variant="outline" className="text-xs">
               Personalized Tracks
             </Badge>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Tailored for Every Learning Path
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -533,31 +533,31 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-3 shadow-2xs">
-              <div className="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center font-bold">
-                <GraduationCap className="h-5 w-5" />
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 space-y-2 shadow-2xs">
+              <div className="h-9 w-9 rounded-lg bg-blue-100 dark:bg-blue-950 text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center font-bold">
+                <GraduationCap className="h-4 w-4" />
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">College Freshers</h3>
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">College Freshers</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Break into high-paying enterprise IT roles without years of experience. Learn platform schema, PDIs, and earn your CSA credential before graduation.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-3 shadow-2xs">
-              <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-                <Briefcase className="h-5 w-5" />
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 space-y-2 shadow-2xs">
+              <div className="h-9 w-9 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                <Briefcase className="h-4 w-4" />
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Career Switchers</h3>
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Career Switchers</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Transition from non-IT, operations, or support roles into ServiceNow Administrator or Developer positions with plain-English concept breakdowns.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-3 shadow-2xs">
-              <div className="h-10 w-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
-                <Building className="h-5 w-5" />
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 space-y-2 shadow-2xs">
+              <div className="h-9 w-9 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                <Building className="h-4 w-4" />
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Enterprise Trainees</h3>
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Enterprise Trainees</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Working at TCS, Infosys, Wipro, Cognizant, or Deloitte with a strict client-mandated certification deadline? Practice with real exam pacing.
               </p>
@@ -566,24 +566,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. Final Sticky Call-to-Action Banner */}
+      {/* 7. Final Call-to-Action Banner */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border-2 border-[#0066FF] dark:border-[#38BDF8] bg-gradient-to-r from-blue-600 via-[#0066FF] to-blue-700 text-white p-8 sm:p-14 shadow-2xl text-center space-y-6 relative overflow-hidden">
-          <div className="space-y-3 max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+        <div className="rounded-2xl border border-blue-500/40 bg-gradient-to-r from-blue-600 via-[#0066FF] to-blue-700 text-white p-6 sm:p-10 shadow-xl text-center space-y-5 relative overflow-hidden">
+          <div className="space-y-2 max-w-2xl mx-auto">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight">
               Start Your ServiceNow Certification Journey Today
             </h2>
-            <p className="text-sm sm:text-base text-blue-100 leading-relaxed">
+            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
               Join thousands of ServiceNow candidates preparing with full 60-question blueprint tests, timed simulations, and domain-level telemetry.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
             <Link href="/certifications/csa/practice">
               <Button
                 variant="default"
                 size="lg"
-                className="bg-white hover:bg-slate-100 text-[#0B192C] font-bold text-sm py-6 px-8 shadow-md cursor-pointer"
+                className="bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs sm:text-sm h-11 px-6 shadow-md cursor-pointer"
               >
                 Launch Free Practice Mode (60 Qs) →
               </Button>
@@ -592,14 +592,14 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-transparent border-white text-white hover:bg-white/10 font-bold text-sm py-6 px-7 cursor-pointer"
+                className="bg-transparent border-white/80 text-white hover:bg-white/10 font-semibold text-xs sm:text-sm h-11 px-6 cursor-pointer"
               >
                 View 2-Year All-Access Pass (₹999)
               </Button>
             </Link>
           </div>
 
-          <div className="pt-2 text-xs text-blue-200">
+          <div className="pt-1 text-[11px] text-blue-200">
             Free forever tier available • Instant access • Australia & Brazil Releases
           </div>
         </div>

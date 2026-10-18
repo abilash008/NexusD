@@ -141,8 +141,8 @@ export default function AdminReportsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B192C] dark:text-white tracking-tight flex items-center gap-2.5">
-            <Flag className="h-7 w-7 text-amber-500" />
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
+            <Flag className="h-6 w-6 text-amber-500" />
             Errata Dispute Triage Board
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
@@ -168,7 +168,7 @@ export default function AdminReportsPage() {
           }`}
         >
           <div className="text-xs font-semibold text-slate-500">All Inquiries</div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono mt-1">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono mt-1">
             {counts.all}
           </div>
         </Card>
@@ -184,7 +184,7 @@ export default function AdminReportsPage() {
           <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
             <AlertTriangle className="h-3.5 w-3.5" /> Action Required
           </div>
-          <div className="text-2xl font-black text-amber-600 dark:text-amber-400 font-mono mt-1">
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 font-mono mt-1">
             {counts.pending}
           </div>
         </Card>
@@ -200,7 +200,7 @@ export default function AdminReportsPage() {
           <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
             <CheckCircle2 className="h-3.5 w-3.5" /> Resolved
           </div>
-          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1">
+          <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-1">
             {counts.resolved}
           </div>
         </Card>
@@ -214,7 +214,7 @@ export default function AdminReportsPage() {
           }`}
         >
           <div className="text-xs font-semibold text-slate-500">Dismissed</div>
-          <div className="text-2xl font-black text-slate-700 dark:text-slate-300 font-mono mt-1">
+          <div className="text-2xl font-bold text-slate-700 dark:text-slate-300 font-mono mt-1">
             {counts.dismissed}
           </div>
         </Card>
