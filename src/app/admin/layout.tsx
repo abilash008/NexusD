@@ -32,17 +32,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
 
+  // Handle unauthenticated state: immediately challenge for admin credentials (declared at top level)
+  useEffect(() => {
+    if (pathname !== "/admin/login" && status === "unauthenticated") {
+      router.replace(`/admin/login?callbackUrl=${encodeURIComponent(pathname)}`);
+    }
+  }, [status, pathname, router]);
+
   // If on the dedicated admin login page, bypass layout chrome completely
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
-
-  // Handle unauthenticated state: immediately challenge for admin credentials
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace(`/admin/login?callbackUrl=${encodeURIComponent(pathname)}`);
-    }
-  }, [status, pathname, router]);
 
   // Loading state
   if (status === "loading") {

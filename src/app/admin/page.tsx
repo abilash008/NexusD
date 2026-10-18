@@ -37,6 +37,16 @@ export default function AdminDashboardPage() {
     setCerts(getAllCertifications());
     setReports(getStoredReports());
 
+    // Fetch live question inventory from database
+    fetch("/api/questions?cert=all")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data?.questions)) {
+          setQuestions((prev) => (data.questions.length > 0 ? data.questions : prev));
+        }
+      })
+      .catch(() => {});
+
     const handleUpdate = () => {
       setQuestions(getAllQuestions());
       setCerts(getAllCertifications());
@@ -94,10 +104,12 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
-            {questions.length || 85}
+            {questions.length}
           </div>
           <p className="text-[11px] text-slate-500">
-            60 Free Quota • {Math.max(0, (questions.length || 85) - 60)} Pro Vault
+            {questions.length > 0
+              ? `${Math.min(60, questions.length)} Free Quota • ${Math.max(0, questions.length - 60)} Pro Vault`
+              : "0 Questions Cataloged • Use Authoring or Bulk Upload"}
           </p>
         </Card>
 
