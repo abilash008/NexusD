@@ -36,10 +36,19 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <span className="text-slate-400 dark:text-slate-600">Certified Application Developer (CAD) — In Authoring</span>
+                <Link href="/certifications/cad" className="hover:text-[#0066FF] dark:hover:text-[#38BDF8] transition-colors">
+                  Certified Application Developer (CAD)
+                </Link>
               </li>
               <li>
-                <span className="text-slate-400 dark:text-slate-600">CIS-ITSM & CIS-Discovery — Roadmap</span>
+                <Link href="/certifications/cis-df" className="hover:text-[#0066FF] dark:hover:text-[#38BDF8] transition-colors">
+                  CIS — Data Foundations (CMDB & CSDM)
+                </Link>
+              </li>
+              <li>
+                <Link href="/certifications/cis-itsm" className="hover:text-[#0066FF] dark:hover:text-[#38BDF8] transition-colors">
+                  CIS — IT Service Management (ITSM)
+                </Link>
               </li>
             </ul>
           </div>

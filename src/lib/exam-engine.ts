@@ -219,11 +219,34 @@ export function generateTrackMockExam(
   });
 
   sourcePool.forEach((q) => {
-    const matchedDomain = config.domains.find(
+    let matchedDomain = config.domains.find(
       (d) =>
         d.slug.toLowerCase() === q.domainSlug?.toLowerCase() ||
         d.name.toLowerCase() === q.domain?.toLowerCase()
     );
+
+    // Dynamic alias resolution for legacy slugs
+    if (!matchedDomain) {
+      const qSlug = (q.domainSlug || "").toLowerCase();
+      if (qSlug === "ui-nav") {
+        matchedDomain = config.domains.find((d) => d.slug === "platform-overview" || d.slug === "instance-config");
+      } else if (qSlug === "collaboration") {
+        matchedDomain = config.domains.find((d) => d.slug === "collaboration-apps");
+      } else if (qSlug === "automation") {
+        matchedDomain = config.domains.find((d) => d.slug === "self-service-automation");
+      } else if (qSlug === "db-admin") {
+        matchedDomain = config.domains.find((d) => d.slug === "database-security");
+      } else if (qSlug === "development") {
+        matchedDomain = config.domains.find((d) => d.slug === "data-migration-integration");
+      } else if (qSlug === "data-model") {
+        matchedDomain = config.domains.find((d) => d.slug === "security-access");
+      } else if (qSlug === "integration") {
+        matchedDomain = config.domains.find((d) => d.slug === "external-data");
+      } else if (qSlug === "ui-experience") {
+        matchedDomain = config.domains.find((d) => d.slug === "app-ui");
+      }
+    }
+
     if (matchedDomain && domainGroups[matchedDomain.slug]) {
       domainGroups[matchedDomain.slug].push(q);
     }

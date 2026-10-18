@@ -62,7 +62,7 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
   cis_df_pass: {
     id: "cis_df_pass",
     name: "CIS-Data Foundations Pass",
-    tagline: "Enterprise CMDB architecture, CSDM v4.0, Discovery patterns, and IRE rules.",
+    tagline: "Enterprise CMDB architecture, CSDM v4.0, Data Manager, and IRE reconciliation rules.",
     priceInr: 499,
     originalPriceInr: 999,
     amountPaise: 49900,
@@ -73,8 +73,8 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
     features: [
       { text: "1-Year Access to Complete CIS-DF Question Vault", included: true, bold: true },
       { text: "3-Mode Printable PDF Exporter (Exam, Key, Master)", included: true, bold: true },
-      { text: "75-Question / 90-Min Timed CMDB Simulations", included: true, bold: true },
-      { text: "IRE Reconciliation & CSDM v4.0 Deep Explanations", included: true },
+      { text: "75-Question / 90-Min Timed CMDB & CSDM Simulations", included: true, bold: true },
+      { text: "IRE Reconciliation, Data Manager & CSDM v4.0 Deep Explanations", included: true },
       { text: "Australia & Brazil Release Standards for 365 Days", included: true },
       { text: "Detailed Weakness Telemetry & Readiness Gauge", included: true },
       { text: "Other Specialist Tracks", included: false },
@@ -95,7 +95,7 @@ export const PRICING_PLANS: Record<string, PricingPlan> = {
     features: [
       { text: "1-Year Access to Complete CIS-ITSM Question Vault", included: true, bold: true },
       { text: "3-Mode Printable PDF Exporter (Exam, Key, Master)", included: true, bold: true },
-      { text: "75-Question / 90-Min Timed ITSM Simulations", included: true, bold: true },
+      { text: "60-Question / 90-Min Timed ITSM Simulations", included: true, bold: true },
       { text: "ITIL 4 Alignment & Process Architectural Explanations", included: true },
       { text: "Australia & Brazil Release Standards for 365 Days", included: true },
       { text: "Detailed Weakness Telemetry & Readiness Gauge", included: true },

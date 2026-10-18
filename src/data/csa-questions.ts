@@ -19,11 +19,12 @@ export interface PracticeQuestion {
 }
 
 export const CSA_DOMAINS_INFO = [
-  { slug: "ui-nav", name: "User Interface & Navigation", weight: 20, questionCount: 12 },
-  { slug: "collaboration", name: "Collaboration & Task Management", weight: 20, questionCount: 12 },
-  { slug: "db-admin", name: "Database Administration & Schema", weight: 30, questionCount: 18 },
-  { slug: "automation", name: "Self-Service & Process Automation", weight: 20, questionCount: 12 },
-  { slug: "development", name: "Introduction to Development", weight: 10, questionCount: 6 },
+  { slug: "platform-overview", name: "Platform Overview and Navigation", weight: 7, questionCount: 4 },
+  { slug: "instance-config", name: "Instance Configuration", weight: 10, questionCount: 6 },
+  { slug: "collaboration-apps", name: "Configuring Applications for Collaboration", weight: 20, questionCount: 12 },
+  { slug: "self-service-automation", name: "Self-Service & Automation", weight: 20, questionCount: 12 },
+  { slug: "database-security", name: "Database Management and Platform Security", weight: 30, questionCount: 18 },
+  { slug: "data-migration-integration", name: "Data Migration and Integration", weight: 13, questionCount: 8 },
 ];
 
 export const CSA_SEED_QUESTIONS: PracticeQuestion[] = [

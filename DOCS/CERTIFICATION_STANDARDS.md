@@ -8,22 +8,24 @@
 
 Every certification track implemented on NexusD must strictly follow official ServiceNow examination metrics:
 
-| Certification Track | Code | Question Count | Time Allowed | Pass Standard | Min Correct | Initial Free Questions |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Certified System Administrator** | `CSA` | **60 Questions** | **90 Minutes** | **70%** | **42 / 60** | **60 Free Questions** |
-| **Certified Application Developer** | `CAD` | **60 Questions** | **90 Minutes** | **70%** | **42 / 60** | **60 Free Questions** |
-| **CIS — Data Foundation (CMDB & CSDM)** | `CIS-DF` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — IT Service Management** | `CIS-ITSM` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — ITOM Discovery** | `CIS-Discovery` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — Event Management** | `CIS-EM` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — HR Service Delivery** | `CIS-HR` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — Software Asset Management** | `CIS-SAM` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — Hardware Asset Management** | `CIS-HAM` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
-| **CIS — Customer Service Management** | `CIS-CSM` | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| Certification Track | Code | Blueprint Reference | Question Count | Time Allowed | Pass Standard | Min Correct | Initial Free Questions |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Certified System Administrator** | `CSA` | **KB0011554** | **60 Questions** | **90 Minutes** | **70%** | **42 / 60** | **60 Free Questions** |
+| **Certified Application Developer** | `CAD` | **KB0011498** | **60 Questions** | **90 Minutes** | **70%** | **42 / 60** | **60 Free Questions** |
+| **CIS — Data Foundations (CMDB & CSDM)** | `CIS-DF` | **KB0012913** | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — IT Service Management** | `CIS-ITSM` | **KB0011560** | **60 Questions** | **90 Minutes** | **70%** | **42 / 60** | Proportional Free Tier |
+| **CIS — ITOM Discovery** *(Roadmap)* | `CIS-Discovery` | Official ITOM | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — Event Management** *(Roadmap)* | `CIS-EM` | Official ITOM | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — HR Service Delivery** *(Roadmap)* | `CIS-HR` | Official HRSD | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — Software Asset Management** *(Roadmap)* | `CIS-SAM` | Official SAM | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — Hardware Asset Management** *(Roadmap)* | `CIS-HAM` | Official HAM | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
+| **CIS — Customer Service Management** *(Roadmap)* | `CIS-CSM` | Official CSM | **75 Questions** | **90 Minutes** | **70%** | **53 / 75** | Proportional Free Tier |
 
-### Core Rule:
-- **Foundational & Developer Tracks (CSA & CAD):** Fixed at **60 questions in 90 minutes with a 70% passing threshold**.
-- **Implementation Specialist Tracks (CIS Series):** Fixed at **75 questions in 90 minutes with a 70% passing threshold**.
+### Core Blueprint Distinction: CIS-Discovery vs. CIS-Data Foundations (CIS-DF)
+> [!IMPORTANT]
+> **CIS-Discovery and CIS-DF are completely different certifications covering distinct domains:**
+> - **CIS-Discovery (ITOM):** Focused strictly on IT Operations, network scanning, MID Server clustering and sizing, IP schedules, SNMP/SSH/WMI/WinRM credentials, Discovery Pattern Designer, and probe/sensor processing.
+> - **CIS-Data Foundations (CIS-DF - KB0012913):** Focused strictly on the Configuration Management Database (CMDB) and Common Service Data Model (CSDM v4.0), Identification & Reconciliation Engine (IRE), CMDB Data Manager policies, CMDB Health Dashboard (Completeness, Correctness, Compliance), and multi-source ingestion governance.
 
 ---
 
@@ -31,11 +33,11 @@ Every certification track implemented on NexusD must strictly follow official Se
 
 Certifications are rolled out in a phased order:
 
-1. **CSA** — Complete (Live in production)
-2. **CAD** — Next in authoring
-3. **CIS-DF (CMDB & CSDM)** — Data Foundation & CSDM v4.0 architecture
-4. **CIS-ITSM** — Incident, Problem, Change, Request, Service Catalog, Knowledge, SLA/OLA
-5. **Roadmap Tracks:** CIS-Discovery, CIS-EM, CIS-HR, CIS-SAM, CIS-HAM, CIS-CSM, CTA.
+1. **CSA** — Complete (Live in production, 85+ questions, aligned to KB0011554)
+2. **CAD** — Complete (Live in production, aligned to KB0011498)
+3. **CIS-DF (CMDB & CSDM)** — Complete (Live in production, aligned to KB0012913)
+4. **CIS-ITSM** — Complete (Live in production, aligned to KB0011560)
+5. **Roadmap Tracks:** CIS-Discovery (ITOM), CIS-EM, CIS-HR, CIS-SAM, CIS-HAM, CIS-CSM, CTA.
 
 ---
 
@@ -121,9 +123,10 @@ Certifications are rolled out in a phased order:
    - Presenting the exact same 60 questions on repeated mock simulations causes synthetic score inflation due to rote memorization rather than concept mastery.
 2. **Stratified Blueprint Assembler Engine (`generateTrackMockExam`):**
    - Given a master question bank (e.g., 250+ questions per track), dynamic mock exams are assembled by sampling domain pools strictly according to official ServiceNow blueprint percentages:
-     - *CSA Exam (60 Qs):* UI (12 Qs / 20%), Collaboration (12 Qs / 20%), DB Administration (18 Qs / 30%), Process Automation (12 Qs / 20%), Introduction to Development (6 Qs / 10%).
-     - *CAD Exam (60 Qs):* App Design (9 Qs / 15%), Data Model (15 Qs / 25%), Automation Logic (18 Qs / 30%), Scripting & REST (12 Qs / 20%), UI Views (6 Qs / 10%).
-     - *CIS-DF Exam (75 Qs):* Discovery & Mid Server (26 Qs / 35%), CMDB & IRE (26 Qs / 35%), Diagnostics (23 Qs / 30%).
+     - *CSA Exam (60 Qs - KB0011554):* Platform Overview and Navigation (4 Qs / 7%), Instance Configuration (6 Qs / 10%), Configuring Applications for Collaboration (12 Qs / 20%), Self-Service & Automation (12 Qs / 20%), Database Management and Platform Security (18 Qs / 30%), Data Migration and Integration (8 Qs / 13%). Total: 60 questions in 90 minutes.
+     - *CAD Exam (60 Qs - KB0011498):* Designing and Creating an Application (12 Qs / 20%), Application User Interface (12 Qs / 20%), Security and Restricting Access (12 Qs / 20%), Application Automation (12 Qs / 20%), Working with External Data (6 Qs / 10%), Managing Applications (6 Qs / 10%). Total: 60 questions in 90 minutes.
+     - *CIS-DF Exam (75 Qs - KB0012913):* Govern (26 Qs / 35%), Insight (15 Qs / 20%), Ingest (14 Qs / 19%), Configuration (11 Qs / 15%), CSDM Fundamentals (9 Qs / 11%). Total: 75 questions in 90 minutes.
+     - *CIS-ITSM Exam (60 Qs - KB0011560):* Incident Management (15 Qs / 25%), Change Management (15 Qs / 25%), Service Catalog and Request Management (15 Qs / 25%), Problem Management (9 Qs / 15%), Service Portfolio Management (3 Qs / 5%), Configuration Management Database (3 Qs / 5%). Total: 60 questions in 90 minutes.
 3. **Freemium Telemetry Separation:**
    - **Free Tier:** 1 baseline diagnostic exam (fixed 60 set with dual shuffle) to calibrate initial readiness and identify blind spots.
    - **Pro Pass:** Unlimited dynamic mock simulations drawn from the 250+ question pool with adaptive spaced repetition, ensuring telemetry scores truly reflect candidate competence.

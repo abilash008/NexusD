@@ -16,16 +16,16 @@ Examinations are released in a strict sequence with official ServiceNow examinat
 
 ### Core Phase 1 Tracks
 
-| Order | Track Code | Full Certification Title | Questions | Duration | Pass Mark | Free Tier Volume | Status |
-| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **1** | **CSA** | Certified System Administrator | **60 Qs** | **90 Mins** | **70%** (42 / 60) | **60 Free Questions** | 🟢 Live |
-| **2** | **CAD** | Certified Application Developer | **60 Qs** | **90 Mins** | **70%** (42 / 60) | 60 Free on Launch | 🟡 In Authoring |
-| **3** | **CIS-DF** | CIS — Data Foundation (CMDB & CSDM) | **75 Qs** | **90 Mins** | **70%** (53 / 75) | Free Tier Included | 🟡 In Authoring |
-| **4** | **CIS-ITSM** | CIS — IT Service Management | **75 Qs** | **90 Mins** | **70%** (53 / 75) | Free Tier Included | 🔵 Roadmap |
+| Order | Track Code | Full Certification Title | Blueprint Reference | Questions | Duration | Pass Mark | Free Tier Volume | Status |
+| :---: | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **1** | **CSA** | Certified System Administrator | **KB0011554** | **60 Qs** | **90 Mins** | **70%** (42 / 60) | **60 Free Questions** | 🟢 Live |
+| **2** | **CAD** | Certified Application Developer | **KB0011498** | **60 Qs** | **90 Mins** | **70%** (42 / 60) | 60 Free on Launch | 🟢 Live |
+| **3** | **CIS-DF** | CIS — Data Foundations (CMDB & CSDM) | **KB0012913** | **75 Qs** | **90 Mins** | **70%** (53 / 75) | Free Tier Included | 🟢 Live |
+| **4** | **CIS-ITSM** | CIS — IT Service Management | **KB0011560** | **60 Qs** | **90 Mins** | **70%** (42 / 60) | Free Tier Included | 🟢 Live |
 
-> **Crucial Exam Standard:**
-> - **CSA & CAD:** 60 Questions • 90 Minutes • 70% Passing Standard
-> - **All CIS Specialist Exams:** **75 Questions • 90 Minutes • 70% Passing Standard**
+> **Official Blueprint Distinction: CIS-DF vs. CIS-Discovery:**
+> - **CIS-DF (Certified Implementation Specialist - Data Foundations: CMDB and CSDM - KB0012913):** Specializes exclusively in CMDB architecture, Identification & Reconciliation Engine (IRE), CMDB Data Manager lifecycle policies, CMDB Health scorecards (Completeness, Correctness, Compliance), and CSDM v4.0 domain governance.
+> - **CIS-Discovery (ITOM Discovery):** Specializes in IT Operations, network scanning, MID Server clustering and sizing, IP schedules, SNMP/SSH/WMI credentials, and Discovery patterns.
 
 ### Subsequent Expansion Roadmap
 - **CIS-Discovery** (ITOM Discovery — 75 Qs • 90 Mins • 70%)

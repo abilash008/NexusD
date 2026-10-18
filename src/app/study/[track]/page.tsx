@@ -16,6 +16,9 @@ import {
   Cpu,
   FileText,
   Download,
+  ShieldCheck,
+  BarChart3,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -39,22 +42,46 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 const DOMAIN_ICONS: Record<string, React.ReactNode> = {
+  // CSA Domains (KB0011554)
+  "platform-overview": <Compass className="h-5 w-5 text-[#0066FF]" />,
+  "instance-config": <Cpu className="h-5 w-5 text-[#0066FF]" />,
+  "collaboration-apps": <Users className="h-5 w-5 text-[#0066FF]" />,
+  "self-service-automation": <Zap className="h-5 w-5 text-[#0066FF]" />,
+  "database-security": <Database className="h-5 w-5 text-[#0066FF]" />,
+  "data-migration-integration": <Terminal className="h-5 w-5 text-[#0066FF]" />,
+  // Legacy CSA aliases
   "ui-nav": <Compass className="h-5 w-5 text-[#0066FF]" />,
   collaboration: <Users className="h-5 w-5 text-[#0066FF]" />,
   "db-admin": <Database className="h-5 w-5 text-[#0066FF]" />,
   automation: <Cpu className="h-5 w-5 text-[#0066FF]" />,
   development: <Terminal className="h-5 w-5 text-[#0066FF]" />,
+
+  // CAD Domains (KB0011498)
   "app-design": <Compass className="h-5 w-5 text-[#0066FF]" />,
-  "data-model": <Database className="h-5 w-5 text-[#0066FF]" />,
+  "app-ui": <Users className="h-5 w-5 text-[#0066FF]" />,
+  "security-access": <ShieldCheck className="h-5 w-5 text-[#0066FF]" />,
   "app-automation": <Cpu className="h-5 w-5 text-[#0066FF]" />,
+  "external-data": <Database className="h-5 w-5 text-[#0066FF]" />,
+  "app-management": <Terminal className="h-5 w-5 text-[#0066FF]" />,
+  // Legacy CAD aliases
+  "data-model": <Database className="h-5 w-5 text-[#0066FF]" />,
   integration: <Terminal className="h-5 w-5 text-[#0066FF]" />,
   "ui-experience": <Users className="h-5 w-5 text-[#0066FF]" />,
-  "discovery-setup": <Terminal className="h-5 w-5 text-[#0066FF]" />,
-  "cmdb-schema": <Database className="h-5 w-5 text-[#0066FF]" />,
-  troubleshooting: <Cpu className="h-5 w-5 text-[#0066FF]" />,
+
+  // CIS-DF Domains (KB0012913 - CMDB & CSDM Data Foundations)
+  govern: <ShieldCheck className="h-5 w-5 text-[#0066FF]" />,
+  insight: <BarChart3 className="h-5 w-5 text-[#0066FF]" />,
+  ingest: <Layers className="h-5 w-5 text-[#0066FF]" />,
+  configuration: <Database className="h-5 w-5 text-[#0066FF]" />,
+  "csdm-fundamentals": <Compass className="h-5 w-5 text-[#0066FF]" />,
+
+  // CIS-ITSM Domains (KB0011560)
   "incident-mgmt": <Users className="h-5 w-5 text-[#0066FF]" />,
   "change-mgmt": <Cpu className="h-5 w-5 text-[#0066FF]" />,
   "service-catalog": <Compass className="h-5 w-5 text-[#0066FF]" />,
+  "problem-mgmt": <AlertTriangle className="h-5 w-5 text-[#0066FF]" />,
+  "service-portfolio": <Layers className="h-5 w-5 text-[#0066FF]" />,
+  "cmdb-itsm": <Database className="h-5 w-5 text-[#0066FF]" />,
   "slm-metrics": <Award className="h-5 w-5 text-[#0066FF]" />,
 };
 
