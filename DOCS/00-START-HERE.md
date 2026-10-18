@@ -35,6 +35,7 @@
 | **Step 3: Implementation — Sprint 5** | ✅ Complete | [`DOCS/03-sprints/sprint-05/sprint-05-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-05/sprint-05-summary.md) |
 | **Step 3: Implementation — Sprint 6** | ✅ Complete | [`DOCS/03-sprints/sprint-06/sprint-06-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-06/sprint-06-summary.md) |
 | **Step 3: Implementation — Sprint 7** | ✅ Complete | [`DOCS/03-sprints/sprint-07/sprint-07-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-07/sprint-07-summary.md) (Typography Scale, Dynamic Mock Engine, 2-Yr Pass, EdTech Dashboard & Profile) |
+| **Step 3: Implementation — Sprint 8** | ✅ Complete | [`docs/03-sprints/sprint-08/sprint-08-summary.md`](file:///c:/NexusD/docs/03-sprints/sprint-08/sprint-08-summary.md) (Confidential Admin Perimeter, Dedicated Gateway, Edge Middleware & CIS-DF Blueprint) |
 | **Production Launch Status** | 🚀 **Live in Production** | Live at [`nexusd.in`](https://nexusd.in) (Live Razorpay Standard Checkout, Hardened NextAuth + Neon DB, Multi-Track Telemetry) |
 
 ---
@@ -55,18 +56,22 @@
 │   ├── sprint-04/
 │   ├── sprint-05/
 │   ├── sprint-06/                   ← Live deployment, Razorpay Standard Checkout, Auth & Telemetry
-│   └── sprint-07/                   ← Typography Scale Standard, Dynamic Mock Engine, Dashboard & Profile Revamp
+│   ├── sprint-07/                   ← Typography Scale Standard, Dynamic Mock Engine, Dashboard & Profile Revamp
+│   └── sprint-08/                   ← Confidential Admin Gateway, Edge Middleware, CIS-DF Blueprint Compliance
 ├── 04-architecture/
+│   ├── admin-security-and-role-perimeter.md ← Multi-layer admin security, edge proxy, and credential lifecycle
 │   ├── cloud-infrastructure-and-migration.md ← Two-phase hosting model & AWS migration blueprint
 │   ├── email-infrastructure.md      ← Zoho Mail routing and domain configuration
 │   └── tech-stack.md                ← Tech stack, database schema, and serverless architecture
 ├── 05-decisions/                    ← Architecture Decision Records (ADRs)
 │   ├── 001-realtime-community-approach.md
 │   ├── 002-tech-stack-selections.md
-│   └── 003-cloud-migration-aws-readiness.md
+│   ├── 003-cloud-migration-aws-readiness.md
+│   └── 004-confidential-admin-authentication.md ← Dedicated admin gateway, edge middleware, and backend seeding
 ├── 06-design/
 │   ├── brand-and-palette.md         ← Navy/Blue hex codes, WCAG AA contrast, tone
 │   └── component-conventions.md     ← Documented shadcn/ui design tokens & conventions
+├── CERTIFICATION_STANDARDS.md       ← Official ServiceNow examination metrics, blueprints (CIS-DF vs Discovery)
 └── 07-open-items/
     └── open-decisions.md            ← Confirmed decisions & active implementation queue
 ```
