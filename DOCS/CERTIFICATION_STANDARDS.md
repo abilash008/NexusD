@@ -141,3 +141,35 @@ Certifications are rolled out in a phased order:
 3. **Dual-Layer Persistence:**
    - Offline-first instant reactivity via `localStorage` (`nexusd_profile`).
    - Authenticated cloud synchronization via `POST /api/user/profile` persisting to Neon PostgreSQL (`user_profiles`).
+
+---
+
+## 9. Universal Small-to-Medium Typography Standard
+
+To prevent visual fatigue, maintain page-to-page consistency, and avoid bloated headings, all exam, study, and dashboard components follow a disciplined **Small-to-Medium Typography Standard**:
+
+1. **Page Title (H1):** Strictly `text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white`.
+2. **Section Title (H2):** Strictly `text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white`.
+3. **Card / Topic Title (H3):** Strictly `text-base font-semibold text-slate-900 dark:text-white` (or `text-sm sm:text-base`).
+4. **Metric Counters / Telemetry:** Strictly `text-2xl sm:text-3xl font-bold font-mono text-slate-900 dark:text-white`.
+5. **No Bloated Fonts:** `text-5xl`, `text-6xl`, and `text-7xl` are strictly banned across the entire platform, including scorecards and hero banners.
+6. **Weight Consistency:** Inconsistent and heavy `font-black` and `font-extrabold` weights are eliminated in favor of `font-bold` for headings and `font-semibold` for cards and actions.
+7. **Button Dimensions:** Standardized button heights (`h-10` or `h-11 px-5 text-xs sm:text-sm font-semibold`), removing arbitrary multi-line vertical padding.
+
+---
+
+## 10. Dashboard & Candidate Portfolio Experience (EdTech Benchmark)
+
+1. **Active Track Switcher:**
+   - Universal certification selector allowing students to toggle context between CSA, CAD, CIS-DF, and CIS-ITSM seamlessly.
+   - Dynamic routing: Launching practice or mock exams routes dynamically to the active track (`/certifications/${activeTrackId}/practice` and `/certifications/${activeTrackId}/mock`), eliminating hardcoded track bias.
+2. **Gamified 7-Day Habit Streak Loop:**
+   - Tracks weekly drilling activity (Monday through Sunday) to foster consistent exam preparation habits.
+3. **Four-Stage Certification Roadmap:**
+   - Metro-line storytelling guiding candidates through:
+     - Stage 1: Diagnostic Assessment (Free 60-question drill).
+     - Stage 2: Knowledge Domain Deep-Dive (Official blueprint notes).
+     - Stage 3: Timed 90-Min Exam Simulation (Realistic Webassessor simulation).
+     - Stage 4: Mastery & Readiness Review (80%+ consistency threshold and PDF pack export).
+4. **Dynamic Landing Page Live Demo:**
+   - Rotates questions dynamically from the question repository on each load/interaction rather than serving a static placeholder item.

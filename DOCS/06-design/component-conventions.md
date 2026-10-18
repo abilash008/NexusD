@@ -30,16 +30,36 @@
 
 ---
 
-## 3. Typography Scale & Tailwind Classes
+## 3. Standardized Small-to-Medium Typography Scale
 
-| Level | Tailwind Classes | Usage |
+To ensure strict visual elegance, legibility, and page-to-page consistency across all routes and components, NexusD enforces a disciplined **Small-to-Medium Typography Scale**.
+
+### Anti-Patterns (Strictly Forbidden):
+- ❌ **No oversized fonts:** Never use `text-5xl`, `text-6xl`, or `text-7xl` anywhere, even for scorecards or hero banners.
+- ❌ **No oversized font weights:** Avoid harsh `font-black` or `font-extrabold` in favor of balanced `font-bold` and `font-semibold`.
+- ❌ **No arbitrary padding on buttons:** Do not use `py-6 px-7` or bloated vertical padding; enforce uniform button heights (`h-10` / `h-11 px-5`).
+
+### Standard Typography Hierarchy:
+
+| Element / Level | Canonical Tailwind Classes | Usage & Rules |
 | :--- | :--- | :--- |
-| **Display H1** | `text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900` | Landing hero, major certification headings |
-| **Section H2** | `text-2xl font-bold tracking-tight text-slate-900` | Exam modes, analytics sections, blueprint modules |
-| **Card H3** | `text-lg font-semibold text-slate-900` | Question numbers, card headers, metric titles |
-| **Body (Normal)** | `text-base text-slate-700 leading-relaxed` | Question text, study guide paragraphs |
-| **Body (Small)** | `text-sm text-slate-600` | Helper text, option choices, metadata |
-| **Caption / Monospace** | `text-xs font-mono text-slate-500 tracking-wide` | Timers, question ID counters, question domain tags |
+| **Page H1 Headers** | `text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white` | Main page titles across all routes (Landing hero, Dashboard, Certifications, Study, Profile, Admin) |
+| **Section H2 Headers** | `text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white` | Section dividers, feature matrix headings, FAQ headers, roadmap headings, domain catalog titles |
+| **Card / Pillar H3** | `text-base font-semibold text-slate-900 dark:text-white` (or `text-sm sm:text-base`) | Card titles, topic titles, syllabus module cards, review headers |
+| **Metric / Stat Digits** | `text-2xl sm:text-3xl font-bold font-mono text-slate-900 dark:text-white` | Analytics gauges, scorecard percentages, habit streaks, KPI counters |
+| **Body Text (Primary)** | `text-sm text-slate-600 dark:text-slate-300 leading-relaxed` | Explanations, architectural justifications, card descriptions, guide content |
+| **Body Text (Secondary)** | `text-xs text-slate-500 dark:text-slate-400 leading-normal` | Timestamps, metadata, exam code tags, subtitle helper text |
+| **Monospace / Counters** | `text-xs font-mono text-slate-600 dark:text-slate-400` | Timer clocks, Webassessor IDs, question IDs, blueprint weights |
+| **Badges / Micro Tags** | `text-[10px] sm:text-[11px] font-semibold py-0.5 px-2.5` | Release version badges, status pills, domain chips |
+
+### Font Family Registration (`src/app/globals.css`):
+```css
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+```
+All components compile cleanly through Geist Sans and Geist Mono without font discrepancy between client and server renders.
 
 ---
 
