@@ -120,6 +120,7 @@ export default function CandidateProfilePage() {
   const { isPro, entitlement, daysRemaining } = useEntitlements();
 
   const [profile, setProfile] = useState<CandidateProfileData>(EMPTY_PROFILE);
+  const [hasMounted, setHasMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "education" | "experience" | "skills" | "credentials">("overview");
   const [isEditing, setIsEditing] = useState(false);
   const [editModalTab, setEditModalTab] = useState<"basic" | "education" | "experience" | "skills" | "links">("basic");
@@ -138,6 +139,7 @@ export default function CandidateProfilePage() {
 
   // Load candidate profile dynamically scoped to the authenticated user
   useEffect(() => {
+    setHasMounted(true);
     try {
       // Purge obsolete hardcoded legacy mock profile if present
       localStorage.removeItem("nexusd_profile");
@@ -385,6 +387,39 @@ export default function CandidateProfilePage() {
     },
   ];
 
+  if (!hasMounted) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 animate-pulse">
+        {/* Skeleton Identity Card */}
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31] shadow-sm overflow-hidden">
+          <div className="h-36 sm:h-44 w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800" />
+          <div className="px-6 pb-6 sm:px-8 sm:pb-8 pt-0 relative">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5 -mt-16 sm:-mt-20">
+              <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-3xl bg-slate-300 dark:bg-slate-700 border-4 border-white dark:border-[#131D31] shrink-0" />
+              <div className="space-y-2 pt-2 w-full max-w-md">
+                <div className="h-7 w-48 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+                <div className="h-4 w-72 bg-slate-200 dark:bg-slate-700 rounded-md" />
+                <div className="h-3 w-40 bg-slate-200 dark:bg-slate-700 rounded-md" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="h-12 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
+            <div className="h-64 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
+          </div>
+          <div className="space-y-6">
+            <div className="h-48 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
+            <div className="h-56 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 animate-in fade-in duration-300">
       {/* 1. Candidate Hero Identity Card with Modern Banner */}
@@ -423,7 +458,10 @@ export default function CandidateProfilePage() {
             {/* Avatar & Core Metadata */}
             <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
               <div className="relative group">
-                <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-3xl bg-gradient-to-tr from-[#0066FF] to-[#38BDF8] border-4 border-white dark:border-[#131D31] flex items-center justify-center text-white font-bold text-2xl sm:text-3xl shadow-xl shrink-0">
+                <div
+                  suppressHydrationWarning
+                  className="h-28 w-28 sm:h-32 sm:w-32 rounded-3xl bg-gradient-to-tr from-[#0066FF] to-[#38BDF8] border-4 border-white dark:border-[#131D31] flex items-center justify-center text-white font-bold text-2xl sm:text-3xl shadow-xl shrink-0"
+                >
                   {userInitials || "SC"}
                 </div>
                 <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#131D31]" title="Active Status" />
@@ -431,7 +469,10 @@ export default function CandidateProfilePage() {
 
               <div className="space-y-1.5 pt-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+                  <h1
+                    suppressHydrationWarning
+                    className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight"
+                  >
                     {displayName}
                   </h1>
                   <Badge variant="accent" className="text-xs font-bold gap-1">
@@ -442,7 +483,10 @@ export default function CandidateProfilePage() {
                   </span>
                 </div>
 
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-snug max-w-2xl">
+                <p
+                  suppressHydrationWarning
+                  className="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-snug max-w-2xl"
+                >
                   {profile.headline || "ServiceNow Aspirant • Click 'Edit Profile' to add headline, education & experience"}
                 </p>
 
@@ -452,7 +496,10 @@ export default function CandidateProfilePage() {
                       <MapPin className="h-3.5 w-3.5 text-slate-400" /> {profile.location}
                     </span>
                   )}
-                  <span className="flex items-center gap-1">
+                  <span
+                    suppressHydrationWarning
+                    className="flex items-center gap-1"
+                  >
                     <Mail className="h-3.5 w-3.5 text-slate-400" /> {displayEmail}
                   </span>
                   <span className="flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
