@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 import { ensureAdminUser, isMasterAdminEmail } from "@/lib/admin-auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -17,8 +18,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET || "nexusd-prod-secret-key-australia-brazil-2026-production-ready",
   providers: [
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID || "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
+      clientId: process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET || "",
       allowDangerousEmailAccountLinking: true,
     }),
     Credentials({

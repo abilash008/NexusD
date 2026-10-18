@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NexusLogo } from "@/components/brand/nexus-logo";
-import { loginWithGoogle } from "@/app/login/actions";
+import { signIn } from "next-auth/react";
 import { registerUser } from "./actions";
 
 export default function SignUpPage() {
@@ -33,10 +33,9 @@ export default function SignUpPage() {
     try {
       setIsGoogleLoading(true);
       setErrorMessage(null);
-      await loginWithGoogle();
+      await signIn("google", { callbackUrl: "/dashboard" });
     } catch (err: any) {
       setIsGoogleLoading(false);
-      if (err?.digest?.startsWith("NEXT_REDIRECT")) return;
       setErrorMessage("Google Sign-in failed. Please try again.");
     }
   };

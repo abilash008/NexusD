@@ -70,9 +70,9 @@ flowchart TD
 - **Candidate Login Filter (`loginWithCredentials`):** When an administrator's email or username is entered into `/login`, the server action blocks submission before NextAuth authorization, returning: *"Administrator accounts cannot sign in through the candidate portal. Please access the dedicated Admin Gateway at /admin/login."*
 
 ### 3.3 NextAuth Authorization & Session Expansion (`src/auth.ts`, `src/types/next-auth.d.ts`)
+- **Host Trust & Reverse Proxy Defense:** Configured `trustHost: true` to prevent `UntrustedHost` configuration errors across local, preview, and production domains.
 - **Portal Parameter Verification:** In `authorize()`, users with `role: "admin"` are strictly verified against `portal === "admin"`. Attempting to log into an admin account with `portal: "student"` yields `null` (rejection).
-- **Google OAuth Admin Filter:** The `signIn` callback inspects OAuth logins; if the Google account matches a master admin address, login is aborted with an error redirect instructing use of the admin gateway.
-- **Custom Sign-Out Route:** Configured `pages: { signOut: "/auth/signout" }` to bind all NextAuth termination flows to the custom branded page.
+- **Google OAuth Admin Filter & Multi-Key Support:** The `signIn` callback inspects OAuth logins; if the Google account matches a master admin address, login is aborted with an error redirect instructing use of the admin gateway. Supports both Auth.js and standard Google OAuth environment variable formats (`AUTH_GOOGLE_ID` / `GOOGLE_CLIENT_ID`).
 - **JWT & Session Role Injection:** NextAuth callbacks preserve `token.role` and `session.user.role`, enabling type-safe authorization checks across client and server components.
 
 ### 3.4 Next.js Edge Middleware Interception (`src/middleware.ts`)

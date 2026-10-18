@@ -39,7 +39,7 @@ To ensure migration to AWS requires zero code rewrites, all development from Spr
 ### 1. Database Portability (Neon $\rightarrow$ AWS RDS)
 * **Standard PostgreSQL SQL:** Drizzle ORM schema must use standard PostgreSQL types (`serial`, `uuid`, `text`, `timestamp with time zone`, `jsonb`, `integer`).
 * **Zero Proprietary Extensions:** Do not depend on Neon-specific extensions. Migrations managed via `drizzle-kit` will run identically against AWS RDS PostgreSQL with a simple change of `DATABASE_URL`.
-* **Connection Pooling:** We use connection pooling abstractions so switching between serverless HTTP poolers (Neon) and persistent poolers (AWS RDS Proxy / PgBouncer) is a configuration switch.
+* **Connection Pooling & Cluster Subdomain Resolution:** In Phase 1, we utilize `@neondatabase/serverless` over HTTP with a custom `neonConfig.fetchEndpoint` to guarantee seamless connectivity across all Neon compute shards and regional clusters (including sub-zones like `.c-7.us-east-2.aws.neon.tech`). Transitioning to AWS RDS Proxy / PgBouncer in Phase 2 is an environment variable update.
 
 ### 2. Standalone Containerization (Vercel $\rightarrow$ AWS EC2 / ECS)
 * Next.js configuration will include `output: 'standalone'` in `next.config.js`.
