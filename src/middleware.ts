@@ -8,7 +8,11 @@ export async function middleware(request: NextRequest) {
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
   const isLoginPage = pathname === "/admin/login";
   const isApiRoute = pathname.startsWith("/api/");
-  const isSignOutPage = pathname === "/auth/signout";
+
+  // Redirect legacy /auth/signout page to home (pop-up modal is used everywhere now)
+  if (pathname === "/auth/signout") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   // Check for NextAuth session token
   let token: any = null;
@@ -37,8 +41,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    // Admin is strictly confined to /admin/*, /auth/signout, and API routes
-    if (!isAdminRoute && !isSignOutPage && !isApiRoute) {
+    // Admin is strictly confined to /admin/* and API routes
+    if (!isAdminRoute && !isApiRoute) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }

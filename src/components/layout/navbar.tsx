@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Compass, Menu, X, Award, BookOpen, BarChart3, ShieldCheck, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SignOutModal } from "@/components/auth/sign-out-modal";
 
 interface NavbarProps {
   user?: {
@@ -15,6 +16,7 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md">
@@ -82,11 +84,14 @@ export function Navbar({ user }: NavbarProps) {
                   Profile
                 </Button>
               </Link>
-              <Link href="/auth/signout">
-                <Button variant="ghost" size="sm" className="text-xs text-slate-600 dark:text-slate-400">
-                  Sign Out
-                </Button>
-              </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSignOutModal(true)}
+                className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer"
+              >
+                Sign Out
+              </Button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -169,6 +174,13 @@ export function Navbar({ user }: NavbarProps) {
           </nav>
         </div>
       )}
+
+      {/* Candidate Sign Out Pop-up Modal */}
+      <SignOutModal
+        isOpen={showSignOutModal}
+        onClose={() => setShowSignOutModal(false)}
+        user={user}
+      />
     </header>
   );
 }

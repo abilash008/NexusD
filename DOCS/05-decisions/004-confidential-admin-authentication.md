@@ -44,8 +44,7 @@ A secure, confidential authentication perimeter was needed to guarantee that adm
    - **Candidate Login Filter (`src/app/login/actions.ts` & `src/auth.ts`):** Admin accounts are strictly barred from logging in on `/login` or through student OAuth.
    - **Backend-Provisioned Credentials (`src/lib/admin-auth.ts`):** Automated database seeding in PostgreSQL with bcrypt hashing and `role: "admin"`.
    - **Edge Middleware Quarantine (`src/middleware.ts`):** Global edge token verification intercepting all requests; redirects unauthorized users away from `/admin`, and redirects active admin sessions away from candidate pages.
-   - **Component Layout Guard & Back-Button Trap (`src/app/admin/layout.tsx`):** 403 Forbidden barrier for student sessions, `popstate` browser back-button lock, and an interactive Exit Admin confirmation modal.
-   - **Custom Branded Sign-Out Page (`src/app/auth/signout/page.tsx`):** Brand-aligned sign-out screen displaying active account details and confirm/cancel controls.
+   - **In-Place Sign-Out Pop-up Modals (`SignOutModal`):** Immediate interactive confirmation dialogs across both candidate and admin portals, removing the need for a separate sign-out route.
    - **Public Signup Hardening (`src/app/signup/actions.ts`):** Strict block on reserved administrative usernames and emails.
 
 ---
@@ -60,7 +59,7 @@ A secure, confidential authentication perimeter was needed to guarantee that adm
 3. **Candidate Portal Lockdown:** Candidate `/login` explicitly blocks administrator credentials with a clear directive to use `/admin/login`.
 4. **Bi-Directional Quarantine:** Implemented `src/middleware.ts` to inspect NextAuth JWT tokens on all platform routes; unauthorized traffic to `/admin` is redirected to `/admin/login`, and active admin sessions browsing candidate routes are redirected back to `/admin`.
 5. **Browser History & Exit Safety:** Added `popstate` history trapping in `AdminLayout` preventing Back navigation from leaving `/admin`, and an interactive Exit Admin confirmation modal to prevent accidental termination.
-6. **Sign-Out Alignment:** Deployed custom `/auth/signout` page consistent with Navy/Electric Blue design system.
+6. **In-Place Sign-Out Modals:** Replaced separate sign-out routing with in-place interactive confirmation modals across candidate and admin interfaces (`SignOutModal`), preserving application state on cancellation and cleanly terminating sessions on confirmation.
 7. **Student Handling:** If an active student session accesses `/admin`, `AdminLayout` presents a 403 Forbidden screen informing them of their student status with options to sign in as admin or return to `/dashboard`.
 8. **UI Isolation:** Public sidebar, footer, and shell padding automatically detach on admin routes to prevent layout interference.
 

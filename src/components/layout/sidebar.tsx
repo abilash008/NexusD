@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "./sidebar-context";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { SignOutModal } from "@/components/auth/sign-out-modal";
 
 interface SidebarProps {
   user?: {
@@ -34,6 +35,7 @@ interface SidebarProps {
 export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
   const [isOpenMobile, setIsOpenMobile] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const { isPinned, togglePin, isHovered, setIsHovered, isExpanded } = useSidebar();
 
   // Admin portal has dedicated navigation and layout
@@ -328,24 +330,24 @@ export function Sidebar({ user }: SidebarProps) {
                   <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
                     Candidate Active
                   </span>
-                  <Link href="/auth/signout">
-                    <button
-                      type="button"
-                      className="text-xs text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer p-1"
-                    >
-                      <LogOut className="h-3.5 w-3.5" /> Sign Out
-                    </button>
-                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setShowSignOutModal(true)}
+                    className="text-xs text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer p-1"
+                  >
+                    <LogOut className="h-3.5 w-3.5" /> Sign Out
+                  </button>
                 </div>
               ) : (
                 <div className="flex justify-center">
-                  <Link
-                    href="/auth/signout"
-                    className="p-1.5 text-slate-400 hover:text-red-600 transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => setShowSignOutModal(true)}
+                    className="p-1.5 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
                     title="Sign Out"
                   >
                     <LogOut className="h-4 w-4" />
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
@@ -396,6 +398,13 @@ export function Sidebar({ user }: SidebarProps) {
           )}
         </div>
       </aside>
+
+      {/* Candidate Sign Out Confirmation Pop-up Modal */}
+      <SignOutModal
+        isOpen={showSignOutModal}
+        onClose={() => setShowSignOutModal(false)}
+        user={user}
+      />
     </>
   );
 }

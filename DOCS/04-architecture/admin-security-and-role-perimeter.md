@@ -25,7 +25,7 @@ Because these capabilities contain confidential assessment material and system c
 5. **Bi-Directional Role Quarantine:** Active administrator sessions are strictly locked to the administrative console and quarantined from student/candidate routes (`/`, `/dashboard`, `/profile`, `/certifications/*`, `/study/*`).
 6. **Browser History & Back-Button Lockdown:** Pressing the browser's back button inside the administrative console cannot navigate to candidate views (`popstate` interception and Edge Middleware redirection).
 7. **Exit Admin Confirmation Modal:** Exiting the admin console requires explicit administrator confirmation via an interactive modal to prevent accidental session termination.
-8. **Brand-Aligned Sign-Out Page (`/auth/signout`):** Custom high-fidelity authentication termination screen displaying active identity details and confirm/cancel options.
+8. **In-Place Sign-Out Confirmation Modals:** Both candidate and admin portals employ interactive pop-up modals (`SignOutModal`) with active identity inspection and cancel/confirm controls instead of navigating away to a separate sign-out page.
 9. **Defense-in-Depth (Dual-Layer Guard):** Enforcement is executed at both the HTTP/Edge layer (Next.js Middleware) and the React component lifecycle layer (`AdminLayout`).
 
 ---
@@ -92,10 +92,11 @@ flowchart TD
   - Provides a **Return to Student Dashboard** fallback.
 - **Public Chrome Suppression:** The learner sidebar ([`Sidebar.tsx`](file:///c:/NexusD/src/components/layout/sidebar.tsx)), learner footer ([`Footer.tsx`](file:///c:/NexusD/src/components/layout/footer.tsx)), and responsive margin padding ([`LayoutShell.tsx`](file:///c:/NexusD/src/components/layout-shell.tsx)) automatically unmount when navigating on `/admin/*` routes.
 
-### 3.6 Custom Branded Sign-Out Page (`src/app/auth/signout/page.tsx`)
-- **Brand System Cohesion:** Dark Navy / Electric Blue aesthetic with the NexusD emblem and status indicator.
-- **Identity Clarity:** Renders the active account's name, email, and dynamic role badge (`Administrator` vs `Student Candidate`).
-- **Interactive Safeguards:** Includes a prominent "Confirm Sign Out" red action button with loading spinner, alongside a "Cancel & Stay Signed In" button that routes users back to their respective portal (`/admin` for administrators, `router.back()` for candidates).
+### 3.6 Candidate In-Place Sign-Out Pop-up Modal (`src/components/auth/sign-out-modal.tsx`)
+- **No Page Transitions:** Clicking "Sign Out" from the candidate sidebar or navigation header no longer navigates to a detached sign-out page; it immediately triggers a glassy confirmation pop-up modal.
+- **Brand System Cohesion:** Styled with dark/light mode adaptability, amber perimeter warning badge, and electric blue account accents.
+- **Identity Clarity:** Renders the active candidate's name, email, and "Student Candidate" badge.
+- **Interactive Safeguards:** Includes a prominent "Confirm & Sign Out" red action button with loading spinner, alongside a "Cancel" button that returns focus immediately to the current workspace without reloading.
 
 ### 3.7 Dedicated Administrator Gateway (`src/app/admin/login/page.tsx`)
 - **Design Philosophy:** Dark, enterprise-grade midnight navy aesthetic with perimeter alert badges and terminal icons.
