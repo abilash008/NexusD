@@ -458,7 +458,29 @@ export default function DynamicQuestionBankPage() {
 
         {/* Question Cards List */}
         <div className="space-y-5">
-          {filteredQuestions.length === 0 ? (
+          {questionsData.length === 0 ? (
+            <Card className="p-12 text-center space-y-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31]">
+              <BookOpen className="h-10 w-10 text-slate-400 mx-auto" />
+              <h3 className="text-base font-bold text-slate-800 dark:text-white">
+                Question Bank Awaiting Upload
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                Official questions for {examConfig.code} are currently being verified and uploaded to the database. You can explore certification guides or check back shortly.
+              </p>
+              <div className="pt-2 flex justify-center gap-3">
+                <Link href={`/certifications/${trackId}`}>
+                  <Button variant="outline" size="sm" className="text-xs cursor-pointer">
+                    Return to {examConfig.code} Hub
+                  </Button>
+                </Link>
+                <Link href="/certifications">
+                  <Button variant="default" size="sm" className="text-xs cursor-pointer">
+                    Browse All Certifications
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          ) : filteredQuestions.length === 0 ? (
             <Card className="p-12 text-center space-y-3 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131D31]">
               <HelpCircle className="h-10 w-10 text-slate-400 mx-auto" />
               <h3 className="text-base font-bold text-slate-800 dark:text-white">

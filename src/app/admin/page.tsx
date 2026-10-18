@@ -241,32 +241,20 @@ export default function AdminDashboardPage() {
             <div className="space-y-2">
               <Link href="/admin/exams" className="block">
                 <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700 text-emerald-600 dark:text-emerald-400 font-semibold">
-                  <span>Manage & Create Certification Tracks</span>
+                  <span>Manage Certification Tracks</span>
                   <Award className="h-4 w-4 text-emerald-600" />
                 </Button>
               </Link>
               <Link href="/admin/questions" className="block">
                 <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700">
-                  <span>Author New Question</span>
+                  <span>Author & Upload Questions</span>
                   <Plus className="h-4 w-4 text-slate-400" />
                 </Button>
               </Link>
-              <Link href="/study/csa/question-bank" className="block">
-                <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700">
-                  <span>Open Master Question Bank</span>
-                  <ExternalLink className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-              <Link href="/pricing" className="block">
-                <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700">
-                  <span>View Pricing & 1-Year Passes</span>
-                  <ExternalLink className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-              <Link href="/certifications/csa/mock" className="block">
-                <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700">
-                  <span>Run 90-Min Mock Simulation</span>
-                  <ExternalLink className="h-4 w-4 text-slate-400" />
+              <Link href="/admin/reports" className="block">
+                <Button variant="outline" className="w-full justify-between text-xs dark:border-slate-700 text-amber-600 dark:text-amber-400">
+                  <span>Triage Errata Disputes</span>
+                  <Flag className="h-4 w-4 text-amber-500" />
                 </Button>
               </Link>
             </div>

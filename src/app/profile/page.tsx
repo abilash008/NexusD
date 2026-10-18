@@ -94,112 +94,86 @@ export interface CandidateProfileData {
   partnerShowcaseOptIn?: boolean;
 }
 
-const DEFAULT_PROFILE: CandidateProfileData = {
-  displayName: "Vithi Sharma",
-  headline: "ServiceNow Trainee | Certified System Administrator (CSA) Aspirant | B.Tech CSE",
-  bio: "Dedicated ServiceNow aspirant preparing for the Certified System Administrator (CSA) and CAD certifications. Strong foundation in Flow Designer, UI Policies, Business Rules, Client Scripting, and ITIL 4 service desk workflows.",
-  location: "Bengaluru, Karnataka, India",
-  phone: "+91 98765 43210",
+const EMPTY_PROFILE: CandidateProfileData = {
+  displayName: "",
+  headline: "",
+  bio: "",
+  location: "",
+  phone: "",
   backgroundSegment: "servicenow_trainee",
-  experienceLevel: "0 - 1 Year (Aspirant / Trainee)",
+  experienceLevel: "",
   availabilityStatus: "open_to_work",
-  targetRoles: [
-    "ServiceNow System Administrator",
-    "Junior ServiceNow Developer",
-    "Technical Support Engineer",
-  ],
-  targetCertifications: ["CSA", "CAD"],
-  skills: [
-    "Flow Designer",
-    "Business Rules",
-    "Client Scripts",
-    "Service Catalog",
-    "UI Policies & Actions",
-    "GlideRecord & GlideSystem",
-    "Incident & Change Management",
-    "CMDB Basics",
-    "Next Experience UI",
-    "REST Integration",
-  ],
-  webassessorId: "KRY-984210",
-  nowLearningId: "NL-741920",
-  linkedInUrl: "https://linkedin.com/in/vithi-sharma-servicenow",
-  portfolioUrl: "https://github.com/vithi-sharma",
-  education: [
-    {
-      id: "edu-1",
-      degree: "Bachelor of Technology (B.Tech)",
-      institution: "Vellore Institute of Technology (VIT)",
-      fieldOfStudy: "Computer Science & Engineering",
-      startYear: "2021",
-      endYear: "2025",
-      cgpa: "8.8 / 10.0 CGPA",
-      highlights: "Coursework in Database Systems, Cloud Computing, Object-Oriented Java, Operating Systems, and Relational Schema Architecture.",
-    },
-  ],
-  experience: [
-    {
-      id: "exp-1",
-      title: "ServiceNow Platform Intern",
-      company: "Cognizant Technology Solutions",
-      employmentType: "Internship",
-      location: "Bengaluru (Hybrid)",
-      startDate: "Jan 2025",
-      endDate: "Present",
-      isCurrent: true,
-      description: "Configured catalog items, variable sets, and Flow Designer subflows. Developed client-side validation scripts and tested Australia & Brazil release standards on Personal Developer Instances (PDIs).",
-    },
-  ],
-  partnerShowcaseOptIn: true,
+  targetRoles: [],
+  targetCertifications: ["CSA"],
+  skills: [],
+  webassessorId: "",
+  nowLearningId: "",
+  linkedInUrl: "",
+  portfolioUrl: "",
+  education: [],
+  experience: [],
+  partnerShowcaseOptIn: false,
 };
 
 export default function CandidateProfilePage() {
   const { data: session, status: authStatus } = useSession();
   const { isPro, entitlement, daysRemaining } = useEntitlements();
 
-  const [profile, setProfile] = useState<CandidateProfileData>(DEFAULT_PROFILE);
+  const [profile, setProfile] = useState<CandidateProfileData>(EMPTY_PROFILE);
   const [activeTab, setActiveTab] = useState<"overview" | "education" | "experience" | "skills" | "credentials">("overview");
   const [isEditing, setIsEditing] = useState(false);
   const [editModalTab, setEditModalTab] = useState<"basic" | "education" | "experience" | "skills" | "links">("basic");
-  const [editForm, setEditForm] = useState<CandidateProfileData>(DEFAULT_PROFILE);
+  const [editForm, setEditForm] = useState<CandidateProfileData>(EMPTY_PROFILE);
 
   const [newSkillInput, setNewSkillInput] = useState("");
   const [newRoleInput, setNewRoleInput] = useState("");
   const [copiedLink, setCopiedLink] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Load candidate profile from localStorage or defaults, and sync with session
+  // Helper to obtain unique user storage key
+  const getUserStorageKey = () => {
+    const userIdentifier = session?.user?.email || session?.user?.id;
+    return userIdentifier ? `nexusd_profile_${userIdentifier.toLowerCase().trim()}` : "nexusd_profile_guest";
+  };
+
+  // Load candidate profile dynamically scoped to the authenticated user
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("nexusd_profile");
+      // Purge obsolete hardcoded legacy mock profile if present
+      localStorage.removeItem("nexusd_profile");
+
+      const storageKey = getUserStorageKey();
+      const stored = localStorage.getItem(storageKey);
+      const userDefaultName = session?.user?.name || (session?.user?.email ? session.user.email.split("@")[0] : "");
+
       if (stored) {
         const parsed = JSON.parse(stored) as CandidateProfileData;
         const merged: CandidateProfileData = {
-          ...DEFAULT_PROFILE,
+          ...EMPTY_PROFILE,
           ...parsed,
-          displayName: session?.user?.name || parsed.displayName || DEFAULT_PROFILE.displayName,
+          displayName: parsed.displayName || userDefaultName,
         };
         setProfile(merged);
         setEditForm(merged);
       } else {
         const initial: CandidateProfileData = {
-          ...DEFAULT_PROFILE,
-          displayName: session?.user?.name || DEFAULT_PROFILE.displayName,
+          ...EMPTY_PROFILE,
+          displayName: userDefaultName,
         };
         setProfile(initial);
         setEditForm(initial);
-        localStorage.setItem("nexusd_profile", JSON.stringify(initial));
       }
     } catch (e) {
-      // Fallback
+      // Fallback silently
     }
   }, [session]);
 
-  // Save profile changes locally and sync to cloud if authenticated
+  // Save profile changes locally to user-scoped storage and sync to cloud if authenticated
   const handleSaveProfile = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     try {
-      localStorage.setItem("nexusd_profile", JSON.stringify(editForm));
+      const storageKey = getUserStorageKey();
+      localStorage.setItem(storageKey, JSON.stringify(editForm));
       setProfile(editForm);
       setIsEditing(false);
       setSaveSuccess(true);
@@ -469,7 +443,7 @@ export default function CandidateProfilePage() {
                 </div>
 
                 <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-snug max-w-2xl">
-                  {profile.headline}
+                  {profile.headline || "ServiceNow Aspirant • Click 'Edit Profile' to add headline, education & experience"}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">

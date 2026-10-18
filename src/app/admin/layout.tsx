@@ -173,20 +173,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="hidden md:inline-flex text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700/60">
+            <span className="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700/60">
               {session?.user?.email}
             </span>
-
-            <Link href="/dashboard">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5 text-xs bg-transparent border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Student Portal</span>
-              </Button>
-            </Link>
 
             <Button
               variant="outline"

@@ -43,6 +43,22 @@ const DEMO_QUESTIONS = CSA_FREE_60_QUESTIONS.filter(
   (q) => !q.isMultiSelect && q.options && q.options.length === 4
 );
 
+const DEMO_FALLBACK_QUESTION = {
+  id: "demo-preview",
+  domain: "User Interface & Navigation",
+  domainSlug: "ui-nav",
+  questionText: "Which component of the Next Experience Unified Navigation contains the Application Navigator, Favorites, and Workspaces menus?",
+  isMultiSelect: false,
+  options: [
+    { id: "opt-1", text: "Contextual App Bar", isCorrect: false },
+    { id: "opt-2", text: "All Menu (Unified Navigation Header)", isCorrect: true },
+    { id: "opt-3", text: "Filter Navigator Pane", isCorrect: false },
+    { id: "opt-4", text: "Global Search Banner", isCorrect: false },
+  ],
+  explanation: "In Next Experience Unified Navigation, the top navigation header provides access to the 'All' menu (which houses the full Application Navigator), Favorites, History, and Workspaces.",
+  releaseVersion: "Australia & Brazil",
+};
+
 const DOMAIN_WEIGHTS: Record<string, number> = {
   "User Interface & Navigation": 20,
   "Collaboration & Task Management": 20,
@@ -65,7 +81,7 @@ export default function HomePage() {
     }
   }, []);
 
-  const currentQuestion = DEMO_QUESTIONS[currentDemoIndex] || DEMO_QUESTIONS[0];
+  const currentQuestion = DEMO_QUESTIONS[currentDemoIndex] || DEMO_QUESTIONS[0] || DEMO_FALLBACK_QUESTION;
   const originalQuestionIndex = CSA_FREE_60_QUESTIONS.findIndex((q) => q.id === currentQuestion.id);
   const questionNumber = originalQuestionIndex >= 0 ? originalQuestionIndex + 1 : currentDemoIndex + 1;
   const domainWeight = DOMAIN_WEIGHTS[currentQuestion.domain] || 20;

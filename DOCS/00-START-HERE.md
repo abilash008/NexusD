@@ -36,6 +36,7 @@
 | **Step 3: Implementation — Sprint 6** | ✅ Complete | [`DOCS/03-sprints/sprint-06/sprint-06-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-06/sprint-06-summary.md) |
 | **Step 3: Implementation — Sprint 7** | ✅ Complete | [`DOCS/03-sprints/sprint-07/sprint-07-summary.md`](file:///c:/NexusD/DOCS/03-sprints/sprint-07/sprint-07-summary.md) (Typography Scale, Dynamic Mock Engine, 2-Yr Pass, EdTech Dashboard & Profile) |
 | **Step 3: Implementation — Sprint 8** | ✅ Complete | [`docs/03-sprints/sprint-08/sprint-08-summary.md`](file:///c:/NexusD/docs/03-sprints/sprint-08/sprint-08-summary.md) (Confidential Admin Perimeter, Dedicated Gateway, Edge Middleware & CIS-DF Blueprint) |
+| **Step 3: Implementation — Sprint 9** | ✅ Complete | [`docs/03-sprints/sprint-09/sprint-09-summary.md`](file:///c:/NexusD/docs/03-sprints/sprint-09/sprint-09-summary.md) (Dynamic Neon DB Questions, Candidate Profile Dynamic State, Zero-Hardcoded Questions & Admin Isolation) |
 | **Production Launch Status** | 🚀 **Live in Production** | Live at [`nexusd.in`](https://nexusd.in) (Live Razorpay Standard Checkout, Hardened NextAuth + Neon DB, Multi-Track Telemetry) |
 
 ---
@@ -57,7 +58,8 @@
 │   ├── sprint-05/
 │   ├── sprint-06/                   ← Live deployment, Razorpay Standard Checkout, Auth & Telemetry
 │   ├── sprint-07/                   ← Typography Scale Standard, Dynamic Mock Engine, Dashboard & Profile Revamp
-│   └── sprint-08/                   ← Confidential Admin Gateway, Edge Middleware, CIS-DF Blueprint Compliance
+│   ├── sprint-08/                   ← Confidential Admin Gateway, Edge Middleware, CIS-DF Blueprint Compliance
+│   └── sprint-09/                   ← Dynamic Database Questions, Zero-Hardcoded Questions, Dynamic Profile & Admin Boundary
 ├── 04-architecture/
 │   ├── admin-security-and-role-perimeter.md ← Multi-layer admin security, edge proxy, and credential lifecycle
 │   ├── cloud-infrastructure-and-migration.md ← Two-phase hosting model & AWS migration blueprint

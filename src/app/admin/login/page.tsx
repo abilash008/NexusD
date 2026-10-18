@@ -228,15 +228,6 @@ function AdminLoginForm() {
           <p className="text-[10px] text-slate-400 leading-relaxed font-mono">
             Audit Notice: All login attempts and IP fingerprints are logged. Administrator accounts are provisioned via secure backend automation. Self-registration is strictly disallowed.
           </p>
-
-          <div>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="h-3 w-3" /> Return to Student Portal
-            </Link>
-          </div>
         </div>
       </Card>
     </div>

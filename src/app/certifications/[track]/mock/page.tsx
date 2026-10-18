@@ -576,7 +576,7 @@ export default function DynamicTimedMockExamPage() {
                 Track Questions in Authoring
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                New questions for {examConfig.code} are currently being authored or imported. Administrators can upload questions via the Admin CMS using bulk Excel/CSV or the question authoring suite.
+                Official {examConfig.code} questions are currently being verified and uploaded to the question vault. Please check back shortly or explore our other active certification tracks.
               </p>
             </div>
           </div>
@@ -586,9 +586,9 @@ export default function DynamicTimedMockExamPage() {
                 ← Return to {examConfig.code} Hub
               </Button>
             </Link>
-            <Link href="/admin/questions" className="flex-1">
+            <Link href="/certifications" className="flex-1">
               <Button variant="default" className="w-full text-xs gap-1.5">
-                Admin Question CMS <ArrowRight className="h-3.5 w-3.5" />
+                Explore All Tracks <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
           </div>
