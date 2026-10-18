@@ -39,11 +39,13 @@ A secure, confidential authentication perimeter was needed to guarantee that adm
    - *Drawback:* Initial HTML and client bundles for admin routes could still be delivered before client execution, leading to potential flash of content or bundle leaks.
 2. **Option 2 (Single Shared Login Page with Role Redirects):** Use the public `/login` page and redirect admins to `/admin` upon sign-in.
    - *Drawback:* Blurs the perimeter between students and administrators. Students entering `/admin` would be redirected to the consumer login page with public "Sign up" links, violating the requirement for confidential handling and separate credentials.
-3. **Option 3 (Multi-Tiered Perimeter Guard with Dedicated Gateway — SELECTED):**
+3. **Option 3 (Multi-Tiered Perimeter Guard with Dedicated Gateway & Bi-Directional Quarantine — SELECTED):**
    - **Dedicated Admin Gateway (`/admin/login`):** An isolated, high-security login terminal without any sign-up link.
+   - **Candidate Login Filter (`src/app/login/actions.ts` & `src/auth.ts`):** Admin accounts are strictly barred from logging in on `/login` or through student OAuth.
    - **Backend-Provisioned Credentials (`src/lib/admin-auth.ts`):** Automated database seeding in PostgreSQL with bcrypt hashing and `role: "admin"`.
-   - **Edge Middleware Proxy (`src/middleware.ts`):** Edge-level token verification intercepting all `/admin/:path*` requests before page render.
-   - **Component Layout Guard (`src/app/admin/layout.tsx`):** 403 Forbidden clearance barrier intercepting student sessions.
+   - **Edge Middleware Quarantine (`src/middleware.ts`):** Global edge token verification intercepting all requests; redirects unauthorized users away from `/admin`, and redirects active admin sessions away from candidate pages.
+   - **Component Layout Guard & Back-Button Trap (`src/app/admin/layout.tsx`):** 403 Forbidden barrier for student sessions, `popstate` browser back-button lock, and an interactive Exit Admin confirmation modal.
+   - **Custom Branded Sign-Out Page (`src/app/auth/signout/page.tsx`):** Brand-aligned sign-out screen displaying active account details and confirm/cancel controls.
    - **Public Signup Hardening (`src/app/signup/actions.ts`):** Strict block on reserved administrative usernames and emails.
 
 ---
@@ -54,10 +56,13 @@ A secure, confidential authentication perimeter was needed to guarantee that adm
 
 ### Architecture Specification:
 1. **Provisioning:** Administrator credentials are initialized via backend automation (`ensureAdminUser()`) storing hashed credentials in PostgreSQL.
-2. **Gateway:** Built `/admin/login`, featuring an enterprise dark-theme security perimeter without sign-up forms.
-3. **Route Guarding:** Implemented `src/middleware.ts` to inspect NextAuth JWT tokens on all `/admin/:path*` routes and enforce immediate redirection for unauthorized visitors.
-4. **Student Handling:** If an active student session accesses `/admin`, `AdminLayout` presents a 403 Forbidden screen informing them of their student status with options to sign in as admin or return to `/dashboard`.
-5. **UI Isolation:** Public sidebar, footer, and shell padding automatically detach on admin routes to prevent layout interference.
+2. **Dedicated Gateway:** Built `/admin/login`, featuring an enterprise dark-theme security perimeter without sign-up forms.
+3. **Candidate Portal Lockdown:** Candidate `/login` explicitly blocks administrator credentials with a clear directive to use `/admin/login`.
+4. **Bi-Directional Quarantine:** Implemented `src/middleware.ts` to inspect NextAuth JWT tokens on all platform routes; unauthorized traffic to `/admin` is redirected to `/admin/login`, and active admin sessions browsing candidate routes are redirected back to `/admin`.
+5. **Browser History & Exit Safety:** Added `popstate` history trapping in `AdminLayout` preventing Back navigation from leaving `/admin`, and an interactive Exit Admin confirmation modal to prevent accidental termination.
+6. **Sign-Out Alignment:** Deployed custom `/auth/signout` page consistent with Navy/Electric Blue design system.
+7. **Student Handling:** If an active student session accesses `/admin`, `AdminLayout` presents a 403 Forbidden screen informing them of their student status with options to sign in as admin or return to `/dashboard`.
+8. **UI Isolation:** Public sidebar, footer, and shell padding automatically detach on admin routes to prevent layout interference.
 
 ---
 
@@ -65,7 +70,9 @@ A secure, confidential authentication perimeter was needed to guarantee that adm
 
 ### Positive Consequences:
 - **Zero Data Leakage:** Unauthorized users and students cannot view or interact with administrative CMS screens.
+- **Bi-Directional Boundary Integrity:** Administrators cannot inadvertently browse student pages, and students cannot enter admin tools.
 - **No Self-Registration Vulnerability:** Public registration cannot spoof or create admin accounts.
+- **Accidental Exit Protection:** Interactive confirmation modal prevents accidental session dropouts during authoring tasks.
 - **Seamless Developer Experience:** Admin credentials can be configured via standard environment variables (`ADMIN_EMAIL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`).
 - **Clean Audit Trail:** Clear separation between student examination activity and administrative CMS authoring.
 

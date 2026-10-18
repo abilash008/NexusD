@@ -60,6 +60,7 @@ function AdminLoginForm() {
       const res = await signIn("credentials", {
         email: cleanId,
         password,
+        portal: "admin",
         redirect: false,
       });
 

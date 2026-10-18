@@ -14,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
   }),
-  secret: process.env.AUTH_SECRET || "nexusd_secret_dev_key_2026_super_secure_fallback",
+  secret: process.env.AUTH_SECRET || "nexusd-prod-secret-key-australia-brazil-2026-production-ready",
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID || "",
@@ -65,6 +65,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
 
           const role = isMasterAdminEmail(user.email) ? "admin" : (user.role || "user");
+          const portal = (credentials as any)?.portal
+            ? String((credentials as any).portal).toLowerCase().trim()
+            : "student";
+
+          // Administrator accounts can ONLY sign in from the dedicated /admin/login gateway
+          if (role === "admin" && portal !== "admin") {
+            return null;
+          }
 
           const emailStr = user.email || user.username || "practitioner";
           return {
@@ -83,8 +91,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/login",
+    signOut: "/auth/signout",
   },
   callbacks: {
+    signIn({ user, account }) {
+      if (account?.provider === "google") {
+        if (isMasterAdminEmail(user.email)) {
+          return "/login?error=AdminMustUseAdminPortal";
+        }
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;

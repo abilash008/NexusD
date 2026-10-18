@@ -82,7 +82,7 @@ export function Navbar({ user }: NavbarProps) {
                   Profile
                 </Button>
               </Link>
-              <Link href="/api/auth/signout">
+              <Link href="/auth/signout">
                 <Button variant="ghost" size="sm" className="text-xs text-slate-600 dark:text-slate-400">
                   Sign Out
                 </Button>

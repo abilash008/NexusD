@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -19,6 +19,8 @@ import {
   Award,
   LogOut,
   Lock,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,6 +33,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [showExitModal, setShowExitModal] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+
+  const role = (session?.user as any)?.role;
 
   // Handle unauthenticated state: immediately challenge for admin credentials (declared at top level)
   useEffect(() => {
@@ -38,6 +44,26 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       router.replace(`/admin/login?callbackUrl=${encodeURIComponent(pathname)}`);
     }
   }, [status, pathname, router]);
+
+  // Browser Back Button Trap: Prevent administrator session from escaping to candidate portal via browser Back button
+  useEffect(() => {
+    if (status === "authenticated" && role === "admin") {
+      // Push initial dummy state to trap back-clicks within the admin domain
+      window.history.pushState({ adminBoundary: true }, "", window.location.href);
+
+      const handlePopState = () => {
+        if (!window.location.pathname.startsWith("/admin")) {
+          window.history.pushState({ adminBoundary: true }, "", "/admin");
+          router.replace("/admin");
+        }
+      };
+
+      window.addEventListener("popstate", handlePopState);
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+      };
+    }
+  }, [status, role, router]);
 
   // If on the dedicated admin login page, bypass layout chrome completely
   if (pathname === "/admin/login") {
@@ -71,8 +97,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </div>
     );
   }
-
-  const role = (session?.user as any)?.role;
 
   // Access Denied: User is authenticated but is a student account
   if (role !== "admin") {
@@ -180,11 +204,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={async () => {
-                await signOut({ redirect: false });
-                router.push("/admin/login");
-              }}
-              className="gap-1.5 text-xs border-red-900/50 text-red-300 hover:bg-red-950/40 hover:text-red-200"
+              onClick={() => setShowExitModal(true)}
+              className="gap-1.5 text-xs border-red-900/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Exit Admin</span>
@@ -222,6 +243,79 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {children}
       </main>
+
+      {/* Exit Confirmation Modal */}
+      {showExitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-[#0F172A] border border-slate-800 rounded-2xl shadow-2xl p-6 space-y-5 text-white">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-white tracking-tight">
+                  Confirm Administrator Sign Out
+                </h3>
+                <p className="text-xs text-slate-400">
+                  NexusD Administrative Clearance Gateway
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
+              <div className="flex items-center justify-between text-slate-400">
+                <span>Active Account</span>
+                <span className="font-mono text-emerald-400 font-medium">Administrator</span>
+              </div>
+              <div className="font-mono text-slate-200 truncate font-medium">
+                {session?.user?.email || "admin@nexusd.in"}
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Are you sure you want to sign out from the Administrative Console? You will be returned to the Admin Gateway login screen and your administrator credentials will be required to re-authenticate.
+            </p>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isExiting}
+                onClick={() => setShowExitModal(false)}
+                className="border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs h-9 px-4 cursor-pointer"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                disabled={isExiting}
+                onClick={async () => {
+                  try {
+                    setIsExiting(true);
+                    await signOut({ callbackUrl: "/admin/login" });
+                  } catch (err) {
+                    console.error("[Admin SignOut Error]:", err);
+                    setIsExiting(false);
+                  }
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white font-semibold text-xs h-9 px-4 gap-1.5 cursor-pointer shadow-xs"
+              >
+                {isExiting ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Signing Out...</span>
+                  </>
+                ) : (
+                  <>
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Confirm & Sign Out</span>
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

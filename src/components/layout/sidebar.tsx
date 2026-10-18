@@ -328,7 +328,7 @@ export function Sidebar({ user }: SidebarProps) {
                   <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
                     Candidate Active
                   </span>
-                  <Link href="/api/auth/signout">
+                  <Link href="/auth/signout">
                     <button
                       type="button"
                       className="text-xs text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer p-1"
@@ -340,7 +340,7 @@ export function Sidebar({ user }: SidebarProps) {
               ) : (
                 <div className="flex justify-center">
                   <Link
-                    href="/api/auth/signout"
+                    href="/auth/signout"
                     className="p-1.5 text-slate-400 hover:text-red-600 transition-colors"
                     title="Sign Out"
                   >
