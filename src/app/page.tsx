@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Award,
   Zap,
   BookOpen,
   CheckCircle2,
+  XCircle,
   Shield,
   ArrowRight,
   Clock,
@@ -29,28 +30,56 @@ import {
   Briefcase,
   Building,
   HelpCircle,
+  Shuffle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DEFAULT_CERTIFICATION_TRACKS } from "@/lib/admin-certifications";
+import { CSA_FREE_60_QUESTIONS } from "@/data/csa-questions";
+
+// Curate single-select 4-option questions from the official free 60 blueprint
+const DEMO_QUESTIONS = CSA_FREE_60_QUESTIONS.filter(
+  (q) => !q.isMultiSelect && q.options && q.options.length === 4
+);
+
+const DOMAIN_WEIGHTS: Record<string, number> = {
+  "User Interface & Navigation": 20,
+  "Collaboration & Task Management": 20,
+  "Database Administration & Schema": 30,
+  "Self-Service & Process Automation": 20,
+  "Introduction to Development": 10,
+};
 
 export default function HomePage() {
-  // Interactive Live Demo Question Card State (Hooking learners instantly)
-  const [selectedDemoOption, setSelectedDemoOption] = useState<number | null>(null);
+  // Interactive Live Demo Question Card State (Shuffled dynamically across the free blueprint)
+  const [currentDemoIndex, setCurrentDemoIndex] = useState(0);
+  const [selectedDemoOption, setSelectedDemoOption] = useState<string | null>(null);
   const [isDemoAnswerSubmitted, setIsDemoAnswerSubmitted] = useState(false);
 
-  const demoQuestion = {
-    domain: "Database Administration & Schema",
-    stem: "Which ServiceNow table stores all dictionary definitions, field configurations, and column schemas for every table in the system?",
-    options: [
-      { id: 0, text: "sys_db_object (Tables catalog)", isCorrect: false },
-      { id: 1, text: "sys_dictionary (System Dictionary)", isCorrect: true },
-      { id: 2, text: "sys_properties (System Properties)", isCorrect: false },
-      { id: 3, text: "sys_metadata (Application Files)", isCorrect: false },
-    ],
-    explanation:
-      "sys_dictionary (System Dictionary) defines every field, column type, label, and schema configuration on every table. In contrast, sys_db_object only holds high-level table records.",
+  // Pick a random question from the pool on client mount so every visit/refresh gives a fresh question
+  useEffect(() => {
+    if (DEMO_QUESTIONS.length > 0) {
+      const rand = Math.floor(Math.random() * DEMO_QUESTIONS.length);
+      setCurrentDemoIndex(rand);
+    }
+  }, []);
+
+  const currentQuestion = DEMO_QUESTIONS[currentDemoIndex] || DEMO_QUESTIONS[0];
+  const originalQuestionIndex = CSA_FREE_60_QUESTIONS.findIndex((q) => q.id === currentQuestion.id);
+  const questionNumber = originalQuestionIndex >= 0 ? originalQuestionIndex + 1 : currentDemoIndex + 1;
+  const domainWeight = DOMAIN_WEIGHTS[currentQuestion.domain] || 20;
+
+  const handleNextDemoQuestion = () => {
+    setSelectedDemoOption(null);
+    setIsDemoAnswerSubmitted(false);
+    setCurrentDemoIndex((prev) => {
+      let next = Math.floor(Math.random() * DEMO_QUESTIONS.length);
+      if (next === prev && DEMO_QUESTIONS.length > 1) {
+        next = (prev + 1) % DEMO_QUESTIONS.length;
+      }
+      return next;
+    });
   };
 
   const tracks = DEFAULT_CERTIFICATION_TRACKS;
@@ -136,27 +165,39 @@ export default function HomePage() {
                       LIVE PRACTICE DEMO
                     </span>
                   </div>
-                  <Badge variant="accent" className="text-[10px] py-0 px-2 font-mono">
-                    CSA Blueprint • Q 18 of 60
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleNextDemoQuestion}
+                      title="Load another random practice question"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 hover:text-[#0066FF] dark:hover:bg-blue-950/60 dark:hover:text-[#38BDF8] border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                    >
+                      <Shuffle className="h-2.5 w-2.5" />
+                      <span>Shuffle</span>
+                    </button>
+                    <Badge variant="accent" className="text-[10px] py-0 px-2 font-mono">
+                      CSA Blueprint • Q {questionNumber} of 60
+                    </Badge>
+                  </div>
                 </div>
 
                 {/* Domain Tag */}
                 <div className="space-y-2">
                   <Badge variant="outline" className="text-[10px] dark:border-slate-700 text-[#0066FF] dark:text-[#38BDF8]">
-                    {demoQuestion.domain} (30% Weight)
+                    {currentQuestion.domain} ({domainWeight}% Weight)
                   </Badge>
                   <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug">
-                    {demoQuestion.stem}
+                    {currentQuestion.questionText}
                   </p>
                 </div>
 
                 {/* Interactive Options List */}
                 <div className="space-y-2">
-                  {demoQuestion.options.map((opt) => {
+                  {currentQuestion.options.map((opt, idx) => {
                     const isSelected = selectedDemoOption === opt.id;
                     const showCorrect = isDemoAnswerSubmitted && opt.isCorrect;
                     const showWrong = isDemoAnswerSubmitted && isSelected && !opt.isCorrect;
+                    const letter = String.fromCharCode(65 + idx);
 
                     let optClass = "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 hover:border-blue-400";
                     if (isSelected && !isDemoAnswerSubmitted) {
@@ -178,14 +219,30 @@ export default function HomePage() {
                         }}
                         className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-center justify-between cursor-pointer ${optClass}`}
                       >
-                        <span>{opt.text}</span>
-                        {showCorrect && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />}
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className={`inline-flex items-center justify-center h-5 w-5 rounded-md text-[10px] font-bold font-mono shrink-0 ${
+                              showCorrect
+                                ? "bg-emerald-600 text-white"
+                                : showWrong
+                                ? "bg-red-600 text-white"
+                                : isSelected
+                                ? "bg-[#0066FF] text-white"
+                                : "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+                            }`}
+                          >
+                            {letter}
+                          </span>
+                          <span className="leading-snug">{opt.text}</span>
+                        </div>
+                        {showCorrect && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 ml-2" />}
+                        {showWrong && <XCircle className="h-4 w-4 text-red-500 shrink-0 ml-2" />}
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Submit / Reveal Button */}
+                {/* Submit / Reveal Button & Actions */}
                 {!isDemoAnswerSubmitted ? (
                   <Button
                     variant="accent"
@@ -197,21 +254,26 @@ export default function HomePage() {
                     Check Answer & Reveal Explanation <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 ) : (
-                  <div className="p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/80 text-[11px] text-slate-700 dark:text-slate-300 space-y-1.5 animate-in fade-in">
-                    <div className="font-bold text-[#0066FF] dark:text-[#38BDF8] flex items-center gap-1">
-                      <Sparkles className="h-3 w-3" /> Architectural Explanation:
+                  <div className="p-3.5 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/80 text-[11px] text-slate-700 dark:text-slate-300 space-y-2.5 animate-in fade-in">
+                    <div className="font-bold text-[#0066FF] dark:text-[#38BDF8] flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5" /> Architectural Explanation:
                     </div>
-                    <p className="leading-relaxed">{demoQuestion.explanation}</p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedDemoOption(null);
-                        setIsDemoAnswerSubmitted(false);
-                      }}
-                      className="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold underline cursor-pointer"
-                    >
-                      Reset demo question
-                    </button>
+                    <p className="leading-relaxed">{currentQuestion.explanation}</p>
+                    <div className="pt-2 border-t border-blue-200/60 dark:border-blue-800/60 flex flex-wrap items-center justify-between gap-2">
+                      <button
+                        type="button"
+                        onClick={handleNextDemoQuestion}
+                        className="inline-flex items-center gap-1 text-[11px] text-[#0066FF] dark:text-[#38BDF8] hover:underline font-bold cursor-pointer"
+                      >
+                        <Shuffle className="h-3 w-3" /> Try Another Question
+                      </button>
+                      <Link
+                        href="/certifications/csa/practice"
+                        className="inline-flex items-center gap-1 text-[11px] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-semibold"
+                      >
+                        Practice All 60 Free Qs <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>

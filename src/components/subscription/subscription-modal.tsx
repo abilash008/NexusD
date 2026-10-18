@@ -357,27 +357,54 @@ export function SubscriptionModal({
           <div className="font-semibold text-slate-900 dark:text-white flex items-center justify-between pb-1 border-b border-slate-200/60 dark:border-slate-800">
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              1-Year Certification Pass Benefits:
+              {selectedPlan === "all_access"
+                ? "2-Year All-Access Pass Benefits:"
+                : `1-Year ${currentPlanConfig.name} Benefits:`}
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">365-Day Access</span>
+            <span className="text-[11px] text-slate-400 font-mono">
+              {selectedPlan === "all_access" ? "730-Day Access (2 Full Years)" : "365-Day Access"}
+            </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>Full Master Vault (Questions 61+)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>3-Mode High-Res PDF Exporter</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>Shuffled Timed Mock Simulations</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>Australia & Brazil Release Sync</span>
-            </div>
+            {selectedPlan === "all_access" ? (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>All 4+ Track Question Vaults (CSA, CAD, CIS-DF, CIS-ITSM)</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Unlimited 3-Mode High-Res PDF Exporter</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Unlimited Shuffled Timed Mock Simulations</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Australia, Brazil & 2026/2027 Syllabus Sync</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Full Master Vault (Questions 61+)</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>3-Mode High-Res PDF Exporter</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Shuffled Timed Mock Simulations</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Australia & Brazil Release Sync</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -425,7 +452,9 @@ export function SubscriptionModal({
                 Subscription Active ({daysRemaining} Days Left)
               </Button>
               <p className="text-center text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
-                You already hold an active 1-year pass for this certification track. All questions, study blueprints, and PDF exports are fully unlocked.
+                {selectedPlan === "all_access"
+                  ? "You already hold an active 2-year All-Access pass. All questions, study blueprints, and PDF exports are fully unlocked across all tracks."
+                  : "You already hold an active 1-year pass for this certification track. All questions, study blueprints, and PDF exports are fully unlocked."}
               </p>
             </div>
           ) : (
