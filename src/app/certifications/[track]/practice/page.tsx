@@ -28,7 +28,9 @@ import {
   getExamConfig,
   generateTrackPracticeDrill,
   getFreeTrackQuestions,
+  shuffleQuestionsAndOptions,
 } from "@/lib/exam-engine";
+import { getAllQuestions } from "@/lib/admin-questions";
 
 function DynamicPracticeExamContent() {
   const params = useParams();
@@ -38,6 +40,7 @@ function DynamicPracticeExamContent() {
   const domainParam = searchParams.get("domain");
 
   const [selectedDomain, setSelectedDomain] = useState<string>(domainParam || "all");
+  const [allTrackQuestions, setAllTrackQuestions] = useState<PracticeQuestion[]>([]);
   const [activeQuestions, setActiveQuestions] = useState<PracticeQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string[]>>({});
@@ -46,25 +49,66 @@ function DynamicPracticeExamContent() {
   const [timeElapsedSeconds, setTimeElapsedSeconds] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load consistent free 60 questions, freshly shuffled for each drill
+  // Load questions dynamically from local storage and Neon DB API
   useEffect(() => {
+    let isMounted = true;
     const targetDomain = domainParam && domainParam !== "all" ? domainParam : "all";
     setSelectedDomain(targetDomain);
 
-    const drillQuestions = generateTrackPracticeDrill(trackId, targetDomain);
-    setActiveQuestions(drillQuestions);
-    setCurrentIndex(0);
-    setIsCompleted(false);
-    setSelectedAnswers({});
-    setFlaggedQuestions({});
-    setIsLoaded(true);
+    async function loadQuestions() {
+      let pool = getAllQuestions(trackId);
+
+      try {
+        const res = await fetch(`/api/questions?cert=${trackId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data?.questions) && data.questions.length > 0) {
+            pool = data.questions;
+          }
+        }
+      } catch (err) {
+        console.warn("[PracticeEngine] Remote fetch fallback to local pool:", err);
+      }
+
+      if (!isMounted) return;
+
+      setAllTrackQuestions(pool);
+
+      const filtered = targetDomain === "all"
+        ? pool
+        : pool.filter(
+            (q) =>
+              q.domainSlug?.toLowerCase() === targetDomain.toLowerCase() ||
+              q.domain?.toLowerCase() === targetDomain.toLowerCase()
+          );
+
+      setActiveQuestions(shuffleQuestionsAndOptions(filtered));
+      setCurrentIndex(0);
+      setIsCompleted(false);
+      setSelectedAnswers({});
+      setFlaggedQuestions({});
+      setIsLoaded(true);
+    }
+
+    loadQuestions();
+
+    return () => {
+      isMounted = false;
+    };
   }, [trackId, domainParam]);
 
   // Handle domain change with instant shuffling and URL sync
   const handleDomainFilterChange = (slug: string) => {
     setSelectedDomain(slug);
-    const drillQuestions = generateTrackPracticeDrill(trackId, slug);
-    setActiveQuestions(drillQuestions);
+    const filtered = slug === "all"
+      ? allTrackQuestions
+      : allTrackQuestions.filter(
+          (q) =>
+            q.domainSlug?.toLowerCase() === slug.toLowerCase() ||
+            q.domain?.toLowerCase() === slug.toLowerCase()
+        );
+
+    setActiveQuestions(shuffleQuestionsAndOptions(filtered));
     setCurrentIndex(0);
     setIsCompleted(false);
     setSelectedAnswers({});
@@ -166,27 +210,69 @@ function DynamicPracticeExamContent() {
   }
 
   if (activeQuestions.length === 0) {
+    // SCENARIO 1: The entire track has ZERO questions uploaded
+    if (allTrackQuestions.length === 0) {
+      return (
+        <div className="mx-auto max-w-2xl px-4 py-20 text-center space-y-6">
+          <Badge variant="outline" className="text-xs py-1 px-3">
+            {examConfig.code} Question Bank Status
+          </Badge>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+            {examConfig.title} Practice Engine
+          </h1>
+          <Card className="p-8 space-y-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-left">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  Question Bank Awaiting Upload
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Official examination questions for {examConfig.title} ({examConfig.code}) are currently being verified against official ServiceNow documentation and uploaded to the database. Practice drills will be enabled as soon as the question vault is populated.
+                </p>
+              </div>
+            </div>
+            <div className="pt-4 flex flex-wrap gap-3">
+              <Link href={`/certifications/${trackId}`} className="flex-1">
+                <Button variant="outline" className="w-full text-xs cursor-pointer">
+                  ← Return to {examConfig.code} Hub
+                </Button>
+              </Link>
+              <Link href="/certifications" className="flex-1">
+                <Button variant="default" className="w-full text-xs gap-1.5 cursor-pointer">
+                  Explore All Certifications <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </div>
+      );
+    }
+
+    // SCENARIO 2: Questions exist in the track, but this specific filtered domain has 0 questions
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center space-y-6">
-        <Badge variant="outline">{examConfig.code} Practice Engine</Badge>
-        <h1 className="text-2xl font-bold text-[#0B192C] dark:text-white">
-          No Practice Questions Found for {examConfig.code}
+        <Badge variant="outline" className="text-xs py-1 px-3">
+          {examConfig.code} Domain Filter
+        </Badge>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+          No Questions Found for this Domain
         </h1>
         <Card className="p-6 text-left border-slate-200 dark:border-slate-800 space-y-4">
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            There are currently no questions cataloged under this domain for {examConfig.title}. You can author new questions in the Admin CMS or switch domains.
+            There are currently no questions cataloged under this specific domain for {examConfig.title}. There are {allTrackQuestions.length} practice questions available across other domains.
           </p>
           <div className="flex gap-3">
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               onClick={() => handleDomainFilterChange("all")}
-              className="text-xs cursor-pointer"
+              className="text-xs cursor-pointer gap-1.5"
             >
-              View All Domains
+              View All Domains ({allTrackQuestions.length} Questions) <ArrowRight className="h-3.5 w-3.5" />
             </Button>
             <Link href={`/certifications/${trackId}`}>
-              <Button variant="default" size="sm" className="text-xs cursor-pointer">
+              <Button variant="outline" size="sm" className="text-xs cursor-pointer">
                 Return to {examConfig.code} Hub
               </Button>
             </Link>

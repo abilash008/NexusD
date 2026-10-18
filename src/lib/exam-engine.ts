@@ -134,10 +134,6 @@ export function getExamQuestions(trackId: string): PracticeQuestion[] {
  */
 export function getFreeTrackQuestions(trackId: string): PracticeQuestion[] {
   const normalizedId = (trackId || "csa").toLowerCase();
-  if (normalizedId === "csa") {
-    return [...CSA_FREE_60_QUESTIONS];
-  }
-
   const all = getExamQuestions(normalizedId);
   const freeItems = all.filter((q) => q.isFree !== false);
   if (freeItems.length >= 60) {
