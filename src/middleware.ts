@@ -6,15 +6,25 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect all /admin routes except /admin/login
-  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    // Check for NextAuth session token
-    const token = await getToken({
-      req: request,
-      secret: process.env.AUTH_SECRET || "nexusd_secret_dev_key_2026_super_secure_fallback",
-    });
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isLoginPage = pathname === "/admin/login";
 
-    // If no token or role is not admin, challenge for credentials immediately
-    if (!token || token.role !== "admin") {
+  if (isAdminRoute && !isLoginPage) {
+    try {
+      // Check for NextAuth session token
+      const token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || "nexusd-prod-secret-key-australia-brazil-2026-production-ready",
+      });
+
+      // If no token or role is not admin, challenge for credentials immediately
+      if (!token || token.role !== "admin") {
+        const loginUrl = new URL("/admin/login", request.url);
+        loginUrl.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+    } catch (err) {
+      console.error("[Middleware Admin Auth Error]:", err);
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
@@ -25,5 +35,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin", "/admin/:path*"],
 };
