@@ -3,8 +3,9 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db, users, accounts, sessions, verificationTokens } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { ensureAdminUser, isMasterAdminEmail } from "@/lib/admin-auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -23,20 +24,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email or Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const email = String(credentials.email).toLowerCase().trim();
+
+        // Ensure backend administrator account is provisioned
+        await ensureAdminUser();
+
+        const identifier = String(credentials.email).toLowerCase().trim();
         const password = String(credentials.password);
 
         try {
-          // Verify user exists in database
+          // Verify user exists in database by email OR username
           const [user] = await db
             .select()
             .from(users)
-            .where(eq(users.email, email))
+            .where(
+              or(
+                eq(users.email, identifier),
+                eq(users.username, identifier)
+              )
+            )
             .limit(1);
 
           if (!user) {
@@ -54,12 +64,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
+          const role = isMasterAdminEmail(user.email) ? "admin" : (user.role || "user");
+
+          const emailStr = user.email || user.username || "practitioner";
           return {
             id: user.id,
             email: user.email,
-            name: user.name || user.username || "ServiceNow Practitioner",
-            image: user.image || `https://avatar.vercel.sh/${encodeURIComponent(email)}`,
-            role: user.role || "user",
+            name: user.name || user.username || (role === "admin" ? "Platform Administrator" : "ServiceNow Practitioner"),
+            image: user.image || `https://avatar.vercel.sh/${encodeURIComponent(emailStr)}`,
+            role,
           };
         } catch (dbErr) {
           console.error("[NextAuth DB Error in authorize]:", dbErr);

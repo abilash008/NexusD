@@ -5,6 +5,7 @@ import { eq, or } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { ADMIN_CONFIG } from "@/lib/admin-auth";
 
 function validatePassword(password: string): { valid: boolean; error?: string } {
   if (!password || password.length < 8) {
@@ -47,6 +48,15 @@ export async function registerUser(formData: FormData) {
   const passwordCheck = validatePassword(password);
   if (!passwordCheck.valid) {
     return { error: passwordCheck.error };
+  }
+
+  // Block registration of reserved administrative credentials
+  const reservedUsernames = ["admin", "administrator", "root", "superuser", ADMIN_CONFIG.username.toLowerCase()];
+  if (
+    email === ADMIN_CONFIG.email ||
+    reservedUsernames.includes(username.toLowerCase())
+  ) {
+    return { error: "This username or email is reserved for platform administration and cannot be registered publicly." };
   }
 
   try {

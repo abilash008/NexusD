@@ -36,6 +36,11 @@ export function Sidebar({ user }: SidebarProps) {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
   const { isPinned, togglePin, isHovered, setIsHovered, isExpanded } = useSidebar();
 
+  // Admin portal has dedicated navigation and layout
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const navItems = [
     {
       title: "Dashboard",

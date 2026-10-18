@@ -1,9 +1,19 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Mail } from "lucide-react";
 import { NexusLogo } from "@/components/brand/nexus-logo";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Do not render public footer on admin CMS or admin gateway
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0B1120] text-slate-600 dark:text-slate-400 transition-colors">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

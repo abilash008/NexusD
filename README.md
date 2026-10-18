@@ -113,6 +113,24 @@ Examinations are released in a strict sequence with official ServiceNow examinat
 - **Zero Bloat:** Banned `text-5xl` through `text-7xl` and oversized `font-black` weights in favor of clean `font-bold` and `font-semibold`.
 - **Geist Fonts:** Explicitly registered Geist Sans (`--font-sans`) and Geist Mono (`--font-mono`) in Tailwind v4 `@theme inline`.
 
+### 9. Confidential Administrator Perimeter & Role Gating (`/admin`, `/admin/login`)
+- **Strict Role Isolation:** Student accounts and unauthenticated visitors cannot access `/admin` or any internal CMS sub-routes (`/admin/questions`, `/admin/exams`, `/admin/reports`).
+- **Dedicated Admin Login Gateway (`/admin/login`):**
+  - High-security administrative entrance styled with dark security cues and perimeter warning badges.
+  - **Zero Public Sign-Up:** Contains no links to `/signup` or self-registration forms.
+  - Immediate role verification upon authentication: if a user logs in with student credentials, access is rejected, the session is cleared, and an explicit clearance notice is displayed.
+- **Backend Provisioning & Auto-Seeding (`src/lib/admin-auth.ts`):**
+  - Admin credentials are created and managed strictly in the backend, automatically verified/seeded in Neon PostgreSQL with bcrypt hashing and `role: "admin"`.
+  - Configurable via environment variables: `ADMIN_EMAIL` (default: `admin@nexusd.in`), `ADMIN_USERNAME` (default: `admin`), and `ADMIN_PASSWORD`.
+- **Public Signup Lockdown (`src/app/signup/actions.ts`):**
+  - Public registration explicitly rejects reserved administrative handles (`admin`, `administrator`, `root`, `superuser`, etc.) and system emails.
+  - All public signups are strictly locked to `role: "user"`.
+- **Next.js Edge Middleware Protection (`src/middleware.ts`):**
+  - Intercepts all `/admin/:path*` requests before page render. Unauthenticated or non-admin requests are redirected immediately to `/admin/login`.
+- **Component Layout Guard (`src/app/admin/layout.tsx`):**
+  - Dual-layer verification with `useSession()`. Detects student accounts and displays an interactive 403 Forbidden screen with options to sign in with admin credentials or return to `/dashboard`.
+- **UI Chrome Isolation:** Public layout components (`Sidebar`, `Footer`, `LayoutShell`) automatically detach on `/admin/*` routes to provide a dedicated, distraction-free administrative cockpit.
+
 ---
 
 ## 🛠️ Technology Stack
